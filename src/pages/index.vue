@@ -4,21 +4,21 @@
           <el-header style="height: 80px; padding: 0">
             <Banner></Banner>
           </el-header>
-          <!-- <el-container style="width: 95%; margin: 15px auto 0; background: #fff">
+          <el-container style="width: 95%; margin: 15px auto 0; background: #fff">
             <el-aside width="250px">
               <Aside></Aside>
             </el-aside>
             <el-main style="padding: 0">
-              <Content></Content>
+              <!-- <Content></Content> -->
             </el-main>
-          </el-container> -->
+          </el-container>
         </el-container>
       </div>
 </template>
 
 <script setup>
-import Banner from "../components/banner.vue";
-// import Aside from "../components/discuss/aside.vue";
+import Banner from "../components/navbar.vue";
+import Aside from "../components/discuss/aside.vue";
 // import Content from "../components/index/indexContent.vue";
 
 </script>

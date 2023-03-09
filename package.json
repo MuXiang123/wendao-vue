@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.1.0",
     "agora-rtc-sdk-ng": "latest",
     "axios": "^1.3.4",
     "element-plus": "^2.2.36",

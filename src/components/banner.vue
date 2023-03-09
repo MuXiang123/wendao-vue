@@ -1,6 +1,6 @@
 <template>
     <div id="banner">
-        <el-row>
+        <el-row :gutter="20">
             <el-col :span="4">
                 <div class="logo">
                     <img src="../assets/logo.jpg" alt="" />
@@ -9,20 +9,24 @@
             </el-col>
             <el-col :span="3">
                 <div class="tlq" @click="goTlq()" style="
-                                  font-size: 15px;
-                                  margin-top: 15px;
-                                  text-align: left;
-                                  cursor: pointer;
-                                ">
+                                          font-size: 15px;
+                                          margin-top: 15px;
+                                          text-align: left;
+                                          cursor: pointer;
+                                        ">
                     讨论区
                 </div>
             </el-col>
-            <el-col :span="8" style="position: relative; padding-right: 50px">
-                <el-input v-model="inputSearch" prefix-icon="el-icon-search" @keyup.enter.native="onEnterSearch"
-                    placeholder="请输入" style="padding-right: 180px">
+            <el-col :span="8">
+                <el-input v-model="inputSearch" @keyup.enter.native="onEnterSearch"
+                    placeholder="请输入">
+                    <template #prefix>
+                        <el-icon class="el-input__icon"><search /></el-icon>
+                      </template>
                 </el-input>
                 <el-button type="primary" style="position: absolute; right: 139px; top: 30px" @click="onEnterSearch()">
-                    搜索</el-button>
+                    搜索
+                </el-button>
             </el-col>
             <el-col :span="3">
                 <el-button type="primary" round @click="check()">
@@ -35,12 +39,12 @@
                         <el-button type="primary" round @click="goWrite()"><i class="el-icon-edit"></i>写文章</el-button>
                     </div>
                     <el-avatar :size="40" :src="imgSrc" style="
-                                    display: inline-block;
-                                    margin-top: 22px;
-                                    margin-left: 20px;
-                                    margin-right: 10px;
-                                    cursor: pointer;
-                                  " @click="goPersonal()"></el-avatar>
+                                            display: inline-block;
+                                            margin-top: 22px;
+                                            margin-left: 20px;
+                                            margin-right: 10px;
+                                            cursor: pointer;
+                                          " @click="goPersonal()"></el-avatar>
                     <div class="denglu" v-if="display == true">
                         <span @click="goRes()">注册</span>|<span @click="goLogin()">登录</span>
                     </div>
@@ -64,13 +68,13 @@
 </template>
   
 <script>
-import { ref, watchEffect } from 'vue';
+import { ref, watchEffect,computed } from 'vue';
 import { useRouter } from "vue-router";
 import { useStore } from 'vuex';
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 export default {
     name: "Banner",
-    components: {},
     setup() {
         const display = ref(true);
         const activeIndex = ref("1");
@@ -100,20 +104,24 @@ export default {
         }
 
         const setActiveIndex = () => {
-            activeIndex.value = router.query.url;
+            // activeIndex.value = router.query.url;
         }
 
         const setStoreValue = () => {
-            store.value = this.$store.state.type.isRed; // 获取状态值
+            store.value = computed(() => store.state.type.isRed); // 获取状态值
         }
 
         const handleClose = (done) => {
             const that = this
-            that.$confirm("确认关闭？")
-                .then(() => {
-                    done();
-                })
-                .catch(() => { });
+            ElMessageBox.confirm("确认关闭？", {
+                confirmButtonText: '关闭',
+                cancelButtonText: '取消',
+                type: 'info',
+            })
+            .then(() => {
+                done();
+            })
+            .catch(() => { });
         }
 
         const goReturn = () => {
@@ -123,12 +131,10 @@ export default {
         }
 
         const goPersonal = () => {
-
             router.push({ name: "personal" });
         }
 
         const goTlq = () => {
-
             router.push({ name: "index" });
         }
 
@@ -138,45 +144,40 @@ export default {
         }
 
         const goWrite = () => {
-
             router.push({ name: "writeArticle" });
         }
 
         const goLogin = () => {
-
             router.push({ name: "login" });
         }
 
         const goRes = () => {
-
             router.push({ name: "register" });
         }
 
         const research = () => {
-
             router.push({ name: "searchDetail" });
             console.log("search:" + inputSearch.value);
         }
 
         const onEnterSearch = () => {
-
             const inputSearch = inputSearch.value;
             const _self = this;
             const url = "http://38617112yi.zicp.vip/article/search";
-            _self.$axios
-                .get(url, { params: { keyword: inputSearch } })
-                .then((res) => {
-                    console.log("搜索的数据", res);
-                    this.$router.push({
-                        name: 'searchDetail',
-                        params: {
-                            search: res.data.data
-                        }
-                    })
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
+            // _self.$axios
+            //     .get(url, { params: { keyword: inputSearch } })
+            //     .then((res) => {
+            //         console.log("搜索的数据", res);
+            //         router.push({
+            //             name: 'searchDetail',
+            //             params: {
+            //                 search: res.data.data
+            //             }
+            //         })
+            //     })
+            //     .catch((err) => {
+            //         console.log(err);
+            //     });
         }
 
         checkLocalStorage();
@@ -326,14 +327,14 @@ export default {
     line-height: 100px;
 }
 
-::v-deep.el-input {
+:deep(.el-input) {
     position: relative;
     font-size: 14px;
     display: inline-block;
     width: 70% !important;
 }
 
-::v-deep.el-input__inner {
+:deep(.el-input__inner) {
     -webkit-appearance: none;
     appearance: none;
     background-color: #fff;
@@ -353,13 +354,13 @@ export default {
     margin-top: 30px !important;
 }
 
-::v-deep.el-input__prefix {
+:deep(.el-input__prefix) {
     left: 5px;
     top: 16px;
     transition: all 0.3s;
 }
 
-::v-deep.el-col-3 {
+:deep(.el-col-3) {
     width: 12.5%;
     margin-top: 31px !important;
 }
