@@ -1,35 +1,47 @@
 <template>
-    <ul v-infinite-scroll="load()" class="infinite-list" style="overflow: auto">
+    <ul v-infinite-scroll="load" class="infinite-list" style="overflow: auto">
         <li v-for="article in articleList" :key="article" class="infinite-list-item">
             <el-card class="box-card" shadow="always">
                 <template #header>
                     <div class="card-header">
-                        <el-avatar :size="50" :src="article.avatar" />
-                        <span class="username">{{ article.username }} </span>
-                        <span class="time">{{ article.time }} </span>
-                        <el-button class="more" icon="MoreFilled" text>
-                        </el-button>
+                            <el-avatar class="avatar" :size="50" :src="article.avatar" />
+                        <div class="ch1">
+                            <p class="username">{{ article.username }} </p>
+                            <p class="time">{{ article.time }} </p>
+                        </div>
+                        <div class="ch2">
+                            <el-button class="more" icon="MoreFilled" text>
+                            </el-button>
+                        </div>
                     </div>
                 </template>
-                <div class="detail">
-                    When you enter into any new area of science, you almost always find yourself with a baffling new
-                    language of technical terms to learn.
-                </div>
+                <h3 class="title">{{ article.title }} </h3>
+                <p class="detail">{{ article.detail }} </p>
                 <el-divider border-style="dotted" />
-                <div class="bottom">
-                    <div class="like">
-                        <img src="../../assets/dianzan.svg"/>
-                        <span>点赞</span>
-                    </div>
-                    <div class="comment">
-                        <el-icon><Comment /></el-icon>
-                        <span>评论</span>
-                    </div>
-                    <div class="share">
-                        <el-icon><Share /></el-icon>
-                        <span>分享</span>
-                    </div>
-                </div>
+                <el-row :gutter="20">
+                    <el-col :span="4">
+                        <div class="like">
+                            <img src="../../assets/dianzan.svg" />
+                            <span class="bottom_font">点赞</span>
+                        </div>
+                    </el-col>
+                    <el-col :span="4">
+                        <div class="comment">
+                            <el-icon size="20px" color="#E6E6E6">
+                                <Comment />
+                            </el-icon>
+                            <span class="bottom_font">评论</span>
+                        </div>
+                    </el-col>
+                    <el-col :span="4">
+                        <div class="share">
+                            <el-icon size="20px" color="#E6E6E6">
+                                <Share />
+                            </el-icon>
+                            <span class="bottom_font">分享</span>
+                        </div>
+                    </el-col>
+                </el-row>
             </el-card>
         </li>
     </ul>
@@ -42,9 +54,25 @@ export default {
     setup() {
         const articleList = ref([
             {
+                username: 'username11111111111111',
+                avatar: 'https://img.js.design/assets/img/61515b3a543d3e0d6e043adb.png',
+                time: '2022-2-21',
+                title: '标题',
+                detail: 'When you enter into any new area of science, you almost always find yourself with a baffling new language of technical terms to learn'
+            },
+            {
+                username: 'e',
+                avatar: 'https://img.js.design/assets/img/61515b3a543d3e0d6e043adb.png',
+                time: '2022-2-21',
+                title: '标题',
+                detail: 'When you enter into any new area of science, you almost always find yourself with a baffling new language of technical terms to learn'
+            },
+            {
                 username: 'username',
                 avatar: 'https://img.js.design/assets/img/61515b3a543d3e0d6e043adb.png',
-                time: '2022-2-21'
+                time: '2022-2-21',
+                title: '标题',
+                detail: 'When you enter into any new area of science, you almost always find yourself with a baffling new language of technical terms to learn'
             }
         ])
         const load = () => {
@@ -63,26 +91,107 @@ export default {
     height: 700px;
     margin: 0;
     list-style: none;
-    
+
 }
 
 .infinite-list .infinite-list-item {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 20px;
-    
+    margin-bottom: 30px;
+
 }
 
 .infinite-list .infinite-list-item+.list-item {
     margin-top: 10px;
 }
-.box-card{
+
+.box-card {
     width: 711px;
 }
-.bottom{
-    text-align: center;
-    width: 100%;
-    float: left;
+
+.like img {
+    width: 20px;
+}
+
+.bottom_font {
+    margin: auto;
+    margin-left: 7px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: rgba(179, 179, 179, 1);
+    font-family: Roboto;
+}
+
+.card-header {
+    display: flex;
+    align-items: left;
+    position: relative;
+}
+.ch1{
+    position: absolute;
+    margin-left: 80px;
+}
+.ch2{
+    position: absolute;
+    margin-left: 600px;
+}
+.username {
+    /** 文本1 */
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    line-height: 30px;
+    color: rgba(102, 102, 102, 1);
+    text-align: left;
+    vertical-align: top;
+}
+
+.time {
+    /** 文本1 */
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0px;
+    line-height: 30px;
+    color: rgba(182, 182, 182, 1);
+    text-align: left;
+    vertical-align: top;
+}
+
+.title {
+
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0px;
+    line-height: 30px;
+    color: rgba(102, 102, 102, 1);
+    text-align: left;
+    vertical-align: top;
+
+}
+
+.detail {
+
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0px;
+    line-height: 25px;
+    color: rgba(128, 128, 128, 1);
+    text-align: left;
+    vertical-align: top;
+
+}
+
+.like {
+    display: flex;
+}
+
+.share {
+    display: flex;
+}
+
+.comment {
+    display: flex;
 }
 </style>
