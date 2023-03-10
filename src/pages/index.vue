@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-import Banner from "../components/navbar.vue";
+import Banner from "../components/banner.vue";
 import Aside from "../components/discuss/aside.vue";
 // import Content from "../components/index/indexContent.vue";
 

@@ -1,20 +1,16 @@
 <template>
     <el-row>
         <el-col :span="11" class="left">
-            <img src="../assets/login/left.png">
+            <img src="../assets/login/register.png">
         </el-col>
         <el-col :span="13" class="right">
-            <div class="wellcome">欢迎登录问道</div>
+            <div class="wellcome">注册新的账号</div>
             <br>
             <div class="register">
-                <span class="register1">注册你的账号</span>
-                <span class="register2" @click="goRegister()">注册</span>
+                <span class="register1">前往登录账号</span>
+                <span class="register2" @click="goLogin()">登录</span>
             </div>
-            <el-form class="form" 
-             label-position="top" 
-             label-width="100px" 
-             :model="formLabelAlign"
-                size="large">
+            <el-form class="form" label-position="top" label-width="100px" :model="formLabelAlign" size="large">
                 <el-form-item label="手机号">
                     <el-input v-model="formLabelAlign.userId" />
                 </el-form-item>
@@ -22,20 +18,18 @@
                     <el-input v-model="formLabelAlign.password" show-password type="password" />
                 </el-form-item>
                 <el-form-item>
-                    <el-button class="button" type="info" dark="isDark" @click="onSubmit()">登录</el-button>
+                    <el-button class="button" type="info" dark="isDark" @click="onSubmit()">注册</el-button>
                 </el-form-item>
             </el-form>
         </el-col>
     </el-row>
 </template>
-
 <script>
-import { reactive, ref } from 'vue';
-import { useRouter,useRoute } from 'vue-router';
-
+import { ref, reactive } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 export default {
 
-    name: "login",
+    name: "register",
     setup() {
         const router = useRouter()
         const route = useRoute()
@@ -44,30 +38,20 @@ export default {
             password: ''
         })
 
-        const onSubmit = () => {
-            
-        }
-        const goRegister = () =>{
+        const goLogin = ()=>{
             router.push({
-                name:'register'
+                name:'login'
             })
         }
-        const rules = reactive({
-            username: [
-                { required: true, message: '手机号不能为空', trigger: 'blur' },
-                { type: 'number', message: '请输入正确的手机号' },
-                { min: 11, max: 11, message: '请输入长度为11位的手机号', trigger: 'blur' },
-            ]
-        })
-        return {
+
+        return{
             formLabelAlign,
-            rules,
-            onSubmit,
-            goRegister,
+            goLogin
         }
     }
 }
 </script>
+
 <style>
 .left {
     left: 0px;
