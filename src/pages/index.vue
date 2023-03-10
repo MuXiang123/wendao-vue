@@ -1,28 +1,32 @@
 <template>
-    <div id="index">
-        <el-container style="background-color: #f7f8f9">
-          <el-header style="height: 80px; padding: 0">
-            <Banner></Banner>
-          </el-header>
-          <el-container style="width: 95%; margin: 15px auto 0; background: #fff">
-            <el-aside width="250px">
-              <Aside></Aside>
-            </el-aside>
-            <el-main style="padding: 0">
-              <!-- <Content></Content> -->
-            </el-main>
-          </el-container>
-        </el-container>
-      </div>
+  <div id="index">
+    <el-container >
+      <el-header style="padding: 0">
+        <Banner></Banner>
+      </el-header>
+      <el-container class="container_content">
+        <el-main class="container_main">
+          <Content></Content>
+        </el-main>
+      </el-container>
+    </el-container>
+  </div>
 </template>
 
 <script setup>
 import Banner from "../components/banner.vue";
-import Aside from "../components/discuss/aside.vue";
-// import Content from "../components/index/indexContent.vue";
+import Content from "../components/index/content.vue";
 
 </script>
 
 <style lang="scss" scoped>
+.container_content {
+  width: 100%;
+  margin: 0px auto 0;
+  background: #fff
+}
+.container_main{
+  padding: 0;
+}
 </style>>
 

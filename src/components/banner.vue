@@ -50,7 +50,7 @@
                         <el-icon><House /></el-icon>
                         <span class="span">我的主页</span>
                 </el-menu-item>
-                <el-menu-item index="/logout" @click="logout()">
+                <el-menu-item index="/login" @click="logout()">
                         <el-icon><CircleClose /></el-icon>
                         <span class="span">退出登录</span>
                 </el-menu-item>
@@ -100,7 +100,7 @@ export default {
         }
 
         const logout = ()=>{
-            router.push({ name: "index" });
+            router.push({ name: "/login" });
             localStorage.removeItem("password");
             display.value = true;
         }
