@@ -16,12 +16,12 @@
                     <span>{{ user.signature }} </span>
                 </div>
                 <div class="user_anniu">
-                    <el-button class="el-icon-edit" v-if="$route.params.id === $store.state.id" type="primary"
+                    <el-button class="el-icon-edit" v-if="useRouter.params.id === useStore.state.id" type="primary"
                         size="medium" plain @click="edit" icon="EditPen" >
                         编辑
                     </el-button>
                     <el-button v-else @click="follow" type="primary" size="medium" icon="Check"
-                        v-text="isfollowid.indexof($route.params.id) > -1 ? '已关注' : '关注'">
+                        v-text="isfollowid.indexof(useRouter.params.id) > -1 ? '已关注' : '关注'">
                     </el-button>
                 </div>
             </div>
@@ -48,23 +48,23 @@
                     <span class="person_body_list" style="border-bottom: none">个人中心</span>
                 </div>
                 <el-menu router active-text-color="#00c3ff" class="el-menu-vertical-demo">
-                    <el-menu-item index="info" :route="{ name: 'info', params: $route.params.id }">
+                    <el-menu-item index="info" :route="{ name: 'info', params: useRouter.params.id }">
                         <i class="el-icon-user"></i>
                         <span slot="title">个人简介</span>
                     </el-menu-item>
-                    <el-menu-item index="myarticle" :route="{ name: 'myarticle', params: $route.params.id }">
+                    <el-menu-item index="myarticle" :route="{ name: 'myarticle', params: useRouter.params.id }">
                         <i class="el-icon-edit-outline"></i>
                         <span slot="title">发帖</span>
                     </el-menu-item>
-                    <el-menu-item index="mycollect" :route="{ name: 'mycollect', params: $route.params.id }">
+                    <el-menu-item index="mycollect" :route="{ name: 'mycollect', params: useRouter.params.id }">
                         <i class="el-icon-document"></i>
                         <span slot="title">收藏</span>
                     </el-menu-item>
-                    <el-menu-item index="myfan" :route="{ name: 'myfan', params: $route.params.id }">
+                    <el-menu-item index="myfan" :route="{ name: 'myfan', params: useRouter.params.id }">
                         <i class="el-icon-tableware"></i>
                         <span slot="title">粉丝</span>
                     </el-menu-item>
-                    <el-menu-item index="myfollow" :route="{ name: 'myfollow', params: $route.params.id }">
+                    <el-menu-item index="myfollow" :route="{ name: 'myfollow', params: useRouter.params.id }">
                         <i class="el-icon-circle-plus-outline"></i>
                         <span slot="title">关注</span>
                     </el-menu-item>
@@ -74,13 +74,16 @@
         <div class="person_body_right">
             <router-view></router-view>
         </div>
+        <PersonalDia ref="dia" @flesh="reload" />
     </div>
 </template>
 
 <script setup>
-import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from 'vue';
+import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed, getCurrentInstance } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus';
+import PersonalDia from "./personalDia.vue";
 const store = useStore();
 const route = useRoute();
 const router = useRouter();
@@ -93,15 +96,118 @@ const user = ref({
 const fanCounts = ref(123)
 const followCounts = ref(456)
 const goodCounts = ref(456457)
+const isfollow = ref()
+let currentInstance=''
+const followData = ref({
+    fanId: "",
+    followId: ""
+})
+const isfollowid= ref()
+
+onMounted(()=>{
+    currentInstance = getCurrentInstance()
+    console.log('onMounted')
+    // userInfo(useRouter.params.id)
+    // .then((res)=>{
+    //     user = res;
+    // })
+    // .catch((err)=>{
+    //     console.log(err)
+    // });
+    // myFollow(useStore.state.id)
+    //     .then((res) => {
+    //       res.data.forEach((res) => {
+    //         isfollowid.push(res.id);
+    //       });
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+
+    //   followAndFanCount(useRouter.params.id)
+    //     .then((res) => {
+    //       followCounts = res.data.followCounts;
+    //       fanCounts = res.data.fanCounts;
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+
+    //   mygoodCount(useRouter.params.id)
+    //     .then((res) => {
+    //       goodCounts = res.data.goodCounts;
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+})
+watchEffect(()=>{
+    useRouter.beforeEach(to =>{
+        if (to.path == `/personal/${useStore.state.id}`) {
+            to.fullPath
+      } else if (to.path == `/personal/${useRouter.params.id}`) {
+            to.fullPath
+      }
+    })
+})
 const edit = () => {
-
+    currentInstance.ctx.$refs.dia.open()
 }
-
+const follow = ()=> {
+      if (!useStore.state.id) {
+        ElMessage({
+          showClose: true,
+          message: "请登录后再进行操作哦",
+          type: "warning",
+        });
+      } else {
+        followData.followId = useRouter.params.id;
+        followData.fanId = useStore.state.id;
+        if (isfollowid.indexOf(followData.followId) > -1) {
+          isfollow = true;
+        } else {
+          isfollow = false;
+        }
+        if (isfollow) {
+          deleteFollow(followData)
+            .then((res) => {
+              isfollow = false;
+              ElMessage({
+                showClose: true,
+                message: "已取消关注",
+                type: "success",
+              });
+              reload();
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } else if (!isfollow) {
+          addFollow(followData)
+            .then((res) => {
+              isfollow = true;
+              ElMessage({
+                showClose: true,
+                message: "已成功关注",
+                type: "success",
+              });
+              reload();
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+      }
+    }
 const myfan = () => {
-
+    useRouter.push({
+        path: `/newsuser/personal/myfan/${useRouter.params.id}`,
+      });
 }
 const myfollow = () => {
-
+    useRouter.push({
+      path:`/newsuser/personal/myfollow/${useRouter.params.id}`,
+      });
 }
 </script>
 <style scoped>
