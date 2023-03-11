@@ -16,15 +16,17 @@ import centertVue from './center.vue'
 import leftVue from './left.vue'
 
 </script>
-<style>
+<style scoped>
 .container {
-    background-color: rgba(250, 250, 250, 1);
+    background-color: #fafafa;
 }
 .left{
     margin-left: 260px;
     margin-top: 20px;
+    background-color: #fafafa !important;
 }
 .right{
     margin-top: 20px;
 }
+
 </style>

@@ -86,7 +86,10 @@ export default {
 }
 
 </script>
-<style>
+<style scoped>
+::-webkit-scrollbar {
+    width: 0 !important;height: 0;
+  }
 .infinite-list {
     height: 700px;
     margin: 0;

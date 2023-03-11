@@ -1,7 +1,7 @@
 <template>
     <el-row>
         <el-col :span="11" class="left">
-            <img src="../assets/login/left.png">
+            <img class="img" src="../assets/login/left.png">
         </el-col>
         <el-col :span="13" class="right">
             <div class="wellcome">欢迎登录问道</div>
@@ -68,22 +68,20 @@ export default {
     }
 }
 </script>
-<style>
+<style scoped>
 .left {
-    left: 0px;
-    top: 0px;
+    margin-left: 0px;
+    margin-top: 0px;
     height: 100%;
     opacity: 1;
-    background: rgba(240, 245, 255, 1);
 }
-
-.left img {
-    display: inline-block;
-    height: 750px;
+.left .img{
+    width: 100%;
 }
 
 .right {
     height: 100%;
+    width: 100%;
     position: relative;
 }
 

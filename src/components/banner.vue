@@ -4,8 +4,8 @@
             :default-active="activeIndex"
              class="el-menu-demo"
             @select="handleSelect"
-            background-color="#24292e"
-            text-color="#fff"
+            active-text-color="#409eff"
+            text-color="#999999"
             ellipsis="false"
             router>
             
@@ -23,22 +23,19 @@
                 视频
             </el-menu-item>
             <div class="search-bar">
-                <el-input v-model="inputSearch" placeholder="请输入问题" prefix-icon="Search" clearable ></el-input>
-                <el-button class="el-button" type="info" @click="onEnterSearch()">
+                <el-input v-model="inputSearch" placeholder="请输入问题" prefix-icon="Search" clearable></el-input>
+                <el-button class="el-button" type="info" @click="onEnterSearch()" round>
                     搜索
                 </el-button>
             </div>
             <el-menu-item index="/writeArticle">
-                <el-button
-                :type="info"
-                round=true
-                >写文章</el-button>
+                发布
             </el-menu-item>
             <el-menu-item index="/message">
                 <el-icon class="el-icon"><Bell/></el-icon>
             </el-menu-item>
-            <el-menu-item index="6">
-                <el-icon class="/chat"><Message/></el-icon>
+            <el-menu-item index="/chat">
+                <el-icon class="el-icon"><Message/></el-icon>
             </el-menu-item>
             <el-sub-menu class="el-sub-menu" >
                 <template #title>
@@ -118,7 +115,6 @@ export default {
 <style scoped>
 
 .header {
-    background-color: #24292e;
     display: flex;
     justify-content: center;
 }
@@ -137,35 +133,37 @@ export default {
 }
 
 .title {
-    color: #fff;
+    color: #409eff;
     font-weight: 600;
     font-size: 20px;
     margin-left: 5px;
     margin-top: 10px;
 }
 .el-icon{
-    color: #fff;
+    color: #999999;
 }
 .search-bar{
     margin-top: 10px;
-    margin-left: 10px;
+    color: #999999;
 }
 .el-button{
-    background-color: #24292e;
-    color: #fff;
+    background-color: #FFFFFF;
+    color: #999999;
     margin-left: 10px;
+    margin-right: 10px;
     margin-top: 3px;
 }
+
  .span{
-    color: #fff;
+    color: #999999;
     font-size: 12px;
 }
 .el-menu-demo {
-    background-color: #24292e;
+    background-color: #FFFFFF;
     border: none;
-    color: #fff;
+    color: #999999;
     line-height: 20px;
-    width: 90%;
+    width: 100%;
     margin-left: 250px;
 }
 

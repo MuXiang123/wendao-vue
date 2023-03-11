@@ -52,7 +52,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .left {
     left: 0px;
     top: 0px;
@@ -60,10 +60,10 @@ export default {
     opacity: 1;
     background: rgba(240, 245, 255, 1);
 }
-
 .left img {
     display: inline-block;
     height: 750px;
+    width: 100%;
 }
 
 .right {

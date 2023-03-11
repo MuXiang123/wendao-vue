@@ -1,14 +1,14 @@
 <template>
-     <div id="index">
+  <div id="index">
     <el-container>
-      <el-header style="padding: 0">
+      <el-header class="head">
         <Banner></Banner>
       </el-header>
-        <el-container class="container_content">
-          <el-main class="container_main">
-            <Content></Content>
-          </el-main>
-        </el-container>
+      <el-container class="container_content">
+        <el-main class="container_main" style="overflow:hidden">
+          <Content></Content>
+        </el-main>
+      </el-container>
     </el-container>
   </div>
 </template>
@@ -27,7 +27,21 @@ import Content from "../components/index/content.vue";
 }
 
 .container_main {
+  position: absolute;
   padding: 0;
+  left: 0;
+  right: 0;
+  top: 60px;
+  bottom: 0;
+  overflow-y: scroll;
+}
+.index{
+  overflow:visible;
+}
+.head{
+  position: relative;
+  width: 100%;
+  height: 60px;
 }
 </style>>
 
