@@ -16,22 +16,22 @@
                 </div>
             </router-link>
 
-            <el-menu-item index="/index">
+            <el-menu-item index="index">
                 首页
             </el-menu-item>
-            <el-menu-item index="/video">
+            <el-menu-item index="video">
                 视频
             </el-menu-item>
             <div class="search-bar">
                 <el-input v-model="inputSearch" placeholder="请输入问题" prefix-icon="Search" clearable></el-input>
-                <el-button class="el-button" type="info" @click="onEnterSearch()" round>
+                <el-button class="el-button" type="primary" @click="onEnterSearch()" round>
                     搜索
                 </el-button>
             </div>
-            <el-menu-item index="/writeArticle">
+            <el-menu-item index="writeArticle">
                 发布
             </el-menu-item>
-            <el-menu-item index="/message">
+            <el-menu-item index="message">
                 <el-icon class="el-icon"><Bell/></el-icon>
             </el-menu-item>
             <el-menu-item index="/chat">
@@ -147,8 +147,6 @@ export default {
     color: #999999;
 }
 .el-button{
-    background-color: #FFFFFF;
-    color: #999999;
     margin-left: 10px;
     margin-right: 10px;
     margin-top: 3px;

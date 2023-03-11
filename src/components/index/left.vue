@@ -6,8 +6,9 @@
      @close="handleClose"
      text-color="#999999"
      active-text-color="#409eff"
+     router
      >
-        <el-sub-menu index="/artical">
+        <el-sub-menu index="artical">
             <template #title>
                 <el-icon>
                     <Files />
@@ -16,19 +17,19 @@
             </template>
             <el-menu-item :key="i" :index="item.path" v-for="item, i in categoryList">{{ item.category }} </el-menu-item>
         </el-sub-menu>
-        <el-menu-item index="/video">
+        <el-menu-item index="video">
             <el-icon>
                 <VideoPlay />
             </el-icon>
             <span>视频</span>
         </el-menu-item>
-        <el-menu-item index="/chat">
+        <el-menu-item index="chat">
             <el-icon>
                 <ChatDotRound />
             </el-icon>
             <span>私信</span>
         </el-menu-item>
-        <el-menu-item index="/publish">
+        <el-menu-item index="publish">
             <el-icon>
                 <Plus />
             </el-icon>
@@ -47,25 +48,24 @@ const router = useRouter();
 const categoryList = ref([
     {
         category: '考研交流',
-        path: '/kaoyan'
+        path: 'kaoyan'
     },
     {
         category: '找工作交流',
-        path: '/work'
+        path: 'work'
     },
     {
         category: '寻物启事',
-        path: '/find'
+        path: 'find'
     },
     {
         category: '拼单拼车',
-        path: '/pin'
+        path: 'pin'
     },
 ])
 </script>
 <style scoped>
 .el-menu-vertical {
-    margin-top: 20px;
     width: 263px;
     opacity: 1;
     box-shadow: 0px 2px 5px 0px #d2d2d2;
