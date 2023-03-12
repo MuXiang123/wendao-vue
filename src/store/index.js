@@ -1,14 +1,16 @@
 import { createStore } from 'vuex'
 
 const store = createStore({
-  state() {
-    return {
-      count: 0
-    }
+  state: {
+    id : '1',
+    dialogVisible: false
   },
   mutations: {
-    increment(state) {
-      state.count++
+    setId(state, id) {
+      state.id = id
+    },
+    setDia(state, dialogVisible){
+      state.dialogVisible = dialogVisible
     }
   }
 })

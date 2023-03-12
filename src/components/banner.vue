@@ -6,8 +6,9 @@
             @select="handleSelect"
             active-text-color="#409eff"
             text-color="#999999"
-            ellipsis="false"
-            router>
+            ellipsis="false"    
+            router="true"
+            >
             
             <router-link to="/">
                 <div class="logo">
@@ -16,10 +17,10 @@
                 </div>
             </router-link>
 
-            <el-menu-item index="index">
+            <el-menu-item index="/index">
                 首页
             </el-menu-item>
-            <el-menu-item index="video">
+            <el-menu-item index="/video">
                 视频
             </el-menu-item>
             <div class="search-bar">
@@ -37,13 +38,14 @@
             <el-menu-item index="/chat">
                 <el-icon class="el-icon"><Message/></el-icon>
             </el-menu-item>
-            <el-sub-menu class="el-sub-menu" >
+            <el-sub-menu class="el-sub-menu" router >
                 <template #title>
                     <el-avatar :size="50" :src="circleUrl" :fit="fit" @error="errorHandler">
                         <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png" alt="">
                     </el-avatar>
                 </template>
-                <el-menu-item index="/personal">
+                <el-menu-item
+                :route="{name: 'home', params: {id: `${store.state.id}` }}">
                         <el-icon><House /></el-icon>
                         <span class="span">我的主页</span>
                 </el-menu-item>
@@ -69,7 +71,7 @@ export default {
     setup() {
         const store = useStore();
         const router = useRouter();
-        const activeIndex = router.currentRoute.value.path;
+        const activeIndex = ref('/index');
         const errorHandler = () => false //头像加载失败
         const handleSelect = (index) => {
             router.push(index);
@@ -104,6 +106,7 @@ export default {
         return {
             activeIndex,
             inputSearch,
+            store,
             logout,
             handleSelect,
             onEnterSearch

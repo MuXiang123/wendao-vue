@@ -1,7 +1,7 @@
 <template>
     <div class="top">
         <div class="top_img">
-            <el-avatar :size="130" :src="user.avatar"/>
+            <el-avatar :size="130" :src="user.avatar" />
         </div>
         <div class="text">
             <div class="user_text">
@@ -9,24 +9,26 @@
                     <span>{{ user.nickname }} </span>
                 </div>
                 <div class="user-school" v-if="user.school != ''">
-                    <el-icon color="#F18F1C"><Flag /></el-icon>
+                    <el-icon color="#F18F1C">
+                        <Flag />
+                    </el-icon>
                     <span class="user-school-font">{{ user.school }} </span>
                 </div>
                 <div class="signature">
                     <span>{{ user.signature }} </span>
                 </div>
                 <div class="user_anniu">
-                    <el-button class="el-icon-edit" v-if="useRouter.params.id === useStore.state.id" type="primary"
-                        size="medium" plain @click="edit" icon="EditPen" >
+                    <el-button class="el-icon-edit" v-if="router.currentRoute.value.params.id === store.state.id"
+                        type="primary" size="medium" plain @click="edit" icon="EditPen">
                         编辑
                     </el-button>
                     <el-button v-else @click="follow" type="primary" size="medium" icon="Check"
-                        v-text="isfollowid.indexof(useRouter.params.id) > -1 ? '已关注' : '关注'">
+                        v-text="true ? '已关注' : '关注'">
                     </el-button>
                 </div>
             </div>
             <div class="user_num">
-                <div style="cursor: pointer" @click="myfan">
+                <div style="cursor: pointer" @click="myfans">
                     <div class="num_number">{{ fanCounts }}</div>
                     <span class="num_text">粉丝</span>
                 </div>
@@ -44,27 +46,28 @@
     <div class="person_body">
         <div class="person_body_left">
             <el-card class="box-card" :body-style="{ padding: '0px' }">
-                <div slot="header" class="clearfix">
+                <template #header class="clearfix">
                     <span class="person_body_list" style="border-bottom: none">个人中心</span>
-                </div>
-                <el-menu router active-text-color="#00c3ff" class="el-menu-vertical-demo">
-                    <el-menu-item index="info" :route="{ name: 'info', params: useRouter.params.id }">
+                </template>
+                <el-menu router 
+                class="el-menu-vertical-demo"
+                 :default-active="info" 
+                 active-text-color="#409eff">
+                    <el-menu-item index="info" :route="{ name: 'info', params: router.currentRoute.value.params.id }">
                         <i class="el-icon-user"></i>
-                        <span slot="title">个人简介</span>
+                        <span slot="title">个人资料</span>
                     </el-menu-item>
-                    <el-menu-item index="myarticle" :route="{ name: 'myarticle', params: useRouter.params.id }">
+                    <el-menu-item index="myArticle"
+                        :route="{ name: 'myArticle', params: router.currentRoute.value.params.id }">
                         <i class="el-icon-edit-outline"></i>
-                        <span slot="title">发帖</span>
+                        <span slot="title">文章</span>
                     </el-menu-item>
-                    <el-menu-item index="mycollect" :route="{ name: 'mycollect', params: useRouter.params.id }">
-                        <i class="el-icon-document"></i>
-                        <span slot="title">收藏</span>
-                    </el-menu-item>
-                    <el-menu-item index="myfan" :route="{ name: 'myfan', params: useRouter.params.id }">
+                    <el-menu-item index="myFans" :route="{ name: 'myFans', params: router.currentRoute.value.params.id }">
                         <i class="el-icon-tableware"></i>
                         <span slot="title">粉丝</span>
                     </el-menu-item>
-                    <el-menu-item index="myfollow" :route="{ name: 'myfollow', params: useRouter.params.id }">
+                    <el-menu-item index="myFollow"
+                        :route="{ name: 'myFollow', params: router.currentRoute.value.params.id }">
                         <i class="el-icon-circle-plus-outline"></i>
                         <span slot="title">关注</span>
                     </el-menu-item>
@@ -74,8 +77,9 @@
         <div class="person_body_right">
             <router-view></router-view>
         </div>
-        <PersonalDia ref="dia" @flesh="reload" />
     </div>
+    <PersonalDia :dialogVisible="dia"/>   
+
 </template>
 
 <script setup>
@@ -97,116 +101,118 @@ const fanCounts = ref(123)
 const followCounts = ref(456)
 const goodCounts = ref(456457)
 const isfollow = ref()
-let currentInstance=''
+let dia = ref(false)
+let currentInstance = ''
 const followData = ref({
     fanId: "",
     followId: ""
 })
-const isfollowid= ref()
+const isfollowid = ref()
 
-onMounted(()=>{
+onMounted(() => {
     currentInstance = getCurrentInstance()
     console.log('onMounted')
-    // userInfo(useRouter.params.id)
-    // .then((res)=>{
-    //     user = res;
-    // })
-    // .catch((err)=>{
-    //     console.log(err)
-    // });
-    // myFollow(useStore.state.id)
+    // userInfo(router.currentRoute.value.params.id)
     //     .then((res) => {
-    //       res.data.forEach((res) => {
-    //         isfollowid.push(res.id);
-    //       });
+    //         user = res;
     //     })
     //     .catch((err) => {
-    //       console.log(err);
+    //         console.log(err)
+    //     });
+    // myfollow(store.state.id)
+    //     .then((res) => {
+    //         res.data.forEach((res) => {
+    //             isfollowid.push(res.id);
+    //         });
+    //     })
+    //     .catch((err) => {
+    //         console.log(err);
     //     });
 
-    //   followAndFanCount(useRouter.params.id)
+    // followAndFanCount(router.currentRoute.value.params.id)
     //     .then((res) => {
-    //       followCounts = res.data.followCounts;
-    //       fanCounts = res.data.fanCounts;
+    //         followCounts = res.data.followCounts;
+    //         fanCounts = res.data.fanCounts;
     //     })
     //     .catch((err) => {
-    //       console.log(err);
+    //         console.log(err);
     //     });
 
-    //   mygoodCount(useRouter.params.id)
+    // goodCounts(router.currentRoute.value.params.id)
     //     .then((res) => {
-    //       goodCounts = res.data.goodCounts;
+    //         goodCounts = res.data.goodCounts;
     //     })
     //     .catch((err) => {
-    //       console.log(err);
+    //         console.log(err);
     //     });
 })
-watchEffect(()=>{
-    useRouter.beforeEach(to =>{
-        if (to.path == `/personal/${useStore.state.id}`) {
-            to.fullPath
-      } else if (to.path == `/personal/${useRouter.params.id}`) {
-            to.fullPath
-      }
-    })
+watchEffect(() => {
+    // useRouter.beforeEach(to =>{
+    //     if (to.path == `/home/${store.state.id}`) {
+    //         to.fullPath
+    //   } else if (to.path == `/home/${router.currentRoute.value.params.id}`) {
+    //         to.fullPath
+    //   }
+    // })
 })
 const edit = () => {
-    currentInstance.ctx.$refs.dia.open()
+    dia = true;
 }
-const follow = ()=> {
-      if (!useStore.state.id) {
+const follow = () => {
+    if (!store.state.id) {
         ElMessage({
-          showClose: true,
-          message: "请登录后再进行操作哦",
-          type: "warning",
+            showClose: true,
+            message: "请登录后再进行操作哦",
+            type: "warning",
         });
-      } else {
-        followData.followId = useRouter.params.id;
-        followData.fanId = useStore.state.id;
+    } else {
+        followData.followId = router.currentRoute.value.params.id;
+        followData.fanId = store.state.id;
         if (isfollowid.indexOf(followData.followId) > -1) {
-          isfollow = true;
+            isfollow = true;
         } else {
-          isfollow = false;
+            isfollow = false;
         }
         if (isfollow) {
-          deleteFollow(followData)
-            .then((res) => {
-              isfollow = false;
-              ElMessage({
-                showClose: true,
-                message: "已取消关注",
-                type: "success",
-              });
-              reload();
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+            deleteFollow(followData)
+                .then((res) => {
+                    isfollow = false;
+                    ElMessage({
+                        showClose: true,
+                        message: "已取消关注",
+                        type: "success",
+                    });
+                    reload();
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         } else if (!isfollow) {
-          addFollow(followData)
-            .then((res) => {
-              isfollow = true;
-              ElMessage({
-                showClose: true,
-                message: "已成功关注",
-                type: "success",
-              });
-              reload();
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+            addFollow(followData)
+                .then((res) => {
+                    isfollow = true;
+                    ElMessage({
+                        showClose: true,
+                        message: "已成功关注",
+                        type: "success",
+                    });
+                    reload();
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         }
-      }
     }
-const myfan = () => {
-    useRouter.push({
-        path: `/newsuser/personal/myfan/${useRouter.params.id}`,
+}
+const myfans = () => {
+    console.log(`${router.currentRoute.value.params.id}`)
+    router.push({
+        path: `/myFans/${router.currentRoute.value.params.id}`,
       });
 }
 const myfollow = () => {
-    useRouter.push({
-      path:`/newsuser/personal/myfollow/${useRouter.params.id}`,
+    router.push({
+      path:`/myFollow/${router.currentRoute.value.params.id}`,
       });
 }
 </script>
@@ -319,7 +325,6 @@ const myfollow = () => {
 
 .person_body_list {
     width: 100%;
-    height: 50px;
     margin-top: 25px;
     font-size: 22px;
     border-bottom: 1px solid #f0f0f0;
@@ -338,7 +343,7 @@ const myfollow = () => {
 }
 
 .box-card {
-    height: 500px;
+    height: 100%
 }
 
 /*ui样式*/

@@ -18,10 +18,13 @@ import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed 
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import Header from '../components/banner.vue';
-import Main from '../components/personal.vue';
+import Main from '../components/home/personal.vue';
 const store = useStore();
 const route = useRoute();
 const router = useRouter();
+defineProps({
+  id:String
+})
 </script>
 
 <style scoped>

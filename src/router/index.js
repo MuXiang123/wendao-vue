@@ -2,7 +2,11 @@ import { createRouter, createWebHashHistory } from "vue-router"
 import Index from '../pages/index.vue';
 import Login from '../pages/login.vue';
 import Register from '../pages/register.vue';
-import Personal from '../pages/myInfo.vue';
+import Home from '../pages/home.vue';
+import Info from '../components/home/info.vue'
+import MyFans from '../components/home/myFans.vue';
+import MyFollow from '../components/home/myFollow.vue';
+import MyArticle from '../components/home/myArticle.vue';
 const routes = [
     {
         path: '/',
@@ -11,7 +15,10 @@ const routes = [
     {
         path: '/index',
         name: 'index',
-        component: Index
+        component: Index,
+        meta: {
+            requireLogin: true
+        }
     },
     {
         path:'/login',
@@ -23,9 +30,34 @@ const routes = [
         name:'register',
         component: Register
     },{
-        path:'/personal',
-        name:'personal',
-        component: Personal
+        path:'/home/:id',
+        name:'home',
+        component: Home,
+        meta: {
+            requireLogin: true
+        },
+        children: [
+            {
+                path: '/home/info/:id',
+                name:'info',
+                component: Info,
+            },
+            {
+                path:'/home/myArticle/:id',
+                name:'myArticle',
+                component: MyArticle
+              },
+              {
+                path:'/home/myFollow/:id',
+                name:'myFollow',
+                component: MyFollow
+              },
+              {
+                path:'/home/myfans/:id',
+                name:'myFans',
+                component: MyFans
+              }
+        ]
     }
 ]
 
