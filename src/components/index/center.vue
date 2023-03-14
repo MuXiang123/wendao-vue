@@ -1,5 +1,5 @@
 <template>
-    <ul v-infinite-scroll="load" class="infinite-list" style="overflow: auto">
+    <ul v-infinite-scroll="load" class="infinite-list">
         <li v-for="article in articleList" :key="article" class="infinite-list-item">
             <el-card class="box-card" shadow="always">
                 <template #header>
@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref} from 'vue'
 export default {
     name: 'IndexContent',
     setup() {
@@ -73,7 +73,15 @@ export default {
                 time: '2022-2-21',
                 title: '标题',
                 detail: 'When you enter into any new area of science, you almost always find yourself with a baffling new language of technical terms to learn'
-            }
+            },
+            {
+                username: 'username',
+                avatar: 'https://img.js.design/assets/img/61515b3a543d3e0d6e043adb.png',
+                time: '2022-2-21',
+                title: '标题',
+                detail: 'When you enter into any new area of science, you almost always find yourself with a baffling new language of technical terms to learn'
+            },
+            
         ])
         const load = () => {
             // articleList.push(articleList[0])
@@ -91,10 +99,9 @@ export default {
     width: 0 !important;height: 0;
   }
 .infinite-list {
-    height: 700px;
     margin: 0;
     list-style: none;
-
+    overflow: auto;
 }
 
 .infinite-list .infinite-list-item {

@@ -43,42 +43,52 @@
             </div>
         </div>
     </div>
+
     <div class="person_body">
+
         <div class="person_body_left">
             <el-card class="box-card" :body-style="{ padding: '0px' }">
                 <template #header class="clearfix">
                     <span class="person_body_list" style="border-bottom: none">个人中心</span>
                 </template>
-                <el-menu router 
-                class="el-menu-vertical-demo"
-                 :default-active="info" 
-                 active-text-color="#409eff">
+                <el-menu router class="el-menu-vertical-demo" :default-active="info" active-text-color="#409eff">
                     <el-menu-item index="info" :route="{ name: 'info', params: router.currentRoute.value.params.id }">
-                        <i class="el-icon-user"></i>
+                        <el-icon color="#999999">
+                            <User />
+                        </el-icon>
                         <span slot="title">个人资料</span>
                     </el-menu-item>
                     <el-menu-item index="myArticle"
                         :route="{ name: 'myArticle', params: router.currentRoute.value.params.id }">
-                        <i class="el-icon-edit-outline"></i>
+                        <el-icon color="#999999">
+                            <Document />
+                        </el-icon>
                         <span slot="title">文章</span>
                     </el-menu-item>
                     <el-menu-item index="myFans" :route="{ name: 'myFans', params: router.currentRoute.value.params.id }">
-                        <i class="el-icon-tableware"></i>
+                        <el-icon color="#999999">
+                            <Bowl />
+                        </el-icon>
                         <span slot="title">粉丝</span>
                     </el-menu-item>
                     <el-menu-item index="myFollow"
                         :route="{ name: 'myFollow', params: router.currentRoute.value.params.id }">
-                        <i class="el-icon-circle-plus-outline"></i>
+                        <el-icon color="#999999">
+                            <CirclePlus />
+                        </el-icon>
                         <span slot="title">关注</span>
                     </el-menu-item>
                 </el-menu>
             </el-card>
         </div>
+
         <div class="person_body_right">
-            <router-view></router-view>
+            <router-view ref="rightRef" @refresh="edit"></router-view>
         </div>
+
     </div>
-    <PersonalDia :dialogVisible="dia"/>   
+
+    <PersonalDia ref="dia" />
 
 </template>
 
@@ -146,17 +156,8 @@ onMounted(() => {
     //         console.log(err);
     //     });
 })
-watchEffect(() => {
-    // useRouter.beforeEach(to =>{
-    //     if (to.path == `/home/${store.state.id}`) {
-    //         to.fullPath
-    //   } else if (to.path == `/home/${router.currentRoute.value.params.id}`) {
-    //         to.fullPath
-    //   }
-    // })
-})
 const edit = () => {
-    dia = true;
+    dia.value.visitDia = true
 }
 const follow = () => {
     if (!store.state.id) {
@@ -208,18 +209,18 @@ const myfans = () => {
     console.log(`${router.currentRoute.value.params.id}`)
     router.push({
         path: `/myFans/${router.currentRoute.value.params.id}`,
-      });
+    });
 }
 const myfollow = () => {
     router.push({
-      path:`/myFollow/${router.currentRoute.value.params.id}`,
-      });
+        path: `/myFollow/${router.currentRoute.value.params.id}`,
+    });
 }
 </script>
 <style scoped>
 .top {
     width: 1000px;
-    height: 140px;
+    height: auto;
     padding-top: 20px;
     background-color: white;
     margin-top: 30px;
@@ -299,7 +300,7 @@ const myfollow = () => {
     color: #333;
 }
 
-.el-menu-item>span {
+.el-menu-item span {
     font-size: 16px;
     color: #999;
 }
@@ -317,7 +318,6 @@ const myfollow = () => {
 
 .person_body_left {
     width: 27%;
-    height: 600px;
     border-radius: 5px;
     margin-right: 3%;
     text-align: center;
@@ -337,16 +337,12 @@ const myfollow = () => {
 
 .person_body_right {
     width: 70%;
-    /* height: 500px; */
+    height: auto;
     border-radius: 5px;
-    background-color: white;
-}
-
-.box-card {
-    height: 100%
 }
 
 /*ui样式*/
 .el-button {
     width: 84px;
-}</style>
+}
+</style>

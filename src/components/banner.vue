@@ -45,7 +45,7 @@
                     </el-avatar>
                 </template>
                 <el-menu-item
-                :route="{name: 'home', params: {id: `${store.state.id}` }}">
+                :route="{name: 'info', params: {id: `${store.state.id}` }}">
                         <el-icon><House /></el-icon>
                         <span class="span">我的主页</span>
                 </el-menu-item>

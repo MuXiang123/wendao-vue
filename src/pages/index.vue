@@ -33,7 +33,6 @@ import Content from "../components/index/content.vue";
   right: 0;
   top: 60px;
   bottom: 0;
-  overflow-y: scroll;
 }
 .index{
   overflow:visible;

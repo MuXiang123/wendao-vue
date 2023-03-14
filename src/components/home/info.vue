@@ -33,6 +33,7 @@ import { useRoute, useRouter } from 'vue-router';
 const store = useStore();
 const route = useRoute();
 const router = useRouter();
+const emit = defineEmits(['refresh'])
 const form = ref({
   avatar: "https://img.js.design/assets/img/61515b3a543d3e0d6e043adb.png",
   nickname: "123",
@@ -47,7 +48,7 @@ onMounted(()=>{
 })
 
 const edit=()=>{
-  
+    emit('refresh')
 }
 </script>
 <style scoped>

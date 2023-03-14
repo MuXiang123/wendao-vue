@@ -19,6 +19,7 @@ import leftVue from './left.vue'
 <style scoped>
 .container {
     background-color: #fafafa;
+    height: 100%;
 }
 .left{
     margin-left: 260px;
@@ -28,5 +29,7 @@ import leftVue from './left.vue'
 .right{
     margin-top: 20px;
 }
-
+:deep(.infinite-list){
+    height: 700px;
+}
 </style>
