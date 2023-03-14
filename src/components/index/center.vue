@@ -4,7 +4,7 @@
             <el-card class="box-card" shadow="always">
                 <template #header>
                     <div class="card-header">
-                            <el-avatar class="avatar" :size="50" :src="article.avatar" />
+                        <el-avatar class="avatar" :size="50" :src="article.avatar" />
                         <div class="ch1">
                             <p class="username">{{ article.username }} </p>
                             <p class="time">{{ article.time }} </p>
@@ -19,21 +19,27 @@
                 <p class="detail">{{ article.detail }} </p>
                 <el-divider border-style="dotted" />
                 <el-row :gutter="20">
-                    <el-col :span="4">
+                    <el-col :span="5">
                         <div class="like">
                             <img src="../../assets/dianzan.svg" />
-                            <span class="bottom_font">点赞</span>
+                            <span class="bottom_font">点赞
+                                <span v-text="article.like > 9999 ? '9999+' : article.like">
+                                </span>
+                            </span>
                         </div>
                     </el-col>
-                    <el-col :span="4">
+                    <el-col :span="5">
                         <div class="comment">
                             <el-icon size="20px" color="#E6E6E6">
                                 <Comment />
                             </el-icon>
-                            <span class="bottom_font">评论</span>
+                            <span class="bottom_font">评论
+                                <span v-text="article.comment > 9999 ? '9999+' : article.comment">
+                                </span>
+                            </span>
                         </div>
                     </el-col>
-                    <el-col :span="4">
+                    <el-col :span="5">
                         <div class="share">
                             <el-icon size="20px" color="#E6E6E6">
                                 <Share />
@@ -48,7 +54,7 @@
 </template>
 
 <script>
-import { ref} from 'vue'
+import { ref } from 'vue'
 export default {
     name: 'IndexContent',
     setup() {
@@ -58,30 +64,38 @@ export default {
                 avatar: 'https://img.js.design/assets/img/61515b3a543d3e0d6e043adb.png',
                 time: '2022-2-21',
                 title: '标题',
-                detail: 'When you enter into any new area of science, you almost always find yourself with a baffling new language of technical terms to learn'
+                detail: 'When you enter into any new area of science, you almost always find yourself with a baffling new language of technical terms to learn',
+                like: 123,
+                comment: 0
             },
             {
                 username: 'e',
                 avatar: 'https://img.js.design/assets/img/61515b3a543d3e0d6e043adb.png',
                 time: '2022-2-21',
                 title: '标题',
-                detail: 'When you enter into any new area of science, you almost always find yourself with a baffling new language of technical terms to learn'
+                detail: 'When you enter into any new area of science, you almost always find yourself with a baffling new language of technical terms to learn',
+                like: 123,
+                comment: 11111111
             },
             {
                 username: 'username',
                 avatar: 'https://img.js.design/assets/img/61515b3a543d3e0d6e043adb.png',
                 time: '2022-2-21',
                 title: '标题',
-                detail: 'When you enter into any new area of science, you almost always find yourself with a baffling new language of technical terms to learn'
+                detail: 'When you enter into any new area of science, you almost always find yourself with a baffling new language of technical terms to learn',
+                like: 1231111111,
+                comment: 0
             },
             {
                 username: 'username',
                 avatar: 'https://img.js.design/assets/img/61515b3a543d3e0d6e043adb.png',
                 time: '2022-2-21',
                 title: '标题',
-                detail: 'When you enter into any new area of science, you almost always find yourself with a baffling new language of technical terms to learn'
+                detail: 'When you enter into any new area of science, you almost always find yourself with a baffling new language of technical terms to learn',
+                like: 123,
+                comment: 0
             },
-            
+
         ])
         const load = () => {
             // articleList.push(articleList[0])
@@ -96,8 +110,10 @@ export default {
 </script>
 <style scoped>
 ::-webkit-scrollbar {
-    width: 0 !important;height: 0;
-  }
+    width: 0 !important;
+    height: 0;
+}
+
 .infinite-list {
     margin: 0;
     list-style: none;
@@ -139,14 +155,17 @@ export default {
     align-items: left;
     position: relative;
 }
-.ch1{
+
+.ch1 {
     position: absolute;
     margin-left: 80px;
 }
-.ch2{
+
+.ch2 {
     position: absolute;
     margin-left: 600px;
 }
+
 .username {
     /** 文本1 */
     font-size: 15px;
@@ -203,5 +222,4 @@ export default {
 
 .comment {
     display: flex;
-}
-</style>
+}</style>

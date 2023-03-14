@@ -53,7 +53,7 @@ const routes = [
                 component: MyFollow
               },
               {
-                path:'/home/myfans/:id',
+                path:'/home/myFans/:id',
                 name:'myFans',
                 component: MyFans
               }

@@ -47,6 +47,7 @@
     <div class="person_body">
 
         <div class="person_body_left">
+            <el-affix :offset="80">
             <el-card class="box-card" :body-style="{ padding: '0px' }">
                 <template #header class="clearfix">
                     <span class="person_body_list" style="border-bottom: none">个人中心</span>
@@ -80,6 +81,7 @@
                     </el-menu-item>
                 </el-menu>
             </el-card>
+        </el-affix>
         </div>
 
         <div class="person_body_right">
@@ -226,7 +228,7 @@ const myfollow = () => {
     margin-top: 30px;
     position: absolute;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%); 
     display: flex;
     border-radius: 5px;
 }
@@ -308,12 +310,17 @@ const myfollow = () => {
 /*下面部分样式*/
 .person_body {
     width: 1000px;
-    margin-top: 210px;
     display: flex;
     position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    left:0;
+    right: 0;
+    top: 210px;
+    margin: auto;
     border-radius: 5px;
+    /**
+        使用left:50%
+        transform: translateX(-50%); 进行剧中会影响固钉的效果
+    **/
 }
 
 .person_body_left {
