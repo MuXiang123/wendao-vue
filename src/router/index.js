@@ -7,6 +7,7 @@ import Info from '../components/home/info.vue'
 import MyFans from '../components/home/myFans.vue';
 import MyFollow from '../components/home/myFollow.vue';
 import MyArticle from '../components/home/myArticle.vue';
+import Article from '../pages/detail.vue'
 const routes = [
     {
         path: '/',
@@ -58,6 +59,10 @@ const routes = [
                 component: MyFans
               }
         ]
+    },{
+        path:'/article/:id',
+        name: 'article',
+        component: Article
     }
 ]
 

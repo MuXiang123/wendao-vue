@@ -10,8 +10,15 @@
                             <p class="time">{{ article.time }} </p>
                         </div>
                         <div class="ch2">
-                            <el-button class="more" icon="MoreFilled" text>
-                            </el-button>
+                            <el-dropdown>
+                                <el-button class="more" icon="MoreFilled" text>
+                                </el-button>
+                                <template #dropdown>
+                                    <el-dropdown-menu>
+                                        <el-dropdown-item @click="deleteArticle(article.id)">删除</el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </template>
+                            </el-dropdown>
                         </div>
                     </div>
                 </template>
@@ -33,9 +40,9 @@
                             <el-icon size="20px" color="#E6E6E6">
                                 <Comment />
                             </el-icon>
-                            <span class="bottom_font">评论
+                            <span class="bottom_font">
                                 <span v-text="article.comment > 9999 ? '9999+' : article.comment">
-                                </span>
+                                </span>条评论
                             </span>
                         </div>
                     </el-col>
@@ -60,6 +67,7 @@ export default {
     setup() {
         const articleList = ref([
             {
+                id : '123',
                 username: 'username11111111111111',
                 avatar: 'https://img.js.design/assets/img/61515b3a543d3e0d6e043adb.png',
                 time: '2022-2-21',
@@ -100,9 +108,13 @@ export default {
         const load = () => {
             // articleList.push(articleList[0])
         }
+        const deleteArticle = (id) =>{
+            console.log(id)
+        }
         return {
             articleList,
-            load
+            load,
+            deleteArticle
         }
     }
 }
@@ -222,4 +234,5 @@ export default {
 
 .comment {
     display: flex;
-}</style>
+}
+</style>
