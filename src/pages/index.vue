@@ -1,15 +1,15 @@
 <template>
   <div id="index">
-    <el-container>
-      <el-header class="head">
+    <div>
+      <div class="head">
         <Banner></Banner>
-      </el-header>
-      <el-container class="container_content">
-        <el-main class="container_main" style="overflow:hidden">
+      </div>
+      <div class="container_content">
+        <div class="container_main">
           <Content></Content>
-        </el-main>
-      </el-container>
-    </el-container>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -23,7 +23,6 @@ import Content from "../components/index/content.vue";
 .container_content {
   width: 100%;
   margin: 0px auto 0;
-  background: #fff
 }
 
 .container_main {
@@ -33,11 +32,14 @@ import Content from "../components/index/content.vue";
   right: 0;
   top: 60px;
   bottom: 0;
+  background-color: #fafafa;
+  overflow-x: hidden;
 }
-.index{
-  overflow:visible;
+
+.index {
 }
-.head{
+
+.head {
   position: relative;
   width: 100%;
   height: 60px;

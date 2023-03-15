@@ -22,7 +22,7 @@
                                 {{ data.createTime }}
                             </span>
                             <span class="views-count">
-                                {{ $t("common.read") + ' ' + data.pv }}
+                                {{ "common.read" + ' ' + data.pv }}
                             </span>
                         </div>
                     </div>
@@ -31,19 +31,19 @@
                     <div class="edit" v-if="$store.state.userId === data.createUser">
                         <el-button class="follow-btn" v-if="!data.articleCountDTO.isFollow"
                             @click="routerArticleEdit(data.id)"
-                            :style="{ color: $store.state.themeColor, border: '1px solid' + $store.state.themeColor }">
-                            {{ $t("common.edit") }}
+                            :style="{ color: $store.state.themeColor, border: '1px solid' + store.state.themeColor }">
+                            {{"common.edit"}}
                         </el-button>
                     </div>
                     <div class="follow" v-else>
                         <el-button class="follow-btn" v-if="!data.articleCountDTO.isFollow"
                             @click="updateFollowState(data.createUser)"
-                            :style="{ color: $store.state.themeColor, border: '1px solid' + $store.state.themeColor }">
-                            {{ $t("common.follow") }}
+                            :style="{ color: $store.state.themeColor, border: '1px solid' + store.state.themeColor }">
+                            {{ "common.follow"}}
                         </el-button>
                         <el-button class="follow-btn-close" v-if="data.articleCountDTO.isFollow"
                             @click="updateFollowState(data.createUser)">
-                            {{ $t("common.haveFollowed") }}
+                            {{ "common.haveFollowed"}}
                         </el-button>
                     </div>
                 </div>
@@ -61,24 +61,25 @@
 </template>
   
 <script setup>
-import articleService from "@/service/articleService";
-import userService from "@/service/userService";
-import CustomEmpty from "../components/utils/CustomEmpty";
-import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from 'vue';
+import articleService from "../../service/articleService";
+import userService from "../../service/userService";
+import CustomEmpty from "../utils/CustomEmpty.vue";
+import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed, nextTick } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
+import { ElMessage } from "element-plus";
 
 const store = useStore();
 const route = useRoute();
 const router = useRouter();
-
+let observer = null;
 const emit = defineEmits(['initLabelIds'])
-const finish = ref(false)
-const data = ref({})
+let finish = ref(false)
+let data = ref({})
 // 获取文章详细信息
 const getArticleById = () => {
     finish = false;
-    articleService.getArticleById({ id: route.currentRoute.value.params.id, isPv: true })
+    articleService.getArticleById({ id: router.currentRoute.value.params.id })
         .then(res => {
             data = res.data;
             finish = true;
@@ -87,16 +88,16 @@ const getArticleById = () => {
             res.data.labelDTOS.forEach(label => {
                 labelIds.push(label.id);
             });
-            emit("initLabelIds", labelIds, this.finish, res.data.createUser, this.$utils.toToc(res.data.html));
+            emit("initLabelIds", labelIds, finish, res.data.createUser, $utils.toToc(res.data.html));
 
             if (res.data.html) {
                 setTimeout(() => {
                     // 设置标题目录追踪滚动高亮当前标题
                     monitorScrollForTopicHighlight();
                     // 代码块复制
-                    this.$nextTick(() => {
-                        clearInterval(this.timer);
-                        this.getCodes();
+                    nextTick(() => {
+                        clearInterval(timer);
+                        getCodes();
                     });
                 }, 800);
             }
@@ -109,17 +110,17 @@ const getArticleById = () => {
                 router.push({
                     name: '404',
                     // 保留当前路径并删除第一个字符，以避免目标 URL 以 `//` 开头。
-                    params: { pathMatch: this.route.currentRoute._rawValue.path.substring(1).split('/') },
+                    params: { pathMatch: route.currentRoute._rawValue.path.substring(1).split('/') },
                 })
             } else {
                 ElMessage({
-                        showClose: true,
-                        message: err.desc,
-                        type: "error",
-                    });
+                    showClose: true,
+                    message: err.desc,
+                    type: "error",
+                });
             }
         });
-},
+}
 
 // 设置标题目录追踪滚动高亮当前标题
 const monitorScrollForTopicHighlight = () => {
@@ -162,7 +163,7 @@ const monitorScrollForTopicHighlight = () => {
         lis[0].classList.add('active');
     }
     // 监听滚动事件，检测标题是否进入/退出检测区域
-    const observer = new IntersectionObserver(
+    observer = new IntersectionObserver(
         entries => {
             for (const entry of entries) {
                 if (entry.intersectionRatio > 0) {
@@ -196,12 +197,14 @@ const monitorScrollForTopicHighlight = () => {
     Array.prototype.forEach.call(topics, target => {
         observer.observe(target);
     });
+    observer.disconnect()
+    toc.removeEventListener('click', tocClickEventCB)
     //TODO
-    this.$once('hook:beforeDestroy', () => {
-        observer.disconnect();
-        toc.removeEventListener('click', tocClickEventCB);
-    });
-},
+    // this.$once('hook:beforeDestroy', () => {
+    //     observer.disconnect();
+    //     toc.removeEventListener('click', tocClickEventCB);
+    // });
+}
 
 // 更新关注状态
 const updateFollowState = (toUser) => {
@@ -210,26 +213,30 @@ const updateFollowState = (toUser) => {
             getArticleById();
         })
         .catch(err => {
-            this.$message.error(err.desc);
+            ElMessage({
+                showClose: true,
+                message: err.desc,
+                type: "error",
+            });
         });
-},
+}
 
 // 路由到文章编辑页面
 const routerArticleEdit = (articleId) => {
-    this.$router.push("/edit/" + articleId);
-},
+    router.push("/edit/" + articleId);
+}
 
 // 路由到用户中心页面
 const routerUserCenter = (userId) => {
-    let routeData = this.$router.resolve("/user/" + userId);
+    let routeData = router.resolve("/user/" + userId);
     window.open(routeData.href, '_blank');
-},
+}
 
 // 路由到Book说明页面
 const routerBook = () => {
-    let routeData = this.$router.resolve("/book");
+    let routeData = router.resolve("/book");
     window.open(routeData.href, '_blank');
-},
+}
 
 
 // 为什么要这么写呢？
@@ -241,17 +248,17 @@ const routerBook = () => {
 // 不然你可以试试去掉这段代码
 // 你的offsetHeight一直为0，没有代码块序号。
 const getCodes = () => {
-    this.codes = document.querySelectorAll("pre code");
-    if (this.codes.length > 0) {
-        for (let i = 0; i < this.codes.length; i++) {
-            if (this.codes[i].offsetHeight !== 0) {
-                return this.init();
+    codes = document.querySelectorAll("pre code");
+    if (codes.length > 0) {
+        for (let i = 0; i < codes.length; i++) {
+            if (codes[i].offsetHeight !== 0) {
+                return init();
             } else {
-                this.timer = setInterval(() => {
-                    for (let j = 0; j < this.codes.length; j++) {
-                        if (this.codes[j].offsetHeight !== 0) {
-                            clearInterval(this.timer);
-                            return this.init();
+                timer = setInterval(() => {
+                    for (let j = 0; j < codes.length; j++) {
+                        if (codes[j].offsetHeight !== 0) {
+                            clearInterval(timer);
+                            return init();
                         }
                     }
                 }, 500);
@@ -259,13 +266,12 @@ const getCodes = () => {
             }
         }
     }
-},
+}
 
 const init = () => {
-    let thisTemp = this;
-    this.$nextTick(() => {
-        clearInterval(this.timer);
-        this.codes.forEach((item) => {
+    nextTick(() => {
+        clearInterval(timer);
+        codes.forEach((item) => {
             // 取出 code 的父元素 pre（后面方便使用）
             let pre = item.parentElement;
             let icon =
@@ -277,33 +283,38 @@ const init = () => {
             // 获取复制元素
             let copyButton = pre.firstElementChild.getElementsByClassName("copy-button")[0];
             copyButton.onclick = function () {
-                thisTemp.$copyText(pre.lastElementChild.innerText).then(() => {
-                    thisTemp.$message.success(
-                        'copy成功',
-                        1,
-                    );
+                $copyText(pre.lastElementChild.innerText).then(() => {
+                    ElMessage({
+                        showClose: true,
+                        message: '复制成功',
+                        type: "success",
+                    });
                 }).catch(() => {
-                    thisTemp.$message.error(
-                        'copy失败',
-                        1,
-                    );
+                    ElMessage({
+                        showClose: true,
+                        message: '复制失败',
+                        type: "error",
+                    });
                 });
             };
         });
     });
 }
 
-onMounted({
+onMounted(() => {
     getArticleById()
 })
-
+onBeforeMount(() => {
+    // observer.disconnect()
+    // toc.removeEventListener('click', tocClickEventCB)
+})
 watchEffect({
     data: function () {
-        this.$nextTick(() => {
+        nextTick(() => {
             // 锁定位置
             let hash = location.hash;
             if (hash) {
-                this.$nextTick(() => {
+                nextTick(() => {
                     setTimeout(() => {
                         // querySelector是按css规范来实现的，所以它传入的字符串中第一个字符不能是数字、特殊字符，修改成用属性匹配即可解决
                         hash = "[id='" + hash.substring(1, hash.length) + "']"
@@ -319,10 +330,10 @@ watchEffect({
             }
         });
     }
-}),
+})
 </script>
   
-<style lang="less">
+<style lang="less" scoped>
 #article-detail .article-title {
     display: flex;
     //align-items: center;

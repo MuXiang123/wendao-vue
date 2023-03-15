@@ -13,8 +13,7 @@ import utils from "./utils/utils"
 
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css' 
-
-import VueClipboards from 'vue-clipboard2'
+import VueClipboards from 'vue-clipboard3'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 const app = createApp(App)
     app.use(store)
