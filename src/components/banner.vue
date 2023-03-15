@@ -11,9 +11,9 @@
             >
             
             <router-link to="/">
-                <div class="logo">
+                <div class="wendao">
                     <img src="src\assets\logo.png" alt="logo">
-                    <span class="title">问道</span>
+                    <span class="wendao_title">问道</span>
                 </div>
             </router-link>
 
@@ -122,20 +122,19 @@ export default {
     justify-content: center;
 }
 
-
-.logo {
+.wendao {
     display: flex;
     align-items: center;
     margin-right: 20px;
 }
 
-.logo img {
+.wendao img {
     width: 40px;
     margin-right: 10px;
     margin-top: 10px;
 }
 
-.title {
+.wendao_title {
     color: #409eff;
     font-weight: 600;
     font-size: 20px;

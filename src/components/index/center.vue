@@ -175,7 +175,7 @@ export default {
 
 .ch2 {
     position: absolute;
-    margin-left: 600px;
+    right: 20px;
 }
 
 .username {
@@ -183,7 +183,7 @@ export default {
     font-size: 15px;
     font-weight: 500;
     letter-spacing: 1px;
-    line-height: 30px;
+    line-height: 1px;
     color: rgba(102, 102, 102, 1);
     text-align: left;
     vertical-align: top;

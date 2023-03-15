@@ -1,13 +1,15 @@
 <template>
     <div class="container">
-        <el-row :gutter="30"> 
-            <el-col span="10" class="left">
-                <leftVue></leftVue>
-            </el-col>
-            <el-col span="14" class="right">
+        <el-row :gutter="10">
+            <div class="left">
+                <el-affix :offset="80">
+                    <leftVue></leftVue>
+                </el-affix>
+            </div>
+            <div class="right">
                 <centertVue></centertVue>
-            </el-col>
-        </el-row >
+            </div>
+        </el-row>
     </div>
 </template>
 <script setup>
@@ -21,15 +23,15 @@ import leftVue from './left.vue'
     background-color: #fafafa;
     height: 100%;
 }
-.left{
+
+.left {
     margin-left: 260px;
     margin-top: 20px;
     background-color: #fafafa !important;
 }
-.right{
+
+.right {
     margin-top: 20px;
-}
-:deep(.infinite-list){
-    height: 700px;
+    height: 100%;
 }
 </style>
