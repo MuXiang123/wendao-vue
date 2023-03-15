@@ -16,12 +16,23 @@ export default defineConfig({
     }),
     Components({
       resolvers: [ElementPlusResolver()],
-    })    
+    })
   ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
-    
-  }
+
+  },
+
+  css: {
+    loaderOptions: {
+      less: {
+        lessOptions: {
+          modifyVars: {},
+          javascriptEnabled: true
+        }
+      }
+    }
+  },
 })
