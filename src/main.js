@@ -10,10 +10,9 @@ import '@/assets/font/font.css'
 import '@/assets/icon/iconfont.css'
 
 import utils from "./utils/utils"
-
-import mavonEditor from 'mavon-editor'
+import mavonEditor from 'mavon-editor' //markdown插件
 import 'mavon-editor/dist/css/index.css' 
-import VueClipboards from 'vue-clipboard3'
+import VueClipboards from 'vue-clipboard3'  //剪切板插件
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 const app = createApp(App)
     app.use(store)

@@ -1,4 +1,5 @@
 export default {
+  //工具 自行调用
   isClamp(event) {
     /**
      * @param {*} event  事件对象

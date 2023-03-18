@@ -35,10 +35,6 @@ import Content from "../components/index/content.vue";
   background-color: #fafafa;
   overflow-x: hidden;
 }
-
-.index {
-}
-
 .head {
   position: relative;
   width: 100%;

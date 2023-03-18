@@ -14,7 +14,7 @@ const routes = [
         redirect: '/index'
     },
     {
-        path: '/index',
+        path: '/index', // 首页
         name: 'index',
         component: Index,
         meta: {
@@ -22,16 +22,16 @@ const routes = [
         }
     },
     {
-        path:'/login',
+        path:'/login',  // 登录
         name:'login',
         component: Login
     },
     {
-        path:'/register',
+        path:'/register',  // 注册
         name:'register',
         component: Register
     },{
-        path:'/home/:id',
+        path:'/home/:id', // 个人主页
         name:'home',
         component: Home,
         meta: {
@@ -60,7 +60,7 @@ const routes = [
               }
         ]
     },{
-        path:'/article/:id',
+        path:'/article/:id', // 文章详情
         name: 'article',
         component: Article
     }

@@ -1,11 +1,11 @@
 import { MockMethod } from 'vite-plugin-mock'
 import Mock from 'mockjs';
-// 搜索便签
+// mock.js 使用示例
 export default [
     {
         url: '/article/getById',
         method: 'get',
-        Response: (opt) => {
+        response: (opt) => {
             console.log(opt)
             return {
                 code: 200,
@@ -28,4 +28,4 @@ export default [
             }
         }
     }
-]
+] as MockMethod[];

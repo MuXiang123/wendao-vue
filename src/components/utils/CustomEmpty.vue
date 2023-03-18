@@ -1,4 +1,5 @@
 <template>
+<!-- 空的骨架屏 -->
     <div id="custom-empty">
       <div class="container">
         <!-- 头像 -->

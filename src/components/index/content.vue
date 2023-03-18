@@ -13,10 +13,25 @@
     </div>
 </template>
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import centertVue from './center.vue'
 import leftVue from './left.vue'
+import axios from "axios";
 
+onMounted(() => {
+    axios.get('/user')
+        .then(function (response) {
+            // 处理成功情况
+            console.log(response);
+        })
+        .catch(function (error) {
+            // 处理错误情况
+            console.log(error);
+        })
+        .then(function () {
+            // 总是会执行
+        });
+})
 </script>
 <style scoped>
 .container {
