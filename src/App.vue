@@ -15,7 +15,7 @@ router.afterEach((to, from) => {
 })
 router.beforeEach((to, from, next) => {
   const userInfo = Cookies.get('token')
-  if (to.name === 'login') {
+  if (to.name === 'login' || to.name==='register') {
     //如果存在用户信息，或者进入的页面是登录页面，则直接进入
     next()
   } else {
@@ -38,7 +38,7 @@ router.beforeEach((to, from, next) => {
         <Banner></Banner>
       </el-header>
       <el-container class="el-container">
-        <el-main>
+        <el-main class="el-main">
           <router-view />
         </el-main>
       </el-container>
@@ -50,19 +50,19 @@ router.beforeEach((to, from, next) => {
 </template>
 
 <style scoped>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #000;
+.app{
+  height: 100%;
   margin: 0;
   padding: 0;
-  border: 0;
-  box-sizing: border-box;
-  width: 100vw;
-  height: 100vh;
-  overflow: -Scroll;
-  overflow-x: hidden;
+}
+.el-container{
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+.el-main{
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 </style>
