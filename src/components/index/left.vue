@@ -18,9 +18,7 @@
             <el-menu-item :key="i" :index="item.path" v-for="item, i in categoryList">{{ item.category }} </el-menu-item>
         </el-sub-menu>
         <el-menu-item index="video">
-            <el-icon>
-                <VideoPlay />
-            </el-icon>
+            <el-icon><VideoPause /></el-icon>
             <span>视频</span>
         </el-menu-item>
         <el-menu-item index="chat">
