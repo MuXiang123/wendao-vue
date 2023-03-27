@@ -13,7 +13,7 @@
             <el-menu-item index="/index">
                 首页
             </el-menu-item>
-            <el-menu-item index="/video">
+            <el-menu-item index="/video/index">
                 视频
             </el-menu-item>
             <div class="search-bar">
@@ -56,7 +56,7 @@
 <script setup>
 import { useRouter, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
-import { ref,defineEmits } from 'vue'
+import { ref} from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 const store = useStore();
 const router = useRouter();

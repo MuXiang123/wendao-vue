@@ -16,7 +16,7 @@
 import centertVue from './center.vue'
 import leftVue from './left.vue'
 import axios from "axios";
-import { getCurrentInstance, ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed, defineProps } from 'vue';
+import { getCurrentInstance, ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed} from 'vue';
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus'
