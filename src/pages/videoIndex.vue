@@ -2,9 +2,8 @@
   <div class="app">
     <el-container class="el-container">
       <el-aside width="250px" class="aside">
-        <el-menu default-active="/video/index" class="aside-menu" @open="handleOpen" @close="handleClose" router="true">
-          <el-menu-item index="VideoIndex"
-          :route="{ name: 'VideoCenter'}" class="el-menu-item">
+        <el-menu default-active="/video/index" class="aside-menu" :default-active="router.currentRoute.value.path" router="true">
+          <el-menu-item index="/video/index" class="el-menu-item">
             <el-icon>
               <HomeFilled />
             </el-icon>
@@ -43,9 +42,20 @@
             </el-icon>
             <span>浏览分区</span>
           </el-menu-item>
+          <el-divider />
+          <div class="tishi">
+            <p>
+              提示：
+            </p>
+            <p>
+              该网站视频信息，视频内容均来源于
+              <a src="www.bilibili.com">bilibili</a>
+              相关信息通过爬虫获取，仅用于学习。
+            </p>
+          </div>
         </el-menu>
       </el-aside>
-      <el-main>
+      <el-main class="el-main">
         <router-view ref="rightRef" @refresh="edit"></router-view>
       </el-main>
     </el-container>
@@ -62,16 +72,34 @@ const router = useRouter();
 </script>
 
 <style scoped>
-
-.aside-menu {
-  font-size: large;
-  font-weight: 500;
+.app {
   height: 100%;
-  text-align: center;
 
+}
+
+.el-container {
+  height: 100%;
+}
+
+.aside {
+  height: 100%;
 }
 
 .el-menu-item {
   border-radius: 10px;
+}
+
+.aside-menu {
+  font-size: large;
+  font-weight: 500;
+  text-align: center;
   padding: 5px;
-}</style>
+}
+.tishi{
+  font-size: small;
+  font-weight: 100;
+}
+.el-main{
+  overflow-y: scroll;
+}
+</style>

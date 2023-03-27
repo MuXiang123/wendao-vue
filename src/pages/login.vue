@@ -121,7 +121,7 @@ const rules = reactive({
     letter-spacing: 5px;
     line-height: 10px;
     margin-top: 149px;
-    margin-right: 288px;
+    margin-left: 140px;
     color: rgba(63, 102, 255, 1);
     vertical-align: middle;
     font-family: PingFang SC;
