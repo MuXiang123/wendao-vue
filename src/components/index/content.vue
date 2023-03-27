@@ -13,25 +13,30 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue'
 import centertVue from './center.vue'
 import leftVue from './left.vue'
 import axios from "axios";
-
+import { getCurrentInstance, ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed, defineProps } from 'vue';
+import { useStore } from 'vuex';
+import { useRoute, useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus'
+const store = useStore()
 onMounted(() => {
-    axios.get('/user')
-        .then(function (response) {
-            // 处理成功情况
-            console.log(response);
-        })
-        .catch(function (error) {
-            // 处理错误情况
-            console.log(error);
-        })
-        .then(function () {
-            // 总是会执行
-        });
+    init()
 })
+const init = () => {
+    axios.get('/userInfo')
+        .then((resp)=> {
+            console.log(resp.data)
+            store.commit('setUserInfo', resp.data)     
+        })
+        .catch((error)=>{
+            ElMessage({
+                message:error.msg,
+                type: 'error'
+            })
+        })
+}
 </script>
 <style scoped>
 .container {
