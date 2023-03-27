@@ -1,16 +1,8 @@
 <template>
     <!-- 顶部菜单栏 -->
     <div class="header">
-        <el-menu mode="horizontal" 
-            :default-active="activeIndex"
-             class="el-menu-demo"
-            @select="handleSelect"
-            active-text-color="#409eff"
-            text-color="#999999"
-            ellipsis="false"    
-            router="true"
-            >
-            
+        <el-menu mode="horizontal" :default-active="router.currentRoute.value.path" class="el-menu-demo"
+            active-text-color="#409eff" text-color="#999999" ellipsis="false" router="true">
             <router-link to="/">
                 <div class="wendao">
                     <img src="src\assets\logo.png" alt="logo">
@@ -34,90 +26,66 @@
                 发布
             </el-menu-item>
             <el-menu-item index="message">
-                <el-icon class="el-icon"><Bell/></el-icon>
+                <el-icon class="el-icon">
+                    <Bell />
+                </el-icon>
             </el-menu-item>
             <el-menu-item index="/chat">
-                <el-icon class="el-icon"><Message/></el-icon>
+                <el-icon class="el-icon">
+                    <Message />
+                </el-icon>
             </el-menu-item>
-            <el-sub-menu class="el-sub-menu" router >
+            <el-sub-menu class="el-sub-menu" router>
                 <template #title>
                     <el-avatar :size="50" :src="circleUrl" :fit="fit" @error="errorHandler">
                         <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png" alt="">
                     </el-avatar>
                 </template>
-                <el-menu-item
-                :route="{name: 'info', params: {id: `${store.state.id}` }}">
-                        <el-icon><House /></el-icon>
-                        <span class="span">我的主页</span>
+                <el-menu-item :route="{ name: 'info', params: { id: `${store.state.userInfo.userId}` } }">
+                    <el-icon>
+                        <House />
+                    </el-icon>
+                    <span class="span">我的主页</span>
                 </el-menu-item>
-                <el-menu-item index="/login" @click="logout()">
-                        <el-icon><CircleClose /></el-icon>
-                        <span class="span">退出登录</span>
-                </el-menu-item>
-                
             </el-sub-menu>
-            
+
         </el-menu>
     </div>
 </template>
   
-<script>
-import { useRouter } from 'vue-router';
+<script setup>
+import { useRouter, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
-import {ref} from 'vue'
+import { ref,defineEmits } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+const store = useStore();
+const router = useRouter();
+const activeIndex = ref('/index');
+const errorHandler = () => false //头像加载失败
+const inputSearch = ref("")
+const onEnterSearch = () => {
+    console.log(inputSearch.value)
+    const _self = this;
+    const url = "http://38617112yi.zicp.vip/article/search";
+    // _self.$axios
+    //     .get(url, { params: { keyword: inputSearch } })
+    //     .then((res) => {
+    //         console.log("搜索的数据", res);
+    //         router.push({
+    //             name: 'searchDetail',
+    //             params: {
+    //                 search: res.data.data
+    //             }
+    //         })
+    //     })
+    //     .catch((err) => {
+    //         console.log(err);
+    //     });
+}
 
-export default {
-    name: 'Header',
-    setup() {
-        const store = useStore();
-        const router = useRouter();
-        const activeIndex = ref('/index');
-        const errorHandler = () => false //头像加载失败
-        const handleSelect = (index) => {
-            router.push(index);
-        };
-        const inputSearch = ref("")
-        
-        const onEnterSearch = () => {
-            console.log(inputSearch.value)
-            const _self = this;
-            const url = "http://38617112yi.zicp.vip/article/search";
-            // _self.$axios
-            //     .get(url, { params: { keyword: inputSearch } })
-            //     .then((res) => {
-            //         console.log("搜索的数据", res);
-            //         router.push({
-            //             name: 'searchDetail',
-            //             params: {
-            //                 search: res.data.data
-            //             }
-            //         })
-            //     })
-            //     .catch((err) => {
-            //         console.log(err);
-            //     });
-        }
-
-        const logout = ()=>{
-            router.push({ name: "/login" });
-            localStorage.removeItem("password");
-            display.value = true;
-        }
-        return {
-            activeIndex,
-            inputSearch,
-            store,
-            logout,
-            handleSelect,
-            onEnterSearch
-        };
-    },
-};
 </script>
   
 <style scoped>
-
 .header {
     display: flex;
     justify-content: center;
@@ -142,23 +110,27 @@ export default {
     margin-left: 5px;
     margin-top: 10px;
 }
-.el-icon{
+
+.el-icon {
     color: #999999;
 }
-.search-bar{
+
+.search-bar {
     margin-top: 10px;
     color: #999999;
 }
-.el-button{
+
+.el-button {
     margin-left: 10px;
     margin-right: 10px;
     margin-top: 3px;
 }
 
- .span{
+.span {
     color: #999999;
     font-size: 12px;
 }
+
 .el-menu-demo {
     background-color: #FFFFFF;
     border: none;
@@ -181,6 +153,4 @@ export default {
 .el-menu-demo .el-input {
     width: 400px;
     margin-top: 5px;
-}
-
-</style>
+}</style>
