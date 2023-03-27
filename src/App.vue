@@ -1,24 +1,51 @@
 <script setup>
-const func1 = () => {
-  console.log('浏览器', navigator.userAgent)
-  let dev = String(navigator.userAgent)
-  if (dev.indexOf('Mozilla') > -1) {
-    this.$cookies.set(
-      "token",
-      "7c6d8601ba874dd7aa74d4bfc4d22b1c"
-    );
+import Banner from './components/banner.vue'
+import { useStore } from 'vuex';
+import { useRouter, useRoute } from 'vue-router'
+import { onMounted, reactive } from 'vue';
+import Cookies from 'js-cookie'
+const store = useStore()
+const router = useRouter()
+const noMenu = ['/login', '/register']
+const state = reactive({
+  showMenu: true,
+})
+router.afterEach((to, from) => {
+  state.showMenu = !noMenu.includes(to.path)
+})
+router.beforeEach((to, from, next) => {
+  const userInfo = Cookies.get('token')
+  if (to.name === 'login') {
+    //如果存在用户信息，或者进入的页面是登录页面，则直接进入
+    next()
   } else {
-    this.$cookies.set(
-      "token",
-      "6ec7c49f758a4296bf17b7410f2182cb"
-    );
+    if (!userInfo) {
+      next('/login')
+    } else {
+      //不存在用户信息则说明用户未登录，跳转到登录页面，带上当前的页面地址，登录完成后做回跳，
+      //如未登录用户进入用户中心的页面地址，检测到未登录，
+      //自动跳转到登录页面，并且带上用户中心的页面地址，登录完成后重新跳到个人中心页面。
+      next()
+    }
   }
-}
+})
 </script>
 
 <template>
-  <div id="app">
-    <router-view></router-view>
+  <div class="app">
+    <el-container v-if="state.showMenu">
+      <el-header class="head">
+        <Banner></Banner>
+      </el-header>
+      <el-container class="el-container">
+        <el-main>
+          <router-view />
+        </el-main>
+      </el-container>
+    </el-container>
+    <el-container v-else class="container">
+      <router-view />
+    </el-container>
   </div>
 </template>
 

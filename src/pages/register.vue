@@ -10,45 +10,86 @@
                 <span class="register1">前往登录账号</span>
                 <span class="register2" @click="goLogin()">登录</span>
             </div>
-            <el-form class="form" label-position="top" label-width="100px" :model="formLabelAlign" size="large">
-                <el-form-item label="手机号">
+            <el-form class="form" label-position="top" label-width="100px" :model="formLabelAlign" size="large"
+                ref="registerForm" :rules="rules">
+                <el-form-item label="昵称" prop="nickName">
+                    <el-input v-model="formLabelAlign.nickName" />
+                </el-form-item>
+                <el-form-item label="手机号" prop="userId">
                     <el-input v-model="formLabelAlign.userId" />
                 </el-form-item>
-                <el-form-item label="密码">
+                <el-form-item label="密码" prop="password">
                     <el-input v-model="formLabelAlign.password" show-password type="password" />
                 </el-form-item>
                 <el-form-item>
-                    <el-button class="button" type="info" dark="isDark" @click="onSubmit()">注册</el-button>
+                    <el-button class="button" type="info" dark=true @click="onSubmit">注册</el-button>
                 </el-form-item>
             </el-form>
         </el-col>
     </el-row>
 </template>
-<script>
-import { ref, reactive } from 'vue';
+
+<script setup>
+import { reactive, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-export default {
+import axios from '../api/axios.js'
+import { ElMessage } from 'element-plus'
+const router = useRouter()
+const route = useRoute()
+const registerForm = ref();
+const formLabelAlign = reactive({
+    userId: '',
+    password: '',
+    nickName: ''
+})
 
-    name: "register",
-    setup() {
-        const router = useRouter()
-        const route = useRoute()
-        const formLabelAlign = reactive({
-            userId: '',
-            password: ''
-        })
-
-        const goLogin = ()=>{
-            router.push({
-                name:'login'
+const goLogin = () => {
+    router.push({
+        name: 'login'
+    })
+}
+const rules = reactive({
+    userId: [
+        { required: true, message: '手机号不能为空', trigger: 'blur' },
+        { min: 11, max: 11, message: '请输入长度为11位的手机号', trigger: 'blur' },
+    ],
+    password: [
+        { required: 'true', message: '密码不能为空', trigger: 'blur' }
+    ],
+    nickName: [
+        { required: 'true', message: '昵称不能为空', trigger: 'blur' }
+    ]
+})
+const onSubmit = async () => {
+    registerForm.value.validate((valid) => {
+        if (valid) {
+            axios.post('/register/verifyRegisterInfo', {
+                nickName: formLabelAlign.nickName || '',
+                userId: formLabelAlign.userId || '',
+                password: formLabelAlign.password
+            }).then(res => {
+                if (res.code == 0) {
+                    ElMessage({
+                        message: '注册成功',
+                        type: 'success',
+                        onClose: () => {
+                            router.push({
+                                name: 'login'
+                            })
+                        }
+                    })
+                } else {
+                    ElMessage({
+                        message: res.msg,
+                        type: 'error',
+                    })
+                }
             })
+        } else {
+            console.log('提交错误!!')
+            return false;
         }
-
-        return{
-            formLabelAlign,
-            goLogin
-        }
-    }
+    })
 }
 </script>
 
@@ -60,10 +101,11 @@ export default {
     opacity: 1;
     background: rgba(240, 245, 255, 1);
 }
+
 .left img {
-    display: inline-block;
-    height: 750px;
-    width: 100%;
+    display: block;
+    max-height: 100vh;
+    width: auto;
 }
 
 .right {

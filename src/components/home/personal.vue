@@ -18,9 +18,13 @@
                     <span>{{ user.signature }} </span>
                 </div>
                 <div class="user_anniu">
-                    <el-button class="el-icon-edit" v-if="router.currentRoute.value.params.id === store.state.id"
-                        type="primary" size="medium" plain @click="edit" icon="EditPen">
-                        编辑
+                    <!-- <el-button class="el-icon-edit" v-if="router.currentRoute.value.params.id === store.state.userInfo.userId"
+                        type="primary" size="medium" plain @click="logout" icon="CircleClose">
+                        退出登录
+                    </el-button> -->
+                    <el-button class="el-icon-edit" v-if=true type="primary" size="medium" plain @click="logout"
+                        icon="CircleClose">
+                        退出登录
                     </el-button>
                     <el-button v-else @click="follow" type="primary" size="medium" icon="Check"
                         v-text="true ? '已关注' : '关注'">
@@ -40,6 +44,7 @@
                     <div class="num_number">{{ goodCounts }}</div>
                     <span class="num_text">获赞</span>
                 </div>
+
             </div>
         </div>
     </div>
@@ -48,40 +53,41 @@
 
         <div class="person_body_left">
             <el-affix :offset="80">
-            <el-card class="box-card" :body-style="{ padding: '0px' }">
-                <template #header class="clearfix">
-                    <span class="person_body_list" style="border-bottom: none">个人中心</span>
-                </template>
-                <el-menu router class="el-menu-vertical-demo" :default-active="info" active-text-color="#409eff">
-                    <el-menu-item index="info" :route="{ name: 'info', params: router.currentRoute.value.params.id }">
-                        <el-icon color="#999999">
-                            <User />
-                        </el-icon>
-                        <span slot="title">个人资料</span>
-                    </el-menu-item>
-                    <el-menu-item index="myArticle"
-                        :route="{ name: 'myArticle', params: router.currentRoute.value.params.id }">
-                        <el-icon color="#999999">
-                            <Document />
-                        </el-icon>
-                        <span slot="title">文章</span>
-                    </el-menu-item>
-                    <el-menu-item index="myFans" :route="{ name: 'myFans', params: router.currentRoute.value.params.id }">
-                        <el-icon color="#999999">
-                            <Bowl />
-                        </el-icon>
-                        <span slot="title">粉丝</span>
-                    </el-menu-item>
-                    <el-menu-item index="myFollow"
-                        :route="{ name: 'myFollow', params: router.currentRoute.value.params.id }">
-                        <el-icon color="#999999">
-                            <CirclePlus />
-                        </el-icon>
-                        <span slot="title">关注</span>
-                    </el-menu-item>
-                </el-menu>
-            </el-card>
-        </el-affix>
+                <el-card class="box-card" :body-style="{ padding: '0px' }">
+                    <template #header class="clearfix">
+                        <span class="person_body_list" style="border-bottom: none">个人中心</span>
+                    </template>
+                    <el-menu router class="el-menu-vertical-demo" :default-active="info" active-text-color="#409eff">
+                        <el-menu-item index="info" :route="{ name: 'info', params: router.currentRoute.value.params.id }">
+                            <el-icon color="#999999">
+                                <User />
+                            </el-icon>
+                            <span slot="title">个人资料</span>
+                        </el-menu-item>
+                        <el-menu-item index="myArticle"
+                            :route="{ name: 'myArticle', params: router.currentRoute.value.params.id }">
+                            <el-icon color="#999999">
+                                <Document />
+                            </el-icon>
+                            <span slot="title">文章</span>
+                        </el-menu-item>
+                        <el-menu-item index="myFans"
+                            :route="{ name: 'myFans', params: router.currentRoute.value.params.id }">
+                            <el-icon color="#999999">
+                                <Bowl />
+                            </el-icon>
+                            <span slot="title">粉丝</span>
+                        </el-menu-item>
+                        <el-menu-item index="myFollow"
+                            :route="{ name: 'myFollow', params: router.currentRoute.value.params.id }">
+                            <el-icon color="#999999">
+                                <CirclePlus />
+                            </el-icon>
+                            <span slot="title">关注</span>
+                        </el-menu-item>
+                    </el-menu>
+                </el-card>
+            </el-affix>
         </div>
 
         <div class="person_body_right">
@@ -91,7 +97,6 @@
     </div>
 
     <PersonalDia ref="dia" />
-
 </template>
 
 <script setup>
@@ -100,6 +105,7 @@ import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import PersonalDia from "./personalDia.vue";
+import Cookies from 'js-cookie'
 const store = useStore();
 const route = useRoute();
 const router = useRouter();
@@ -124,40 +130,14 @@ const isfollowid = ref()
 onMounted(() => {
     currentInstance = getCurrentInstance()
     console.log('onMounted')
-    // userInfo(router.currentRoute.value.params.id)
-    //     .then((res) => {
-    //         user = res;
-    //     })
-    //     .catch((err) => {
-    //         console.log(err)
-    //     });
-    // myfollow(store.state.id)
-    //     .then((res) => {
-    //         res.data.forEach((res) => {
-    //             isfollowid.push(res.id);
-    //         });
-    //     })
-    //     .catch((err) => {
-    //         console.log(err);
-    //     });
 
-    // followAndFanCount(router.currentRoute.value.params.id)
-    //     .then((res) => {
-    //         followCounts = res.data.followCounts;
-    //         fanCounts = res.data.fanCounts;
-    //     })
-    //     .catch((err) => {
-    //         console.log(err);
-    //     });
-
-    // goodCounts(router.currentRoute.value.params.id)
-    //     .then((res) => {
-    //         goodCounts = res.data.goodCounts;
-    //     })
-    //     .catch((err) => {
-    //         console.log(err);
-    //     });
 })
+const logout = () => {
+    console.log(Cookies.get('token'))
+    Cookies.remove('token')
+    router.push({ path: "/login" });
+
+}
 const edit = () => {
     dia.value.visitDia = true
 }
@@ -228,7 +208,7 @@ const myfollow = () => {
     margin-top: 30px;
     position: absolute;
     left: 50%;
-    transform: translateX(-50%); 
+    transform: translateX(-50%);
     display: flex;
     border-radius: 5px;
 }
@@ -312,7 +292,7 @@ const myfollow = () => {
     width: 1000px;
     display: flex;
     position: absolute;
-    left:0;
+    left: 0;
     right: 0;
     top: 210px;
     margin: auto;

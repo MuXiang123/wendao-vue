@@ -10,73 +10,102 @@
                 <span class="register1">注册你的账号</span>
                 <span class="register2" @click="goRegister()">注册</span>
             </div>
-            <el-form class="form" 
-             label-position="top" 
-             label-width="100px" 
-             :model="formLabelAlign"
-                size="large">
-                <el-form-item label="手机号">
+            <el-form class="form" label-position="top" label-width="100px" :model="formLabelAlign" :rules="rules"
+                size="large" ref="loginForm">
+                <el-form-item label="手机号" prop="userId">
                     <el-input v-model="formLabelAlign.userId" />
                 </el-form-item>
-                <el-form-item label="密码">
+                <el-form-item label="密码" prop="password">
                     <el-input v-model="formLabelAlign.password" show-password type="password" />
                 </el-form-item>
                 <el-form-item>
-                    <el-button class="button" type="info" dark="isDark" @click="onSubmit()">登录</el-button>
+                    <el-button class="button" type="info" dark=true @click="onSubmit">登录</el-button>
                 </el-form-item>
             </el-form>
         </el-col>
     </el-row>
 </template>
 
-<script>
+<script setup>
 import { reactive, ref } from 'vue';
-import { useRouter,useRoute } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
+import axios from '../api/axios.js'
+import { ElMessage } from 'element-plus'
+import { useStore } from "vuex";
+import Cookies from 'js-cookie'
+const router = useRouter()
+const route = useRoute()
+const store = useStore()
+const formLabelAlign = reactive({
+    userId: '',
+    password: ''
+})
+const loginForm = ref(null)
+const onSubmit = async () => {
+    loginForm.value.validate((valid) => {
+        if (valid) {
+            axios.post('/login/loginPassword', {
+                userId: formLabelAlign.userId || '',
+                password: formLabelAlign.password
+            }).then(res => {
+                if (res.code == 0) {
+                    //设置cookie
+                    let a = document.cookie
+                    let b = a.split('=')
+                    Cookies.set(b[0], b[1], '30d')
+                    console.log(Cookies.get('token'))
+                    store.commit('setId', formLabelAlign.userId)
+                    ElMessage({
+                        message: '登录成功',
+                        type: 'success',
+                        onClose: () => {
+                            router.push('/')
+                            // window.location.href = '/'
+                        }
+                    })
 
-export default {
-
-    name: "login",
-    setup() {
-        const router = useRouter()
-        const route = useRoute()
-        const formLabelAlign = reactive({
-            userId: '',
-            password: ''
-        })
-
-        const onSubmit = () => {
-            
-        }
-        const goRegister = () =>{
-            router.push({
-                name:'register'
+                } else {
+                    ElMessage({
+                        message: res.msg,
+                        type: 'error',
+                    })
+                }
             })
+        } else {
+            console.log('提交错误!!')
+            return false;
         }
-        const rules = reactive({
-            username: [
-                { required: true, message: '手机号不能为空', trigger: 'blur' },
-                { type: 'number', message: '请输入正确的手机号' },
-                { min: 11, max: 11, message: '请输入长度为11位的手机号', trigger: 'blur' },
-            ]
-        })
-        return {
-            formLabelAlign,
-            rules,
-            onSubmit,
-            goRegister,
-        }
-    }
+    })
 }
+
+const goRegister = () => {
+    router.push({
+        name: 'register'
+    })
+}
+const rules = reactive({
+    userId: [
+        { required: true, message: '手机号不能为空', trigger: 'blur' },
+        { min: 11, max: 11, message: '请输入长度为11位的手机号', trigger: 'blur' },
+    ],
+    password: [
+        { required: 'true', message: '密码不能为空', trigger: 'blur' }
+    ]
+})
 </script>
 <style scoped>
 .left {
     margin-left: 0px;
     margin-top: 0px;
-    height: 100%;
     opacity: 1;
 }
-.left .img{
+
+.left .img {
     width: 100%;
+    max-height: 100vh;
+    width: auto;
+    /* 让浏览器自动计算图片的宽度 */
+    display: block;
 }
 
 .right {

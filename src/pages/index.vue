@@ -1,9 +1,6 @@
 <template>
   <div id="index">
     <div>
-      <div class="head">
-        <Banner></Banner>
-      </div>
       <div class="container_content">
         <div class="container_main">
           <Content></Content>
@@ -14,7 +11,6 @@
 </template>
 
 <script setup>
-import Banner from "../components/banner.vue";
 import Content from "../components/index/content.vue";
 
 </script>
@@ -34,11 +30,6 @@ import Content from "../components/index/content.vue";
   bottom: 0;
   background-color: #fafafa;
   overflow-x: hidden;
-}
-.head {
-  position: relative;
-  width: 100%;
-  height: 60px;
 }
 </style>>
 
