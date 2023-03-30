@@ -38,7 +38,7 @@
             <el-sub-menu class="el-sub-menu" router>
                 <template #title>
                     <el-avatar :size="50" :src="circleUrl" :fit="fit" @error="errorHandler">
-                        <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png" alt="">
+                        <img :src="store.state.userInfo.avatar" alt="">
                     </el-avatar>
                 </template>
                 <el-menu-item :route="{ name: 'info', params: { id: `${store.state.userInfo.userId}` } }">
