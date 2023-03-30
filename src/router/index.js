@@ -10,7 +10,7 @@ import MyArticle from '../components/home/myArticle.vue';
 import Article from '../pages/detail.vue'
 import Video from "../pages/videoIndex.vue"
 import VideoCenter from "../components/video/videoCenter.vue"
-import VideoAction from "../pages/video.vue"
+import VideoAction from "../components/video/subarea.vue"
 import Cookies from 'js-cookie'
 const routes = [
     {
@@ -84,6 +84,10 @@ const routes = [
             {
                 path:'/video/action',
                 name:'VideoAction',
+                component:VideoAction
+            },{
+                path:'/video/area/:tid',
+                name:'VideoArea',
                 component:VideoAction
             }
         ]

@@ -24,6 +24,7 @@ const store = useStore()
 onMounted(() => {
     init()
 })
+//加载用户数据
 const init = () => {
     axios.get('/userInfo')
         .then((resp)=> {

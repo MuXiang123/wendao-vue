@@ -10,10 +10,6 @@
         <videoItem :msg="col"></videoItem>
       </el-col>
     </el-row>
-    <div class="footer">
-      <el-pagination :page-size="changePage.pageSize" layout="prev, pager, next" background :total="changePage.total"
-        @current-change="handleCurrentChange" :current-page="changePage.currentPage" />
-    </div>
   </div>
 </template>
 
@@ -38,33 +34,8 @@ const msg = ref([])
 onMounted(() => {
   onload()
 })
-
+//加载首页数据
 const onload = () => {
-  // 获取分区推荐
-  // axios.post("/video/popular", {
-  //   pageNum: changePage.currentPage,
-  //   pageSize: 24,
-  //   tid: 27
-  // }).then((res) => {
-  //   if (res.data.archives.length == 0) {
-  //     ElMessage({
-  //       message: '当前目录没有信息',
-  //       type: 'error'
-  //     })
-  //   } else {
-  //     msg.value = []
-  //     msg.value = res.data.archives
-  //     changePage.total = res.data.page.count
-
-  //     console.log(msg.value)
-  //   }
-  // }).catch((error) => {
-  //   ElMessage({
-  //     message: error,
-  //     type: 'error'
-  //   })
-  // })
-
   //获取热门推荐
   axios.get("/video/popular", {
     params: {
@@ -78,10 +49,8 @@ const onload = () => {
         type: 'error'
       })
     } else {
-      msg.value = []
       msg.value = res.data.list
-      changePage.total = res.data.page.count
-
+      changePage.total = res.data.list.length
       console.log(msg.value)
     }
   }).catch((error) => {
@@ -97,11 +66,7 @@ const changePage = reactive({
   total: 0,
   pageSize: 24,
 })
-const handleCurrentChange = (value) => {
-  changePage.currentPage = value;
-  onload()
-}
-
+//对分页数据取整
 const computedRows = computed(() => {
   const rows = [];
   const rowCount = Math.ceil(msg.value.length / 3);
@@ -133,10 +98,6 @@ const computedRows = computed(() => {
 
 .el-row {
   margin-bottom: 20px;
-}
-
-.el-row:last-child {
-  margin-bottom: 0;
 }
 
 .el-col {
