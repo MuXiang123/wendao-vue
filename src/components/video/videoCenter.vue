@@ -55,7 +55,7 @@ const onload = () => {
     }
   }).catch((error) => {
     ElMessage({
-      message: error,
+      message: '请求错误',
       type: 'error'
     })
   })

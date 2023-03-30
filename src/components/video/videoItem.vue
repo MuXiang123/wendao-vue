@@ -1,6 +1,6 @@
 <template>
     <meta name="referrer" content="no-referrer">
-    <div class="app">
+    <div class="app" @click="action">
         <el-image class="img" :src="props.msg.pic" fit="fill" />
         <div class="text">
             <el-avatar size="36px" :src="props.msg.owner.face" class="avatar" />
@@ -90,6 +90,15 @@ const getFormatTime = (timeStamp) => {
     }
 
     return timeSpanStr;
+}
+const action = () =>{
+    router.push({
+        path:'/video/action',
+        query:{
+            avid: props.msg.aid,
+            cid: props.msg.cid
+        }
+    })
 }
 </script>
 <style scoped>

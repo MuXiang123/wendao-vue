@@ -71,7 +71,7 @@
         </el-menu>
       </el-aside>
       <el-main class="el-main">
-        <router-view ref="rightRef" @refresh="edit"></router-view>
+        <router-view ref="rightRef"></router-view>
       </el-main>
     </el-container>
   </div>
@@ -84,6 +84,7 @@ import { useRoute, useRouter } from 'vue-router';
 const store = useStore();
 const route = useRoute();
 const router = useRouter();
+const showParent = ref(true)
 </script>
 
 <style scoped>

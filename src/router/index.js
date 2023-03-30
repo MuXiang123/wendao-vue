@@ -10,7 +10,8 @@ import MyArticle from '../components/home/myArticle.vue';
 import Article from '../pages/detail.vue'
 import Video from "../pages/videoIndex.vue"
 import VideoCenter from "../components/video/videoCenter.vue"
-import VideoAction from "../components/video/subarea.vue"
+import VideoArea from "../components/video/subarea.vue"
+import VideoAction from "../pages/videoAction.vue"
 import Cookies from 'js-cookie'
 const routes = [
     {
@@ -75,23 +76,23 @@ const routes = [
         path: '/video',
         name: 'video',
         component: Video,
-        children:[
+        children: [
             {
-                path:'/video/index',
-                name:'VideoCenter',
-                component:VideoCenter
-            },
-            {
-                path:'/video/action',
-                name:'VideoAction',
-                component:VideoAction
-            },{
-                path:'/video/area/:tid',
-                name:'VideoArea',
-                component:VideoAction
+                path: '/video/index',
+                name: 'VideoCenter',
+                component: VideoCenter
+            }, {
+                path: '/video/area/:tid',
+                name: 'VideoArea',
+                component: VideoArea,
             }
         ]
     },
+    {
+        path: '/video/action',
+        name: 'VideoAction',
+        component: VideoAction
+    }
 ]
 const router = createRouter({
     history: createWebHashHistory(),
