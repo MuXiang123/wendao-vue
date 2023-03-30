@@ -151,6 +151,7 @@ const onSubmit = async () => {
     color: rgba(63, 102, 255, 1);
     text-align: left;
     vertical-align: middle;
+    cursor: pointer;
 }
 
 .form {

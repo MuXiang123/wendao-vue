@@ -28,10 +28,12 @@ const props = defineProps({
 const msg = reactive(props.msg)
 let bigView = ref('')
 let time = ref('')
+// 初始化
 onMounted(() => {
     bigView.value = bigNumberTransform(props.msg.stat.view)
     time.value = getFormatTime(props.msg.ctime * 1000)
 })
+//监听页面传参，根据参数重新计算
 watchEffect(props, (newProps) => {
     bigView.value = bigNumberTransform(newProps.msg.stat.view)
     time.value = getFormatTime(newProps.msg.ctime * 1000)
@@ -91,6 +93,9 @@ const getFormatTime = (timeStamp) => {
 }
 </script>
 <style scoped>
+.app{
+    cursor: pointer;
+}
 .img {
     width: 360px;
     height: 203px;
