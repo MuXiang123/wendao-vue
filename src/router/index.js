@@ -12,6 +12,7 @@ import Video from "../pages/videoIndex.vue"
 import VideoCenter from "../components/video/videoCenter.vue"
 import VideoArea from "../components/video/subarea.vue"
 import VideoAction from "../pages/videoAction.vue"
+import ArticleEdit from "../pages/edit.vue"
 import Cookies from 'js-cookie'
 const routes = [
     {
@@ -93,6 +94,11 @@ const routes = [
         path: '/video/action',
         name: 'VideoAction',
         component: VideoAction
+    },
+    {
+        path:'/article/edit',
+        name: 'ArticleEdit',
+        component: ArticleEdit
     }
 ]
 const router = createRouter({
