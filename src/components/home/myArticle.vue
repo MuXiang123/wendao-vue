@@ -1,10 +1,10 @@
 <template>
   <div class="myart1">
-    <Article v-if=""/>
-        <el-empty
+    <Article />
+        <!-- <el-empty
         :image-size="250"
         description="暂未发表任何文章额"
-      ></el-empty>
+      ></el-empty> -->
   </div>
 </template>
 
@@ -18,10 +18,10 @@ const store = useStore();
 const route = useRoute();
 const router = useRouter();
 onMounted({
-  load()
+
 })
 const load = (()=>{
-  axios.get
+
 })
 </script>
 <style scoped>

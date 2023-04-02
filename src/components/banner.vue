@@ -22,7 +22,7 @@
                     搜索
                 </el-button>
             </div>
-            <el-menu-item index="writeArticle">
+            <el-menu-item index="/article/edit">
                 发布
             </el-menu-item>
             <el-menu-item index="message">

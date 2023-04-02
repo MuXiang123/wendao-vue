@@ -27,7 +27,7 @@
             </el-icon>
             <span>私信</span>
         </el-menu-item>
-        <el-menu-item index="publish">
+        <el-menu-item index="/article/edit">
             <el-icon>
                 <Plus />
             </el-icon>

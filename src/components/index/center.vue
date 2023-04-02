@@ -1,63 +1,73 @@
 <template>
-    <ul v-infinite-scroll="load" class="infinite-list">
-        <li v-for="article in props.articleList" :key="article" class="infinite-list-item">
-            <el-card class="box-card" shadow="always">
-                <template #header>
-                    <div class="card-header">
-                        <el-avatar class="avatar" :size="50" :src="article.avatar" />
-                        <div class="ch1">
-                            <p class="username">{{ article.username }} </p>
-                            <p class="time">{{ article.time }} </p>
+    <div class="main">
+        <ul v-infinite-scroll="load" class="infinite-list" style="overflow: auto">
+            <li v-for="(article, i) in articleList" :key="i" class="infinite-list-item">
+                <el-card class="box-card" shadow="always">
+                    <template #header>
+                        <div class="card-header">
+                            <el-avatar class="avatar" :size="50" :src="article.avatar" />
+                            <div class="ch1">
+                                <p class="username">{{ article.username }} </p>
+                                <p class="time">{{ article.time }} </p>
+                            </div>
+                            <div class="ch2">
+                                <el-dropdown>
+                                    <el-button class="more" icon="MoreFilled" text>
+                                    </el-button>
+                                    <template #dropdown>
+                                        <el-dropdown-menu>
+                                            <el-dropdown-item @click="deleteArticle(article.id)">删除</el-dropdown-item>
+                                        </el-dropdown-menu>
+                                    </template>
+                                </el-dropdown>
+                            </div>
                         </div>
-                        <div class="ch2">
-                            <el-dropdown>
-                                <el-button class="more" icon="MoreFilled" text>
+                    </template>
+                    <h3 class="title">{{ article.title }} </h3>
+                    <p class="detail">{{ article.detail }} </p>
+                    <el-divider border-style="dotted" />
+                    <el-row :gutter="20">
+                        <el-col :span="5">
+                            <div class="like">
+                                <el-button type="primary" text>
+                                    <svg class="icon" aria-hidden="true">
+                                        <use xlink:href="#icon-like"></use>
+                                      </svg>
+                                    <span class="bottom_font">
+                                        <span v-text="article.like > 9999 ? '9999+' : article.like">
+                                        </span>点赞
+                                    </span>
                                 </el-button>
-                                <template #dropdown>
-                                    <el-dropdown-menu>
-                                        <el-dropdown-item @click="deleteArticle(article.id)">删除</el-dropdown-item>
-                                    </el-dropdown-menu>
-                                </template>
-                            </el-dropdown>
-                        </div>
-                    </div>
-                </template>
-                <h3 class="title">{{ article.title }} </h3>
-                <p class="detail">{{ article.detail }} </p>
-                <el-divider border-style="dotted" />
-                <el-row :gutter="20">
-                    <el-col :span="5">
-                        <div class="like">
-                            <img src="../../assets/dianzan.svg" />
-                            <span class="bottom_font">点赞
-                                <span v-text="article.like > 9999 ? '9999+' : article.like">
-                                </span>
-                            </span>
-                        </div>
-                    </el-col>
-                    <el-col :span="5">
-                        <div class="comment">
-                            <el-icon size="20px" color="#E6E6E6">
-                                <Comment />
-                            </el-icon>
-                            <span class="bottom_font">
-                                <span v-text="article.comment > 9999 ? '9999+' : article.comment">
-                                </span>条评论
-                            </span>
-                        </div>
-                    </el-col>
-                    <el-col :span="5">
-                        <div class="share">
-                            <el-icon size="20px" color="#E6E6E6">
-                                <Share />
-                            </el-icon>
-                            <span class="bottom_font">分享</span>
-                        </div>
-                    </el-col>
-                </el-row>
-            </el-card>
-        </li>
-    </ul>
+                            </div>
+                        </el-col>
+                        <el-col :span="5">
+                            <div class="comment">
+                                <el-button type="primary" text>
+                                    <el-icon size="20px">
+                                        <Comment />
+                                    </el-icon>
+                                    <span class="bottom_font">
+                                        <span v-text="article.comment > 9999 ? '9999+' : article.comment">
+                                        </span>条评论
+                                    </span>
+                                </el-button>
+                            </div>
+                        </el-col>
+                        <el-col :span="5">
+                            <div class="share">
+                                <el-button type="primary" text>
+                                    <el-icon size="20px">
+                                        <Share />
+                                    </el-icon>
+                                    <span class="bottom_font">分享</span>
+                                </el-button>
+                            </div>
+                        </el-col>
+                    </el-row>
+                </el-card>
+            </li>
+        </ul>
+    </div>
 </template>
 
 <script setup>
@@ -69,7 +79,7 @@ const store = useStore();
 const route = useRoute();
 const router = useRouter();
 const props = defineProps({
-    articleList:Array
+    articleList: Array
 })
 const articleList = ref([
     {
@@ -82,38 +92,71 @@ const articleList = ref([
         like: 123,
         comment: 0
     },
-    
+    {
+        id: '123',
+        username: 'username11111111111111',
+        avatar: 'https://img.js.design/assets/img/61515b3a543d3e0d6e043adb.png',
+        time: '2022-2-21',
+        title: '标题',
+        detail: 'When you enter into any new area of science, you almost always find yourself with a baffling new language of technical terms to learn',
+        like: 123,
+        comment: 0
+    },
+    {
+        id: '123',
+        username: 'username11111111111111',
+        avatar: 'https://img.js.design/assets/img/61515b3a543d3e0d6e043adb.png',
+        time: '2022-2-21',
+        title: '标题',
+        detail: 'When you enter into any new area of science, you almost always find yourself with a baffling new language of technical terms to learn',
+        like: 123,
+        comment: 0
+    },
+    {
+        id: '123',
+        username: 'username11111111111111',
+        avatar: 'https://img.js.design/assets/img/61515b3a543d3e0d6e043adb.png',
+        time: '2022-2-21',
+        title: '标题',
+        detail: 'When you enter into any new area of science, you almost always find yourself with a baffling new language of technical terms to learn',
+        like: 123,
+        comment: 0
+    },
 ])
 
 const deleteArticle = (id) => {
     console.log(id)
 }
-return {
-    articleList,
-    load,
-    deleteArticle
+const i1 = ref(1)
+const load = () => {
+    articleList.value.push(articleList.value[0])
 }
-
 
 </script>
 <style scoped>
 ::-webkit-scrollbar {
-    width: 0 !important;
-    height: 0;
+    width: 0;
+}
+
+.main {
+    height: 100%;
+    overflow: hidden;
+
 }
 
 .infinite-list {
     margin: 0;
     list-style: none;
     overflow: auto;
+    height: 42.5rem;
 }
 
 .infinite-list .infinite-list-item {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 30px;
-
+    margin-bottom: 15px;
+    height: auto
 }
 
 .infinite-list .infinite-list-item+.list-item {
@@ -134,7 +177,6 @@ return {
     font-size: 13px;
     font-weight: 500;
     letter-spacing: 1px;
-    color: rgba(179, 179, 179, 1);
     font-family: Roboto;
 }
 
@@ -163,6 +205,7 @@ return {
     color: rgba(102, 102, 102, 1);
     text-align: left;
     vertical-align: top;
+    margin-bottom: 1rem;
 }
 
 .time {
@@ -177,19 +220,20 @@ return {
 }
 
 .title {
-
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 600;
     letter-spacing: 0px;
-    line-height: 30px;
     color: rgba(102, 102, 102, 1);
     text-align: left;
     vertical-align: top;
-
+    margin-top: 0;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
 }
 
 .detail {
-
     font-size: 13px;
     font-weight: 400;
     letter-spacing: 0px;
@@ -197,7 +241,15 @@ return {
     color: rgba(128, 128, 128, 1);
     text-align: left;
     vertical-align: top;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
 
+.el-divider {
+    margin-top: 0;
+    margin-bottom: 1rem;
 }
 
 .like {

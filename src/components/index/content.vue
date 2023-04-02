@@ -42,7 +42,7 @@ const init = () => {
 <style scoped>
 .container {
     background-color: #fafafa;
-    height: 100%;
+    height: 100%
 }
 
 .left {
@@ -53,6 +53,6 @@ const init = () => {
 
 .right {
     margin-top: 20px;
-    height: 100%;
+    height: calc(100vh - 90px);
 }
 </style>
