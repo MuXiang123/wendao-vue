@@ -50,14 +50,6 @@
             <span>生活</span>
           </el-menu-item>
           <el-divider />
-
-          <el-menu-item index="/subarea">
-            <el-icon>
-              <CirclePlusFilled />
-            </el-icon>
-            <span>浏览分区</span>
-          </el-menu-item>
-          <el-divider />
           <div class="tishi">
             <p>
               提示：
@@ -77,6 +69,7 @@
   </div>
 </template>
 
+
 <script setup>
 import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from 'vue';
 import { useStore } from 'vuex';
@@ -88,6 +81,7 @@ const showParent = ref(true)
 </script>
 
 <style scoped>
+
 .app {
   height: 100%;
 

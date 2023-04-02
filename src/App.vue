@@ -4,6 +4,7 @@ import { useStore } from 'vuex';
 import { useRouter, useRoute } from 'vue-router'
 import { onMounted, reactive } from 'vue';
 import Cookies from 'js-cookie'
+import './assets/icon/iconfont.js'
 const store = useStore()
 const router = useRouter()
 const noMenu = ['/login', '/register']
@@ -64,4 +65,6 @@ router.beforeEach((to, from, next) => {
   margin: 0;
   padding: 0;
 }
+
+
 </style>
