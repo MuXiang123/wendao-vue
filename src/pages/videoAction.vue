@@ -1,13 +1,9 @@
 <template>
   <meta name="referrer" content="no-referrer">
   <div class="app">
-    <iframe class="iframe_video" :src="src" scrolling="no" border="0" frameborder="no"
-      framespacing="0" allowfullscreen="true"> </iframe>
-    <h3 class="video_title">{{ msg.title }} </h3>
-    <div class="owner" v-if="msg.owner">
-      <el-avatar :size="50" :src="msg.owner.face"></el-avatar>
-      <h4 class="owner_name">{{ msg.owner.name }} </h4>
-    </div>
+    <iframe class="iframe_video" :src="src" scrolling="no" border="0" frameborder="no" framespacing="0"
+      allowfullscreen="true"> </iframe>
+
     <div class="recommend">
       <el-col>
         <el-row v-for="(rem, item) in recommend" :key="index">
@@ -18,12 +14,52 @@
               <div class="name">{{ rem.owner.name }} </div>
               <span class="view" v-text="bigNumberTransform(rem.stat.vv)"></span>
               <span class="view">次观看 • </span>
-              <span class="time" v-text="getFormatTime(rem.ctime*1000)"></span>
+              <span class="time" v-text="getFormatTime(rem.ctime * 1000)"></span>
             </div>
           </div>
         </el-row>
       </el-col>
+    </div>
 
+    <h3 class="video_title">{{ msg.title }} </h3>
+
+    <div class="owner" v-if="msg.owner">
+      <el-avatar :size="50" :src="msg.owner.face"></el-avatar>
+      <h4 class="owner_name">{{ msg.owner.name }} </h4>
+      <div class="icon_button">
+        <el-button type="primary" bg size="large">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-like"></use>
+          </svg>
+          {{ bigNumberTransform(msg.stat.like) }}
+        </el-button>
+        <el-button type="primary" bg size="large">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-message"></use>
+          </svg>
+          {{ bigNumberTransform(msg.stat.reply) }}
+        </el-button>
+        <el-button type="primary" bg size="large">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-share"></use>
+          </svg>
+          {{ bigNumberTransform(msg.stat.share) }}
+        </el-button>
+        <el-button type="primary" bg size="large">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-star"></use>
+          </svg>
+          收藏
+        </el-button>
+      </div>
+    </div>
+    <div class="dynamic">
+      <span >{{ msg.stat.view }}次观看 </span>
+      <span>{{ getFormatTime(msg.ctime * 1000) }}发布 </span>
+      <span style="color:#409EFF;"> #{{ msg.tname }} </span>
+      <p class="content" v-if="msg.dynamic">
+        {{ msg.dynamic }}
+      </p>
     </div>
   </div>
 </template>
@@ -41,7 +77,7 @@ let actionInfo = reactive({
   avid: router.currentRoute.value.query.avid,
   cid: router.currentRoute.value.query.cid
 })
-onBeforeMount( ()=>{
+onBeforeMount(() => {
   loadMsg()
   loadRecommend()
 })
@@ -54,8 +90,8 @@ const loadMsg = () => {
       aid: actionInfo.avid
     }
   }).then((res) => {
-      msg.value = res.data
-      console.log(msg.owner)
+    msg.value = res.data
+    console.log(msg.owner)
   }).catch((error) => {
     ElMessage({
       message: '请求错误',
@@ -63,7 +99,7 @@ const loadMsg = () => {
     })
   })
 }
-const loadRecommend = () =>{
+const loadRecommend = () => {
   axios.get('/video/recommend', {
     params: {
       aid: actionInfo.avid
@@ -79,14 +115,17 @@ const loadRecommend = () =>{
     })
   })
 }
-const action = (aid, cid) =>{
-    router.push({
-        path:'/video/action',
-        query:{
-            avid: aid,
-            cid: cid
-        }
-    })
+const action = (aid, cid) => {
+  router.replace({
+    path: '/video/action',
+    query: {
+      avid: aid,
+      cid: cid
+    }
+  }).then(() => {
+    location.reload()
+  })
+
 }
 let src = ref("//player.bilibili.com/player.html?aid=" + actionInfo.avid + "&cid=" + actionInfo.cid + "&page=" + 1)
 
@@ -154,12 +193,18 @@ const getFormatTime = (timeStamp) => {
   height: calc(100vh - 70px);
 }
 
+.icon_button {
+  margin-left: calc(100vh - 26%);
+}
+
 .iframe_video {
   margin-left: 10px;
   margin-right: 10px;
-  height:515px;
-  width:916px;
+  height: 515px;
+  width: 916px;
+  border-radius: 10px;
 }
+
 
 .el-image {
   width: 168px;
@@ -168,9 +213,19 @@ const getFormatTime = (timeStamp) => {
 
 }
 
-.video_title{
+.video_title {
   margin-left: 10px;
   width: 900px;
+}
+
+.owner {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.owner_name {
+  margin-left: 20px;
 }
 
 .recommend {
@@ -218,5 +273,39 @@ const getFormatTime = (timeStamp) => {
   font-size: 10px;
   line-height: 2px;
   font-weight: 400;
+}
+
+.icon {
+  margin-right: 5px;
+}
+
+.dynamic{
+  width: 55rem;
+  height: auto;
+  margin-top: 15px;
+  margin-left: 10px;
+  margin-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: auto;
+  background-color:  #e9e9eb;
+  color: #303133;
+  border-radius: 10px;
+}
+</style>
+
+<style>
+.icon {
+  width: 1rem;
+  height: 1rem;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
 }
 </style>
