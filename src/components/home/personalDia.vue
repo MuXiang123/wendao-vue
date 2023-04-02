@@ -5,9 +5,8 @@
       <el-form :model="form" :rules="rules" ref="ruleFormsss" label-width="150px">
         <div class="updateinfo">
           <el-form-item label="头像" prop="avatar">
-            <el-upload class="avatar-uploader" action="localhost:8081/upload/images" :show-file-list="false"
-              :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload" :http-request="upload"
-              list-type="picture">
+            <el-upload class="avatar-uploader" :show-file-list="false" :on-success="handleAvatarSuccess"
+              action='http://localhost:8081/upload/images' :before-upload="beforeAvatarUpload" auto-upload="true">
               <img v-if="form.avatar" :src="form.avatar" class="avatar" />
               <el-icon v-else class="avatar-uploader-icon">
                 <Plus />
@@ -37,7 +36,7 @@
           </el-form-item>
           <el-form-item>
             <el-button @click="handleClose">取 消</el-button>
-            <el-button type="primary" @click="submit">提 交</el-button>
+            <el-button type="primary" @click="submit(ruleFormsss)">提 交</el-button>
           </el-form-item>
         </div>
       </el-form>
@@ -49,19 +48,43 @@
 import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
+import axios from 'axios';
+import { ElMessage } from 'element-plus';
+import Cookies from 'js-cookie'
 const store = useStore();
 const route = useRoute();
 const router = useRouter();
-const form = ref({
-  avatar: "",
-  password: "",
-  nickname: "",
-  sex: '',
-  userId: "",
-  signature: "",
-  school: ""
+const form = reactive({
+  avatar:'',
+  nickname:'',
+  sex:Number,
+  userId:store.state.userInfo.userId,
+  password:'',
+  signature:'',
+  school:'',
 })
 const ruleFormsss = ref(null);
+onMounted(() => {
+  loadMsg()
+})
+const loadMsg = () => {
+  axios.get('/userInfo')
+    .then((res) => {
+      form.avatar = res.data.avatar
+      form.nickname = res.data.nickname
+      form.sex = res.data.sex
+      form.signature = res.data.signature
+      form.school = res.data.school
+      console.log(form.userId);
+    }).catch((error) => {
+      ElMessage({
+        message: error,
+        type: 'error'
+      })
+    })
+
+}
+
 const rules = ref({
   nickname: [
     { required: true, message: "昵称不能为空", trigger: "blur" },
@@ -77,34 +100,71 @@ let visitDia = ref(false)
 const handleClose = () => {
   visitDia.value = false
 }
-const upload = (file) => {
 
-}
 const handleAvatarSuccess = (res, file) => {
-  form.avatar = res.data.url
-}
-const beforeAvatarUpload = (file) => {
-  const isPNG = file.type === 'image/png/img/gif/jpg'
-  const isLt2M = file.size / 1024 / 1024 < 4
-  if (!isPNG) {
-    this.$message.error('上传头像图片只能是 image/png/img/gif/jpg 格式!')
-  }
-  if (!isLt2M) {
-    this.$message.error('上传头像图片大小不能超过 4MB!')
-  }
-  return isPNG && isLt2M
-}
-const submit = async () => {
-  const form = unref(ruleFormsss);
-  if (!form) return
-  try {
-    await form.validate()
-    const { username, password, region } = ruleForm
-    console.log(username, password, region)
-  } catch (error) {
-  }
+  console.log(res);
+  form.avatar = res.data
 }
 
+const beforeAvatarUpload = (rawFile) => {
+  console.log(rawFile.type)
+  if (rawFile.type !== 'image/jpeg') {
+    ElMessage.error('请提交JPG格式的文件!')
+    return false
+  } else if (rawFile.size / 1024 / 1024 > 4) {
+    ElMessage.error('图片大小不能超过4MB!')
+    return false
+  }
+  return true
+}
+
+const submit = (ruleFormsss) => {
+  if (!ruleFormsss) return
+  ruleFormsss.validate((valid) => {
+    console.log(form);
+    if (valid) {
+      axios.post('/update/userInfo', {
+        userId:form.userId,
+        avatar:form.avatar,
+        password:form.password,
+        sex:form.sex,
+        nickname:form.nickname,
+        signature:form.signature,
+        school:form.school
+      }).then((res) => {
+        if (res.msg == 'success') {
+          let a = document.cookie
+          let b = a.split('=')
+          Cookies.set(b[0], b[1], '30d')
+          console.log(Cookies.get('token'))
+          store.commit('setId', form.userId)
+
+          axios.get('/userInfo')
+            .then((resp) => {
+              console.log(resp.data)
+              store.commit('setUserInfo', resp.data)
+            })
+            .catch((error) => {
+              ElMessage({
+                message: error.msg,
+                type: 'error'
+              })
+            })
+            
+          ElMessage({
+            type: 'success',
+            message: '修改成功',
+            onClose: () => {
+              window.location.reload()
+            }
+          })
+        }
+      }).catch(error => {
+        ElMessage.error(error)
+      })
+    }
+  })
+}
 
 defineExpose({
   visitDia,

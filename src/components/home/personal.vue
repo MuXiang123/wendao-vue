@@ -1,126 +1,125 @@
 <template>
-    <div class="top">
-        <div class="top_img">
-            <el-avatar :size="130" :src="user.avatar" />
-        </div>
-        <div class="text">
-            <div class="user_text">
-                <div class="user_name">
-                    <span>{{ user.nickname }} </span>
+    <div>
+        <div class="top">
+            <div class="top_img">
+                <el-avatar :size="130" :src="user.avatar" />
+            </div>
+            <div class="text">
+                <div class="user_text">
+                    <div class="user_name">
+                        <span>{{ user.nickname }} </span>
+                    </div>
+                    <div class="user-school" v-if="user.school != ''">
+                        <el-icon color="#F18F1C">
+                            <Flag />
+                        </el-icon>
+                        <span class="user-school-font">{{ user.school }} </span>
+                    </div>
+                    <div class="signature">
+                        <span>{{ user.signature }} </span>
+                    </div>
+                    <div class="user_anniu">
+                        <el-button class="el-icon-edit" v-if=true type="primary" size="medium" plain @click="logout"
+                            icon="CircleClose">
+                            退出登录
+                        </el-button>
+                        <el-button v-else @click="follow" type="primary" size="medium" icon="Check"
+                            v-text="true ? '已关注' : '关注'">
+                        </el-button>
+                    </div>
                 </div>
-                <div class="user-school" v-if="user.school != ''">
-                    <el-icon color="#F18F1C">
-                        <Flag />
-                    </el-icon>
-                    <span class="user-school-font">{{ user.school }} </span>
-                </div>
-                <div class="signature">
-                    <span>{{ user.signature }} </span>
-                </div>
-                <div class="user_anniu">
-                    <!-- <el-button class="el-icon-edit" v-if="router.currentRoute.value.params.id === store.state.userInfo.userId"
-                        type="primary" size="medium" plain @click="logout" icon="CircleClose">
-                        退出登录
-                    </el-button> -->
-                    <el-button class="el-icon-edit" v-if=true type="primary" size="medium" plain @click="logout"
-                        icon="CircleClose">
-                        退出登录
-                    </el-button>
-                    <el-button v-else @click="follow" type="primary" size="medium" icon="Check"
-                        v-text="true ? '已关注' : '关注'">
-                    </el-button>
+                <div class="user_num">
+                    <div style="cursor: pointer" @click="myfans">
+                        <div class="num_number">{{ userData.fansCount }}</div>
+                        <span class="num_text">粉丝</span>
+                    </div>
+                    <div style="cursor: pointer" @click="myfollow">
+                        <div class="num_number">{{ userData.followCount }}</div>
+                        <span class="num_text">关注</span>
+                    </div>
+                    <div>
+                        <div class="num_number">{{ userData.likeCount }}</div>
+                        <span class="num_text">获赞</span>
+                    </div>
+
                 </div>
             </div>
-            <div class="user_num">
-                <div style="cursor: pointer" @click="myfans">
-                    <div class="num_number">{{ fanCounts }}</div>
-                    <span class="num_text">粉丝</span>
-                </div>
-                <div style="cursor: pointer" @click="myfollow">
-                    <div class="num_number">{{ followCounts }}</div>
-                    <span class="num_text">关注</span>
-                </div>
-                <div>
-                    <div class="num_number">{{ goodCounts }}</div>
-                    <span class="num_text">获赞</span>
-                </div>
+        </div>
 
+        <div class="person_body">
+
+            <div class="person_body_left">
+                <el-affix :offset="80">
+                    <el-card class="box-card" :body-style="{ padding: '0px' }">
+                        <template #header class="clearfix">
+                            <span class="person_body_list" style="border-bottom: none">个人中心</span>
+                        </template>
+                        <el-menu router class="el-menu-vertical-demo" :default-active="router.currentRoute.value.path">
+                            <el-menu-item index="info"
+                                :route="{ name: 'info', params: router.currentRoute.value.params.id }">
+                                <el-icon color="#999999">
+                                    <User />
+                                </el-icon>
+                                <span>个人资料</span>
+                            </el-menu-item>
+                            <el-menu-item index="myArticle"
+                                :route="{ name: 'myArticle', params: router.currentRoute.value.params.id }">
+                                <el-icon color="#999999">
+                                    <Document />
+                                </el-icon>
+                                <span slot="title">文章</span>
+                            </el-menu-item>
+                            <el-menu-item index="myFans"
+                                :route="{ name: 'myFans', params: router.currentRoute.value.params.id }">
+                                <el-icon color="#999999">
+                                    <Bowl />
+                                </el-icon>
+                                <span slot="title">粉丝</span>
+                            </el-menu-item>
+                            <el-menu-item index="myFollow"
+                                :route="{ name: 'myFollow', params: router.currentRoute.value.params.id }">
+                                <el-icon color="#999999">
+                                    <CirclePlus />
+                                </el-icon>
+                                <span slot="title">关注</span>
+                            </el-menu-item>
+                        </el-menu>
+                    </el-card>
+                </el-affix>
             </div>
+
+            <div class="person_body_right">
+                <router-view ref="rightRef" @refresh="edit" :userInfo="user" v-slot="{ Component }">
+
+                    <keep-alive>
+                        <component :is="Component"  v-if="route.meta.keepAlive"/>
+                      </keep-alive>
+                      <component :is="Component"  v-if="!$route.meta.keepAlive"/>
+                </router-view>
+            </div>
+
         </div>
+
+        <PersonalDia ref="dia" />
     </div>
-
-    <div class="person_body">
-
-        <div class="person_body_left">
-            <el-affix :offset="80">
-                <el-card class="box-card" :body-style="{ padding: '0px' }">
-                    <template #header class="clearfix">
-                        <span class="person_body_list" style="border-bottom: none">个人中心</span>
-                    </template>
-                    <el-menu router class="el-menu-vertical-demo" :default-active="info" active-text-color="#409eff">
-                        <el-menu-item index="info" :route="{ name: 'info', params: router.currentRoute.value.params.id }">
-                            <el-icon color="#999999">
-                                <User />
-                            </el-icon>
-                            <span slot="title">个人资料</span>
-                        </el-menu-item>
-                        <el-menu-item index="myArticle"
-                            :route="{ name: 'myArticle', params: router.currentRoute.value.params.id }">
-                            <el-icon color="#999999">
-                                <Document />
-                            </el-icon>
-                            <span slot="title">文章</span>
-                        </el-menu-item>
-                        <el-menu-item index="myFans"
-                            :route="{ name: 'myFans', params: router.currentRoute.value.params.id }">
-                            <el-icon color="#999999">
-                                <Bowl />
-                            </el-icon>
-                            <span slot="title">粉丝</span>
-                        </el-menu-item>
-                        <el-menu-item index="myFollow"
-                            :route="{ name: 'myFollow', params: router.currentRoute.value.params.id }">
-                            <el-icon color="#999999">
-                                <CirclePlus />
-                            </el-icon>
-                            <span slot="title">关注</span>
-                        </el-menu-item>
-                    </el-menu>
-                </el-card>
-            </el-affix>
-        </div>
-
-        <div class="person_body_right">
-            <router-view ref="rightRef" @refresh="edit"></router-view>
-        </div>
-
-    </div>
-
-    <PersonalDia ref="dia" />
 </template>
 
 <script setup>
-import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed, getCurrentInstance } from 'vue';
+import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import PersonalDia from "./personalDia.vue";
 import Cookies from 'js-cookie'
+import axios from 'axios';
+
 const store = useStore();
 const route = useRoute();
 const router = useRouter();
-const user = ref({
-    avatar: 'https://img.js.design/assets/img/61515b3a543d3e0d6e043adb.png',
-    nickname: '木香上升',
-    school: '东莞城市学院',
-    signature: '123456789werewqerertasdfadfga'
-})
-const fanCounts = ref(123)
-const followCounts = ref(456)
-const goodCounts = ref(456457)
+const user = ref({})
+let userData = ref({})
 let isfollow = ref()
 let dia = ref(false)
-let currentInstance = ''
 const followData = ref({
     fanId: "",
     followId: ""
@@ -128,13 +127,37 @@ const followData = ref({
 const isfollowid = ref()
 
 onMounted(() => {
-    currentInstance = getCurrentInstance()
-    console.log('onMounted')
-
+    loadMsg()
 })
+
+const loadMsg = () => {
+    axios.get('/userInfo')
+        .then((res) => {
+            user.value = res.data
+            console.log(user.value.userId);
+
+            axios.get('/userData', {
+                params: {
+                    userId: user.value.userId
+                }
+            }).then((res) => {
+                console.log(res)
+                userData.value = res.data
+            })
+        }).catch((error) => {
+            ElMessage({
+                message: '请求错误',
+                type: 'error'
+            })
+        })
+
+}
+
 const logout = () => {
     console.log(Cookies.get('token'))
+    window.localStorage.clear()
     Cookies.remove('token')
+    window.location.reload()
     router.push({ path: "/login" });
 
 }

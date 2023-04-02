@@ -3,9 +3,9 @@ import { createStore } from 'vuex'
 const store = createStore({
   state: {
     userInfo:{
-      userId: '',
-      nickname: '',
-      avatar: '',
+      userId: JSON.parse(localStorage.getItem('userId')) ? JSON.parse(localStorage.getItem('userId')) : '',
+      nickname: JSON.parse(localStorage.getItem('nickname')) ? JSON.parse(localStorage.getItem('nickname')) : '',
+      avatar: JSON.parse(localStorage.getItem('avatar')) ? JSON.parse(localStorage.getItem('avatar')) : '',
       school: '',
       sex: '',
       signature: '',
@@ -46,13 +46,18 @@ const store = createStore({
   mutations: {
     setId(state, userId) {
       state.userInfo.userId = userId
+      localStorage.setItem('userId', JSON.stringify(state.userInfo.userId));
     },
     setDia(state, dialogVisible) {
       state.dialogVisible = dialogVisible
     },
     setUserInfo(state, userInfo){
       state.userInfo.avatar = userInfo.avatar
+      localStorage.setItem('avatar', JSON.stringify(state.userInfo.avatar));
+      
       state.userInfo.nickname = userInfo.nickname
+      localStorage.setItem('nickname', JSON.stringify(state.userInfo.nickname));
+
       state.userInfo.school = userInfo.school
       state.userInfo.sex = userInfo.sex
       state.userInfo.signature = userInfo.signature

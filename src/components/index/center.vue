@@ -1,6 +1,6 @@
 <template>
     <ul v-infinite-scroll="load" class="infinite-list">
-        <li v-for="article in articleList" :key="article" class="infinite-list-item">
+        <li v-for="article in props.articleList" :key="article" class="infinite-list-item">
             <el-card class="box-card" shadow="always">
                 <template #header>
                     <div class="card-header">
@@ -60,64 +60,40 @@
     </ul>
 </template>
 
-<script>
-import { ref } from 'vue'
-export default {
-    name: 'IndexContent',
-    setup() {
-        const articleList = ref([
-            {
-                id : '123',
-                username: 'username11111111111111',
-                avatar: 'https://img.js.design/assets/img/61515b3a543d3e0d6e043adb.png',
-                time: '2022-2-21',
-                title: '标题',
-                detail: 'When you enter into any new area of science, you almost always find yourself with a baffling new language of technical terms to learn',
-                like: 123,
-                comment: 0
-            },
-            {
-                username: 'e',
-                avatar: 'https://img.js.design/assets/img/61515b3a543d3e0d6e043adb.png',
-                time: '2022-2-21',
-                title: '标题',
-                detail: 'When you enter into any new area of science, you almost always find yourself with a baffling new language of technical terms to learn',
-                like: 123,
-                comment: 11111111
-            },
-            {
-                username: 'username',
-                avatar: 'https://img.js.design/assets/img/61515b3a543d3e0d6e043adb.png',
-                time: '2022-2-21',
-                title: '标题',
-                detail: 'When you enter into any new area of science, you almost always find yourself with a baffling new language of technical terms to learn',
-                like: 1231111111,
-                comment: 0
-            },
-            {
-                username: 'username',
-                avatar: 'https://img.js.design/assets/img/61515b3a543d3e0d6e043adb.png',
-                time: '2022-2-21',
-                title: '标题',
-                detail: 'When you enter into any new area of science, you almost always find yourself with a baffling new language of technical terms to learn',
-                like: 123,
-                comment: 0
-            },
+<script setup>
+import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from 'vue';
+import { useStore } from 'vuex';
+import { useRoute, useRouter } from 'vue-router';
+import axios from 'axios';
+const store = useStore();
+const route = useRoute();
+const router = useRouter();
+const props = defineProps({
+    articleList:Array
+})
+const articleList = ref([
+    {
+        id: '123',
+        username: 'username11111111111111',
+        avatar: 'https://img.js.design/assets/img/61515b3a543d3e0d6e043adb.png',
+        time: '2022-2-21',
+        title: '标题',
+        detail: 'When you enter into any new area of science, you almost always find yourself with a baffling new language of technical terms to learn',
+        like: 123,
+        comment: 0
+    },
+    
+])
 
-        ])
-        const load = () => {
-            // articleList.push(articleList[0])
-        }
-        const deleteArticle = (id) =>{
-            console.log(id)
-        }
-        return {
-            articleList,
-            load,
-            deleteArticle
-        }
-    }
+const deleteArticle = (id) => {
+    console.log(id)
 }
+return {
+    articleList,
+    load,
+    deleteArticle
+}
+
 
 </script>
 <style scoped>

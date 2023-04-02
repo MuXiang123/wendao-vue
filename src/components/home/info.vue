@@ -30,23 +30,31 @@
 import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
+import axios from 'axios';
 const store = useStore();
 const route = useRoute();
 const router = useRouter();
 const emit = defineEmits(['refresh'])
-const form = ref({
-  avatar: "https://img.js.design/assets/img/61515b3a543d3e0d6e043adb.png",
-  nickname: "123",
-  sex: 1,
-  userId: "12345678900",
-  signature: " No.1188, Wuzhong Avenue, Wuzhong District, Suzhou, Jiangsu Province",
-  school:'清华大学'
+const form = ref({})
+const props = defineProps({
+  userInfo:Object
 })
-
 onMounted(()=>{
-
+  loadMsg()
 })
+const loadMsg = () => {
+    axios.get('/userInfo')
+        .then((res) => {
+            form.value = res.data
+            console.log(form.value.userId);
+        }).catch((error) => {
+            ElMessage({
+                message: error,
+                type: 'error'
+            })
+        })
 
+}
 const edit=()=>{
     emit('refresh')
 }

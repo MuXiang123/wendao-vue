@@ -47,6 +47,7 @@ const routes = [
                 path: '/home/info/:id',
                 name: 'info',
                 component: Info,
+                meta: { keepAlive: true }
             },
             {
                 path: '/home/myArticle/:id',

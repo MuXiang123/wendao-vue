@@ -1,8 +1,5 @@
 <template>
   <div class="index">
-    <div class="head">
-      <Header></Header>
-    </div>
     <div class="container_content" >
       <div class="container_main">
         <Main></Main>
@@ -15,7 +12,6 @@
 import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
-import Header from '../components/banner.vue';
 import Main from '../components/home/personal.vue';
 const store = useStore();
 const route = useRoute();
