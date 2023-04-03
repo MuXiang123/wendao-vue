@@ -1,73 +1,71 @@
 <template>
-    <div class="main">
-        <ul v-infinite-scroll="load" class="infinite-list" style="overflow: auto">
-            <li v-for="(article, i) in articleList" :key="i" class="infinite-list-item">
-                <el-card class="box-card" shadow="always">
-                    <template #header>
-                        <div class="card-header">
-                            <el-avatar class="avatar" :size="50" :src="article.avatar" />
-                            <div class="ch1">
-                                <p class="username">{{ article.username }} </p>
-                                <p class="time">{{ article.time }} </p>
-                            </div>
-                            <div class="ch2">
-                                <el-dropdown>
-                                    <el-button class="more" icon="MoreFilled" text>
-                                    </el-button>
-                                    <template #dropdown>
-                                        <el-dropdown-menu>
-                                            <el-dropdown-item @click="deleteArticle(article.id)">删除</el-dropdown-item>
-                                        </el-dropdown-menu>
-                                    </template>
-                                </el-dropdown>
-                            </div>
+    <ul v-infinite-scroll="load" class="infinite-list" style="overflow: auto">
+        <li v-for="(article, i) in articleList" :key="i" class="infinite-list-item">
+            <el-card class="box-card" shadow="always">
+                <template #header>
+                    <div class="card-header">
+                        <el-avatar class="avatar" :size="50" :src="article.avatar" />
+                        <div class="ch1">
+                            <p class="username">{{ article.username }} </p>
+                            <p class="time">{{ article.time }} </p>
                         </div>
-                    </template>
-                    <h3 class="title">{{ article.title }} </h3>
-                    <p class="detail">{{ article.detail }} </p>
-                    <el-divider border-style="dotted" />
-                    <el-row :gutter="20">
-                        <el-col :span="5">
-                            <div class="like">
-                                <el-button type="primary" text>
-                                    <svg class="icon" aria-hidden="true">
-                                        <use xlink:href="#icon-like"></use>
-                                      </svg>
-                                    <span class="bottom_font">
-                                        <span v-text="article.like > 9999 ? '9999+' : article.like">
-                                        </span>点赞
-                                    </span>
+                        <div class="ch2">
+                            <el-dropdown>
+                                <el-button class="more" icon="MoreFilled" text>
                                 </el-button>
-                            </div>
-                        </el-col>
-                        <el-col :span="5">
-                            <div class="comment">
-                                <el-button type="primary" text>
-                                    <el-icon size="20px">
-                                        <Comment />
-                                    </el-icon>
-                                    <span class="bottom_font">
-                                        <span v-text="article.comment > 9999 ? '9999+' : article.comment">
-                                        </span>条评论
-                                    </span>
-                                </el-button>
-                            </div>
-                        </el-col>
-                        <el-col :span="5">
-                            <div class="share">
-                                <el-button type="primary" text>
-                                    <el-icon size="20px">
-                                        <Share />
-                                    </el-icon>
-                                    <span class="bottom_font">分享</span>
-                                </el-button>
-                            </div>
-                        </el-col>
-                    </el-row>
-                </el-card>
-            </li>
-        </ul>
-    </div>
+                                <template #dropdown>
+                                    <el-dropdown-menu>
+                                        <el-dropdown-item @click="deleteArticle(article.id)">删除</el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </template>
+                            </el-dropdown>
+                        </div>
+                    </div>
+                </template>
+                <h3 class="title">{{ article.title }} </h3>
+                <p class="detail">{{ article.detail }} </p>
+                <el-divider border-style="dotted" />
+                <el-row :gutter="20">
+                    <el-col :span="5">
+                        <div class="like">
+                            <el-button type="primary" text>
+                                <svg class="icon" aria-hidden="true">
+                                    <use xlink:href="#icon-like"></use>
+                                </svg>
+                                <span class="bottom_font">
+                                    <span v-text="article.like > 9999 ? '9999+' : article.like">
+                                    </span>点赞
+                                </span>
+                            </el-button>
+                        </div>
+                    </el-col>
+                    <el-col :span="5">
+                        <div class="comment">
+                            <el-button type="primary" text>
+                                <el-icon size="20px">
+                                    <Comment />
+                                </el-icon>
+                                <span class="bottom_font">
+                                    <span v-text="article.comment > 9999 ? '9999+' : article.comment">
+                                    </span>条评论
+                                </span>
+                            </el-button>
+                        </div>
+                    </el-col>
+                    <el-col :span="5">
+                        <div class="share">
+                            <el-button type="primary" text>
+                                <el-icon size="20px">
+                                    <Share />
+                                </el-icon>
+                                <span class="bottom_font">分享</span>
+                            </el-button>
+                        </div>
+                    </el-col>
+                </el-row>
+            </el-card>
+        </li>
+    </ul>
 </template>
 
 <script setup>
@@ -129,6 +127,7 @@ const deleteArticle = (id) => {
 }
 const i1 = ref(1)
 const load = () => {
+    console.log(1);
     articleList.value.push(articleList.value[0])
 }
 
@@ -138,29 +137,21 @@ const load = () => {
     width: 0;
 }
 
-.main {
-    height: 100%;
-    overflow: hidden;
-
-}
-
 .infinite-list {
+    height: 100%;
     margin: 0;
+    padding: 0;
     list-style: none;
-    overflow: auto;
-    height: 42.5rem;
 }
 
 .infinite-list .infinite-list-item {
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin-bottom: 15px;
-    height: auto
+    margin: 10px;
 }
 
 .infinite-list .infinite-list-item+.list-item {
-    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .box-card {
@@ -262,5 +253,4 @@ const load = () => {
 
 .comment {
     display: flex;
-}
-</style>
+}</style>

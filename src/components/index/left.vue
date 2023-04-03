@@ -59,12 +59,32 @@ const categoryList = ref([
     {
         category: '拼单拼车',
         path: 'pin'
-    },
+    },{
+        category: '日常学习',
+        path: 'pin'
+    },{
+        category: '表白墙',
+        path: 'pin'
+    },{
+        category: '生活趣事',
+        path: 'pin'        
+    },{
+        category: '竞赛组队',
+        path: 'pin'        
+    },{
+        category: '编程技术',
+        path: 'pin'        
+    }
 ])
 </script>
 <style scoped>
+
 .el-menu-vertical {
     width: 263px;
     opacity: 1;
     box-shadow: 0px 2px 5px 0px #d2d2d2;
-}</style>
+    overflow-y: scroll;
+}
+
+
+</style>

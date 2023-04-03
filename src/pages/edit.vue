@@ -1,5 +1,24 @@
 <template>
     <div class="app">
+        <div class="top">
+            <el-input
+            class="title"
+            v-model="title"
+            maxlength="30"
+            placeholder="请输入标题"
+            show-word-limit
+            type="textarea"
+          />
+          <el-input
+            class="summary"
+            v-model="summary"
+            maxlength="100"
+            placeholder="请输入文章摘要"
+            show-word-limit
+            type="textarea"
+          />
+        </div>
+
         <mavon-editor v-model="content" navigation defaultOpen="preview" :toolbars="toolbars" class="editior" :ishljs="true"
             ref=md @imgAdd="imgAdd" @imgDel="imgDel">
         </mavon-editor>
@@ -52,12 +71,28 @@ const toolbars = reactive({
     preview: true, // 预览
 })
 const content = ref('')
+const title = ref('')
+const summary = ref('')
 
 </script>
 <style scoped>
+.top{
+    display: flex;
+}
+.title{
+    margin-top: 20px;
+    margin-left: 50px;
+    width: 45%;
+}
+.summary{
+    margin-top: 20px;
+    margin-left: 55px;
+    width: 45%;
+}
 .editior {
+    margin-top: 20px;
     margin-left: 50px;
     margin-right: 50px;
-    height: calc(100vh - 75px);
+    height: calc(100vh - 155px);
 }
 </style>
