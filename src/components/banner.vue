@@ -26,14 +26,15 @@
                 发布
             </el-menu-item>
             <el-menu-item index="message">
-                <el-icon class="el-icon">
-                    <Bell />
-                </el-icon>
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-bell"></use>
+                </svg>
+
             </el-menu-item>
             <el-menu-item index="/chat">
-                <el-icon class="el-icon">
-                    <Message />
-                </el-icon>
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-message"></use>
+                </svg>
             </el-menu-item>
             <el-sub-menu class="el-sub-menu" router>
                 <template #title>
@@ -42,9 +43,9 @@
                     </el-avatar>
                 </template>
                 <el-menu-item :route="{ name: 'info', params: { id: `${store.state.userInfo.userId}` } }">
-                    <el-icon>
-                        <House />
-                    </el-icon>
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-home"></use>
+                    </svg>
                     <span class="span">我的主页</span>
                 </el-menu-item>
             </el-sub-menu>
@@ -56,7 +57,7 @@
 <script setup>
 import { useRouter, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
-import { ref} from 'vue'
+import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 const store = useStore();
 const router = useRouter();
@@ -115,6 +116,9 @@ const onEnterSearch = () => {
     color: #999999;
 }
 
+.icon-home{
+    margin-right:5px ;
+}
 .search-bar {
     margin-top: 10px;
     color: #999999;
@@ -153,4 +157,5 @@ const onEnterSearch = () => {
 .el-menu-demo .el-input {
     width: 400px;
     margin-top: 5px;
-}</style>
+}
+</style>

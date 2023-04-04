@@ -15,7 +15,7 @@
     "js-cookie": "^3.0.1",
     "less": "^4.1.3",
     "less-loader": "^11.1.0",
-    "mavon-editor": "^3.0.1",
+    "md-editor-v3": "^2.11.0",
     "mockjs": "^1.1.0",
     "require.js": "^1.0.0",
     "style-resources-loader": "^1.5.0",
