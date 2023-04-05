@@ -13,6 +13,7 @@ import VideoCenter from "../components/video/videoCenter.vue"
 import VideoArea from "../components/video/subarea.vue"
 import VideoAction from "../pages/videoAction.vue"
 import ArticleEdit from "../pages/edit.vue"
+import CategoryArticle from "../components/index/center.vue"
 import Cookies from 'js-cookie'
 const routes = [
     {
@@ -23,10 +24,15 @@ const routes = [
         path: '/index', // 首页
         name: 'index',
         component: Index,
-        meta: {
-            requireLogin: true
-        }
+        children: [
+            {
+                path: '/index/article/:id',
+                name: 'CategoryArticle',
+                component: CategoryArticle
+            },
+        ]
     },
+
     {
         path: '/login',  // 登录
         name: 'login',
@@ -96,10 +102,10 @@ const routes = [
         component: VideoAction
     },
     {
-        path:'/article/edit',
+        path: '/article/edit',
         name: 'ArticleEdit',
         component: ArticleEdit
-    }
+    },
 ]
 const router = createRouter({
     history: createWebHashHistory(),

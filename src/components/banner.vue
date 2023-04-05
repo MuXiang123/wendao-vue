@@ -10,7 +10,7 @@
                 </div>
             </router-link>
 
-            <el-menu-item index="/index">
+            <el-menu-item index="/index/article/0">
                 首页
             </el-menu-item>
             <el-menu-item index="/video/index">

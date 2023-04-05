@@ -103,7 +103,7 @@ const handleClose = () => {
 
 const handleAvatarSuccess = (res, file) => {
   console.log(res);
-  form.avatar = res.data
+  form.avatar = res.data.url
 }
 
 const beforeAvatarUpload = (rawFile) => {

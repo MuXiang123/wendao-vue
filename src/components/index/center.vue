@@ -6,8 +6,8 @@
                     <div class="card-header">
                         <el-avatar class="avatar" :size="50" :src="article.avatar" />
                         <div class="ch1">
-                            <p class="username">{{ article.username }} </p>
-                            <p class="time">{{ article.time }} </p>
+                            <p class="username">{{ article.nickname }} </p>
+                            <p class="time">{{ article.createdTime }} </p>
                         </div>
                         <div class="ch2">
                             <el-dropdown>
@@ -22,8 +22,8 @@
                         </div>
                     </div>
                 </template>
-                <h3 class="title">{{ article.title }} </h3>
-                <p class="detail">{{ article.detail }} </p>
+                <h3 class="title">{{ article.articleTitle }} </h3>
+                <p class="detail">{{ article.articleSummary }} </p>
                 <el-divider border-style="dotted" />
                 <el-row :gutter="20">
                     <el-col :span="5">
@@ -33,7 +33,7 @@
                                     <use xlink:href="#icon-like"></use>
                                 </svg>
                                 <span class="bottom_font">
-                                    <span v-text="article.like > 9999 ? '9999+' : article.like">
+                                    <span v-text="article.articleLikeCount > 9999 ? '9999+' : article.articleLikeCount">
                                     </span>点赞
                                 </span>
                             </el-button>
@@ -46,7 +46,8 @@
                                     <Comment />
                                 </el-icon>
                                 <span class="bottom_font">
-                                    <span v-text="article.comment > 9999 ? '9999+' : article.comment">
+                                    <span
+                                        v-text="article.articleCommentCount > 9999 ? '9999+' : article.articleCommentCount">
                                     </span>条评论
                                 </span>
                             </el-button>
@@ -79,56 +80,93 @@ const router = useRouter();
 const props = defineProps({
     articleList: Array
 })
-const articleList = ref([
-    {
-        id: '123',
-        username: 'username11111111111111',
-        avatar: 'https://img.js.design/assets/img/61515b3a543d3e0d6e043adb.png',
-        time: '2022-2-21',
-        title: '标题',
-        detail: 'When you enter into any new area of science, you almost always find yourself with a baffling new language of technical terms to learn',
-        like: 123,
-        comment: 0
-    },
-    {
-        id: '123',
-        username: 'username11111111111111',
-        avatar: 'https://img.js.design/assets/img/61515b3a543d3e0d6e043adb.png',
-        time: '2022-2-21',
-        title: '标题',
-        detail: 'When you enter into any new area of science, you almost always find yourself with a baffling new language of technical terms to learn',
-        like: 123,
-        comment: 0
-    },
-    {
-        id: '123',
-        username: 'username11111111111111',
-        avatar: 'https://img.js.design/assets/img/61515b3a543d3e0d6e043adb.png',
-        time: '2022-2-21',
-        title: '标题',
-        detail: 'When you enter into any new area of science, you almost always find yourself with a baffling new language of technical terms to learn',
-        like: 123,
-        comment: 0
-    },
-    {
-        id: '123',
-        username: 'username11111111111111',
-        avatar: 'https://img.js.design/assets/img/61515b3a543d3e0d6e043adb.png',
-        time: '2022-2-21',
-        title: '标题',
-        detail: 'When you enter into any new area of science, you almost always find yourself with a baffling new language of technical terms to learn',
-        like: 123,
-        comment: 0
-    },
-])
-
+const articleList = ref([])
+const pageNum = ref(1)
+const id = ref(0)
 const deleteArticle = (id) => {
-    console.log(id)
+
 }
-const i1 = ref(1)
+
+watchEffect(() => {
+    const path = router.currentRoute.value.params.id
+    if (path == null) {
+        return
+    }
+    if (path !== id.value) {
+        id.value = path
+        pageNum.value = 1
+        articleList.value = []
+        if (path == 0) {
+            axios.get('/article/index/list', {
+                params: {
+                    userId: store.state.userInfo.userId,
+                    pageNum: pageNum.value,
+                    pageSize: 10
+                }
+            }).then((res) => {
+                console.log("watch: "+res)
+                pageNum.value += 1
+                for (var i = 0, len = res.data.length; i < len; i++) {
+                    // console.log(res.data[i]);
+                    articleList.value.push(res.data[i])
+                }
+            })
+        } else {
+            axios.get('/article/category/list', {
+                params: {
+                    category: path,
+                    pageNum: pageNum.value,
+                    pageSize: 10
+                }
+            }).then((res) => {
+                console.log("watch: "+res)
+                pageNum.value += 1
+                for (var i = 0, len = res.data.length; i < len; i++) {
+                    articleList.value.push(res.data[i])
+                }
+            })
+        }
+    }
+
+})
+
 const load = () => {
-    console.log(1);
-    articleList.value.push(articleList.value[0])
+    id.value = router.currentRoute.value.params.id
+    console.log('id=' + id.value);
+    if (id.value == 0) {
+        axios.get('/article/index/list', {
+            params: {
+                userId: store.state.userInfo.userId,
+                pageNum: pageNum.value,
+                pageSize: 10
+            }
+        }).then((res) => {
+            console.log("load: "+res.data.length)
+            
+            pageNum.value += 1
+            for (var i = 0, len = res.data.length; i < len; i++) {
+                // console.log(res.data[i]);
+                articleList.value.push(res.data[i])
+            }
+        })
+    } else {
+        axios.get('/article/category/list', {
+            params: {
+                category: id.value,
+                pageNum: pageNum.value,
+                pageSize: 10
+            }
+        }).then((res) => {
+            console.log("load: "+res.data)
+
+            pageNum.value += 1
+            for (var i = 0, len = res.data.length; i < len; i++) {
+                // console.log(res.data[i]);
+                articleList.value.push(res.data[i])
+            }
+        })
+    }
+
 }
 
 </script>
@@ -253,4 +291,5 @@ const load = () => {
 
 .comment {
     display: flex;
-}</style>
+}
+</style>

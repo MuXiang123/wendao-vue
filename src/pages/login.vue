@@ -59,7 +59,7 @@ const onSubmit = async () => {
                         message: '登录成功',
                         type: 'success',
                         onClose: () => {
-                            router.push('/')
+                            router.push('/index/article/0')
                             // window.location.href = '/'
                         }
                     })

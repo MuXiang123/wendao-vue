@@ -81,8 +81,6 @@ const computedRows = computed(() => {
     }
     rows.push(cols);
   }
-  console.log(rows.length)
-  console.log(rows)
   return rows;
 });
 </script>
