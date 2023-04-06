@@ -1,7 +1,7 @@
 <template>
     <ul v-infinite-scroll="load" class="infinite-list" style="overflow: auto">
-        <li v-for="(article, i) in articleList" :key="i" class="infinite-list-item">
-            <el-card class="box-card" shadow="always">
+        <li v-for="(article, i) in articleList" :key="i" class="infinite-list-item" >
+            <el-card class="box-card" shadow="always" @click="detail(article.articleId)">
                 <template #header>
                     <div class="card-header">
                         <el-avatar class="avatar" :size="50" :src="article.avatar" />
@@ -70,7 +70,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from 'vue';
+import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
@@ -86,13 +86,15 @@ const id = ref(0)
 const deleteArticle = (id) => {
 
 }
-
-watchEffect(() => {
+const flag = ref(false)
+watch(() => {
     const path = router.currentRoute.value.params.id
-    if (path == null) {
+    if (path == null || flag.value == false) {
+        flag.value = true
         return
     }
     if (path !== id.value) {
+        console.log('path=' + path);
         id.value = path
         pageNum.value = 1
         articleList.value = []
@@ -144,8 +146,9 @@ const load = () => {
             console.log("load: "+res.data.length)
             
             pageNum.value += 1
+            console.log('pageNum.value'+pageNum.value);
             for (var i = 0, len = res.data.length; i < len; i++) {
-                // console.log(res.data[i]);
+                console.log(res.data[i]);
                 articleList.value.push(res.data[i])
             }
         })
@@ -160,6 +163,7 @@ const load = () => {
             console.log("load: "+res.data)
 
             pageNum.value += 1
+            console.log('pageNum.value'+pageNum.value);
             for (var i = 0, len = res.data.length; i < len; i++) {
                 // console.log(res.data[i]);
                 articleList.value.push(res.data[i])
@@ -169,6 +173,10 @@ const load = () => {
 
 }
 
+const detail = (aid) =>{
+    console.log(aid);
+    router.push('/article/detail/'+aid)
+}
 </script>
 <style scoped>
 ::-webkit-scrollbar {
@@ -176,16 +184,17 @@ const load = () => {
 }
 
 .infinite-list {
-    height: 100%;
+    height: 640px;
     margin: 0;
     padding: 0;
     list-style: none;
 }
 
-.infinite-list .infinite-list-item {
+.infinite-list-item {
     display: flex;
     align-items: center;
     margin: 10px;
+    height: 260px;
 }
 
 .infinite-list .infinite-list-item+.list-item {

@@ -7,13 +7,13 @@ import Info from '../components/home/info.vue'
 import MyFans from '../components/home/myFans.vue';
 import MyFollow from '../components/home/myFollow.vue';
 import MyArticle from '../components/home/myArticle.vue';
-import Article from '../pages/detail.vue'
 import Video from "../pages/videoIndex.vue"
 import VideoCenter from "../components/video/videoCenter.vue"
 import VideoArea from "../components/video/subarea.vue"
 import VideoAction from "../pages/videoAction.vue"
 import ArticleEdit from "../pages/edit.vue"
 import CategoryArticle from "../components/index/center.vue"
+import ArticleDetail from "../pages/articleDetail.vue"
 import Cookies from 'js-cookie'
 const routes = [
     {
@@ -72,14 +72,7 @@ const routes = [
                 component: MyFans
             }
         ]
-    }, {
-        path: '/article/:id', // 文章详情
-        name: 'article',
-        component: Article,
-        meta: {
-            requireLogin: true
-        },
-    },
+    }, 
     {
         path: '/video',
         name: 'video',
@@ -106,6 +99,11 @@ const routes = [
         name: 'ArticleEdit',
         component: ArticleEdit
     },
+    {
+        path:'/article/detail/:id',
+        name:'ArticleDetail',
+        component: ArticleDetail
+    }
 ]
 const router = createRouter({
     history: createWebHashHistory(),

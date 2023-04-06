@@ -38,9 +38,6 @@ defineProps({
   overflow-x: hidden;
 }
 
-.index {
-}
-
 .head {
   position: relative;
   width: 100%;

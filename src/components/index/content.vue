@@ -41,6 +41,7 @@
             <el-main class="el-main">
                 <div class="right">
                     <router-view></router-view>
+
                 </div>
             </el-main>
         </el-container>

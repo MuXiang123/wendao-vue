@@ -255,6 +255,7 @@ const getFormatTime = (timeStamp) => {
   margin-top: 15px;
   margin-bottom: 5px;
   font-weight: 600;
+  line-height: 21px;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
