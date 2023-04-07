@@ -54,7 +54,7 @@
       </div>
     </div>
     <div class="dynamic">
-      <span >{{ msg.stat.view }}次观看 </span>
+      <span >{{bigNumberTransform( msg.stat.view )}}次观看 </span>
       <span>{{ getFormatTime(msg.ctime * 1000) }}发布 </span>
       <span style="color:#409EFF;"> #{{ msg.tname }} </span>
       <p class="content" v-if="msg.dynamic">
@@ -194,14 +194,14 @@ const getFormatTime = (timeStamp) => {
 }
 
 .icon_button {
-  margin-left: calc(100vh - 26%);
+  margin-left: 28%;
 }
 
 .iframe_video {
   margin-left: 10px;
   margin-right: 10px;
-  height: 515px;
-  width: 916px;
+  height: 70.5%;
+  width: 62%;
   border-radius: 10px;
 }
 
@@ -220,12 +220,14 @@ const getFormatTime = (timeStamp) => {
 
 .owner {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   margin-left: 10px;
+  width: 62%;
 }
 
 .owner_name {
-  margin-left: 20px;
+  margin-left: -10%;
 }
 
 .recommend {
@@ -281,7 +283,7 @@ const getFormatTime = (timeStamp) => {
 }
 
 .dynamic{
-  width: 55rem;
+  width: 62%;
   height: auto;
   margin-top: 15px;
   margin-left: 10px;

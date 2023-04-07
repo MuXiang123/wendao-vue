@@ -2,7 +2,7 @@
     <!-- 顶部菜单栏 -->
     <div class="header">
         <el-menu mode="horizontal" :default-active="router.currentRoute.value.path" class="el-menu-demo"
-            active-text-color="#409eff" text-color="#999999" ellipsis="false" router="true">
+            active-text-color="#409eff" text-color="#999999" router="true" :ellipsis="false">
             <router-link to="/">
                 <div class="wendao">
                     <img src="src\assets\logo.png" alt="logo">
@@ -16,12 +16,15 @@
             <el-menu-item index="/video/index">
                 视频
             </el-menu-item>
+            <div class="flex-grow" />
+
             <div class="search-bar">
                 <el-input v-model="inputSearch" placeholder="请输入问题" prefix-icon="Search" clearable></el-input>
                 <el-button class="el-button" type="primary" @click="onEnterSearch()" round>
                     搜索
                 </el-button>
             </div>
+            <div class="flex-grow" />
             <el-menu-item index="/article/edit">
                 发布
             </el-menu-item>
@@ -49,7 +52,6 @@
                     <span class="span">我的主页</span>
                 </el-menu-item>
             </el-sub-menu>
-
         </el-menu>
     </div>
 </template>
@@ -98,6 +100,10 @@ const onEnterSearch = () => {
     margin-right: 20px;
 }
 
+.flex-grow {
+    flex-grow: 1;
+}
+
 .wendao img {
     width: 40px;
     margin-right: 10px;
@@ -116,9 +122,10 @@ const onEnterSearch = () => {
     color: #999999;
 }
 
-.icon-home{
-    margin-right:5px ;
+.icon-home {
+    margin-right: 5px;
 }
+
 .search-bar {
     margin-top: 10px;
     color: #999999;
@@ -141,7 +148,6 @@ const onEnterSearch = () => {
     color: #999999;
     line-height: 20px;
     width: 100%;
-    margin-left: 250px;
 }
 
 .el-menu-demo .el-menu-item {

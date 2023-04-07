@@ -184,7 +184,7 @@ const detail = (aid) =>{
 }
 
 .infinite-list {
-    height: 640px;
+    height: 100%;
     margin: 0;
     padding: 0;
     list-style: none;
