@@ -2,7 +2,7 @@
     <div class="reply-box" v-if="show">
         <div class="box-normal">
             <div class="reply-box-avatar">
-                <img class="shoka-avatar" v-if="store.state.userInfoavatar" :src="store.state.userInfoavatar" alt="" />
+                <img class="shoka-avatar" v-if="store.state.userInfo.avatar" :src="store.state.userInfo.avatar" alt="" />
             </div>
             <div class="reply-box-warp">
                 <textarea class="reply-box-textarea" v-model="commentContent" :style="sendActive ? lineStyle : ''"
@@ -35,35 +35,26 @@ const lineStyle = {
 };
 const emit = defineEmits(["reload"]);
 const props = defineProps({
-    commentType: {
-        type: Number,
-    },
     show: {
         type: Boolean,
         default: true,
     },
-    typeId: {
-        type: Number,
-    },
 });
 const data = reactive({
-    nickname: "",
+    nickname: '',
     sendActive: false,
     show: props.show,
     commentContent: "",
     commentForm: {
-        typeId: props.typeId,
-        commentType: props.commentType,
         parentId: undefined,
         replyId: undefined,
-        toUid: undefined,
         commentContent: "",
     }
 });
 const { nickname, sendActive, show, commentContent, commentForm } = toRefs(data);
-const placeholderText = computed(() => {
+const placeholderText = computed(() =>
     nickname.value ? `回复 @${nickname.value}：` : "发一条友善的评论"
-});
+);
 const inputActive = () => {
     if (commentContent.value.length == 0) {
         sendActive.value = false;
@@ -77,7 +68,6 @@ const handleEmoji = (key) => {
 };
 const handleAdd = () => {
     if (!store.state.userInfo.userId) {
-        // app.setLoginFlag(true);
         return;
     }
     if (commentContent.value.trim() == "") {
@@ -95,11 +85,13 @@ const handleAdd = () => {
             "' width='21' height='21' style='margin: 0 1px;vertical-align: text-bottom'/>"
         );
     });
+    const parentId = commentForm.value.replyId === undefined ? -1 : commentForm.value.replyId
     axios.post('/insert/comment', {
         content: commentForm.value.commentContent,
-        parent: commentForm.value.parentId,
-        articleId: router.currentRoute.value.params.value
+        parentId: parentId,
+        articleId: router.currentRoute.value.params.id
     }).then((res) => {
+        console.log(res);
         if (res.data == true) {
             ElMessage({
                 type: 'success',
@@ -108,20 +100,6 @@ const handleAdd = () => {
             emit("reload")
         }
     })
-    // addComment(commentForm.value).then(({ data }) => {
-    //     if (data.flag) {
-    //         sendActive.value = false;
-    //         commentContent.value = "";
-    //         if (blog.siteConfig.commentCheck) {
-    //             ElMessage({
-    //                 type: 'success',
-    //                 message: '评论成功'
-    //             })
-    //         }
-    //         // 重新加载评论列表
-    //         emit("reload");
-    //     }
-    // })
 };
 const setReply = (flag) => {
     show.value = flag;

@@ -148,7 +148,6 @@ const load = () => {
             pageNum.value += 1
             console.log('pageNum.value'+pageNum.value);
             for (var i = 0, len = res.data.length; i < len; i++) {
-                console.log(res.data[i]);
                 articleList.value.push(res.data[i])
             }
         })

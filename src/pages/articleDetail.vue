@@ -74,7 +74,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <CommentList :comment-type="commentType"></CommentList>
+                        <CommentList></CommentList>
                     </div>
                 </div>
             </div>
@@ -110,7 +110,6 @@ const data = reactive({
     articleLoaded: false,
     wordNum: 0,
     readTime: 0,
-    commentType: 1,
     article: {
         articleTitle: "",
         articleContent: "",
@@ -123,7 +122,7 @@ const data = reactive({
         isLiked: 0
     },
 });
-const { articleLoaded, wordNum, readTime, commentType, article } = toRefs(data);
+const { articleLoaded, wordNum, readTime, article } = toRefs(data);
 const isLike = computed(() => () => article.value.isLiked != 1 ? "like-btn-active" : "like-btn");
 const count = (value) => {
     if (value >= 1000) {
@@ -166,18 +165,6 @@ const like = () => {
             })
         })
     }
-
-    // likeArticle(id).then(({ data }) => {
-    //     if (data.flag) {
-    //         //判断是否点赞
-    //         if (user.articleLikeSet.indexOf(id) != -1) {
-    //             article.value.likeCount -= 1;
-    //         } else {
-    //             article.value.likeCount += 1;
-    //         }
-    //         user.articleLike(id);
-    //     }
-    // });
 };
 onMounted(() => {
     axios.get('/article/detail', {
@@ -234,11 +221,29 @@ const formatDate = (timeStamp) => {
 @import "@/assets/styles/mixin.scss";
 
 .page-header {
-    color: rgb(238, 238, 238);
+    left: 0;
+    right: 0;
+    width: 100%;
+    padding: 1.5rem 0;
     text-align: center;
-    background-color: var(--color-blue);
-    background-image: linear-gradient(120deg, var(--color-pink), var(--color-blue));
-    padding: 0rem 0rem;
+    background: var(--footer-bg);
+    background-size: 300% 300%;
+    -webkit-animation: gradientBG 10s ease infinite;
+    animation: gradientBG 10s ease infinite;
+}
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0 50%;
+    }
 }
 
 .article-container {

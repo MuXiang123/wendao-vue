@@ -4,63 +4,55 @@
             <svg-icon icon-class="comment" size="1.4rem" style="margin-right: 5px;"></svg-icon>
             评论
         </div>
-        <ReplyBox @reload="reloadComments" :comment-type="commentType" :type-id="typeId"></ReplyBox>
+        <ReplyBox @reload="reloadComments" :type-id="typeId"></ReplyBox>
         <div v-if="count > 0 && reFresh">
-            <div class="reply-item" v-for="(comment, index) of commentList" :key="comment.id">
+            <div class="reply-item" v-for="(comment, index) of commentList" :key="comment.commentId">
                 <div class="reply-box-avatar">
                     <img class="shoka-avatar" :src="comment.avatar">
                 </div>
                 <div class="content-warp">
                     <div class="user-info">
-                        <div class="user-name">{{ comment.fromNickname }}</div>
+                        <div class="user-name">{{ comment.nickname }}</div>
                         <svg-icon v-if="comment.fromUid == 1" icon-class="badge"></svg-icon>
                     </div>
                     <div class="reply-content" v-html="comment.commentContent"></div>
                     <div class="reply-info">
-                        <span class="reply-time">{{ formatDateTime(comment.createTime) }}</span>
+                        <span class="reply-time">{{ formatDateTime(comment.commentCreatedTime) }}</span>
                         <span class="reply-like" @click="like(comment)">
-                            <svg-icon class="like" icon-class="like" size="0.8rem" :class="isLike(comment.id)"
-                                style="margin-right: 5px"></svg-icon>
-                            <span v-show="comment.likeCount">{{ comment.likeCount }}</span>
+                            <svg-icon class="like" icon-class="like" size="0.8rem" style="margin-right: 5px"></svg-icon>
+                            <span v-show="comment.commentLikeCount">{{ comment.commentLikeCount }}</span>
                         </span>
                         <span class="reply-btn" @click="handleReply(index, comment)">回复</span>
                     </div>
-                    <div class="sub-reply-item" v-for="reply of comment.replyVOList" :key="reply.id">
+                    <div class="sub-reply-item" v-for="reply in comment.replyCommentList" :key="reply.commentId">
                         <div class="sub-user-info">
                             <img class="sub-reply-avatar" :src="reply.avatar" />
-                            <div class="sub-user-name">{{ reply.fromNickname }}</div>
+                            <div class="sub-user-name">{{ reply.nickname }}</div>
                             <svg-icon v-if="reply.fromUid == 1" icon-class="badge" style="margin-left: 5px;"></svg-icon>
                         </div>
                         <span class="reply-content">
-                            <template v-if="reply.fromUid !== reply.toUid">回复 <span style="color: #008ac5">@{{
-                                reply.toNickname
-                            }}</span> :</template>
+                            <span>回复 <span style="color: #008ac5">@{{
+                                reply.replyNickname
+                            }}</span> :</span>
                             <span v-html="reply.commentContent"></span>
                         </span>
                         <div class="reply-info">
-                            <span class="reply-time">{{ formatDateTime(reply.createTime) }}</span>
+                            <span class="reply-time">{{ formatDateTime(reply.commentCreatedTime) }}</span>
                             <span class="reply-like" @click="like(reply)">
-                                <svg-icon class="like" icon-class="like" size="0.8rem" :class="isLike(reply.id)"
-                                    style="margin-right: 5px"></svg-icon>
-                                <span v-show="reply.likeCount > 0">{{ reply.likeCount }}</span>
+                                <svg-icon class="like" icon-class="like" size="0.8rem" style="margin-right: 5px"></svg-icon>
+                                <span v-show="reply.commentLikeCount > 0">{{ reply.commentLikeCount }}</span>
                             </span>
                             <span class="reply-btn" @click="handleReply(index, reply)">回复</span>
                         </div>
                     </div>
-                    <div ref="readMoreRef" class="view-more" v-show="comment.replyCount > 3">
-                        <span>共{{ comment.replyCount }}条回复, </span>
+                    <div ref="readMoreRef" class="view-more" v-show="comment.replyCommentList.length > 3">
+                        <span>共{{ comment.replyCommentList.length }}条回复, </span>
                         <span class="view-more-btn" @click="readMoreComment(index, comment)">点击查看</span>
                     </div>
-                    <ReplyBox ref="replyRef" class="mt-4" :show="false" :comment-type="commentType" :type-id="typeId"
-                        @reload="reloadReplies(index)">
+                    <ReplyBox ref="replyRef" class="mt-4" :show="false" @reload="reloadReplies(index)">
                     </ReplyBox>
                     <div class="bottom-line"></div>
                 </div>
-            </div>
-            <div class="loading-warp" v-if="count > commentList.length">
-                <el-button class="btn" color="#e9546b" @click="getList">
-                    加载更多...
-                </el-button>
             </div>
         </div>
         <div v-else style="padding: 1.25rem; text-align: center">来发评论吧~</div>
@@ -68,33 +60,28 @@
 </template>
 
 <script setup>
-import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed, watch } from 'vue';
+import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed, watch, nextTick } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import ReplyBox from './ReplyBox.vue'
+
 const { user, app } = useStore();
 const router = useRouter()
 const replyRef = ref([]);
 const pageRef = ref([]);
 const readMoreRef = ref([]);
-const props = defineProps({
-    commentType: {
-        type: Number,
-    }
-});
 const emit = defineEmits(["getCommentCount"]);
 const typeId = computed(() => (useRoute().params.id) ? (useRoute().params.id) : undefined);
-const isLike = computed(() => (id) => user.commentLikeSet.indexOf(id) != -1 ? "like-flag" : "");
+// const isLike = computed(() => (id) => user.commentLikeSet.indexOf(id) != -1 ? "like-flag" : "");
 const data = reactive({
     count: 0,
     reFresh: true,
     queryParams: {
         current: 1,
         typeId: typeId.value,
-        commentType: props.commentType,
-    } ,
-    commentList: [] ,
+    },
+    commentList: [],
 });
 const { count, reFresh, queryParams, commentList } = toRefs(data);
 const like = (comment) => {
@@ -145,37 +132,33 @@ const getCurrentPage = (current, index, commentId) => {
     });
 };
 const handleReply = (index, target) => {
+    console.log(index);
     replyRef.value.forEach((element) => {
         element.setReply(false);
     });
     const currentReply = replyRef.value[index];
-    currentReply.nickname = target.fromNickname;
-    currentReply.commentForm.replyId = target.id;
-    currentReply.commentForm.toUid = target.fromUid;
-    currentReply.commentForm.parentId = commentList.value[index].id;
+    currentReply.nickname = target.nickname;
+    currentReply.commentForm.replyId = target.commentId,
+    currentReply.commentForm.parentId = target.parentCommentId;
     currentReply.setReply(true);
 };
 const getList = () => {
     axios.get('/comment/list', {
-        params:{
+        params: {
             articleId: router.currentRoute.value.params.id
         }
-    }).then((res) =>{
-        commentList.value.push(...res.data);
+    }).then((res) => {
+        console.log(res);
+        if (queryParams.value.current == 1) {
+            commentList.value = res.data
+        } else {
+            commentList.value.push(...res.data);
+        }
+        console.log(commentList.value);
         queryParams.value.current++;
         count.value = res.data.length;
         emit("getCommentCount", count.value);
     })
-    // getCommentList(queryParams.value).then(({ data }) => {
-    //     if (queryParams.value.current == 1) {
-    //         commentList.value = data.data.recordList;
-    //     } else {
-    //         commentList.value.push(...data.data.recordList);
-    //     }
-    //     queryParams.value.current++;
-    //     count.value = res.data.length;
-    //     emit("getCommentCount", count.value);
-    // });
 };
 // 重新加载评论列表
 const reloadComments = () => {

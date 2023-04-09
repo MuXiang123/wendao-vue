@@ -120,15 +120,7 @@ const onUploadImg = async (files, callback) => {
 const onGetCatalog = (list) => {
     state.catalogList = list;
 };
-const DropdownToolbar = MdEditor.DropdownToolbar;
 
-const emojis = ['😀', '😃']
-
-const emojiVisibleChanged = () => {
-  state.emojiVisible = !state.emojiVisible;
-};
-
-const emojiHandler = () => {};
 
 </script>
 <style scoped>

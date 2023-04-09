@@ -28,7 +28,7 @@
             <el-menu-item index="/article/edit">
                 发布
             </el-menu-item>
-            <el-menu-item index="message">
+            <el-menu-item index="/message">
                 <svg class="icon" aria-hidden="true">
                     <use xlink:href="#icon-bell"></use>
                 </svg>
@@ -63,27 +63,10 @@ import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 const store = useStore();
 const router = useRouter();
-const activeIndex = ref('/index');
 const errorHandler = () => false //头像加载失败
 const inputSearch = ref("")
 const onEnterSearch = () => {
     console.log(inputSearch.value)
-    const _self = this;
-    const url = "http://38617112yi.zicp.vip/article/search";
-    // _self.$axios
-    //     .get(url, { params: { keyword: inputSearch } })
-    //     .then((res) => {
-    //         console.log("搜索的数据", res);
-    //         router.push({
-    //             name: 'searchDetail',
-    //             params: {
-    //                 search: res.data.data
-    //             }
-    //         })
-    //     })
-    //     .catch((err) => {
-    //         console.log(err);
-    //     });
 }
 
 </script>

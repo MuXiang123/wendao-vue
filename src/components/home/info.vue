@@ -46,7 +46,6 @@ const loadMsg = () => {
     axios.get('/userInfo')
         .then((res) => {
             form.value = res.data
-            console.log(form.value.userId);
         }).catch((error) => {
             ElMessage({
                 message: error,
