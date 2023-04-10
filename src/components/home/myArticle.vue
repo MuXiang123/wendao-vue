@@ -1,15 +1,12 @@
 <template>
   <div class="myart">
-    <ul v-infinite-scroll="load" class="infinite-list" style="overflow: auto">
+    <ul v-infinite-scroll="load" class="infinite-list" style="overflow: auto" v-if="articleList.length">
       <li v-for="(article, i) in articleList" :key="i" class="infinite-list-item">
         <el-card class="box-card" shadow="always" @click="detail(article.articleId)">
           <template #header>
             <div class="card-header">
-              <el-avatar class="avatar" :size="50" :src="article.avatar" />
-              <div class="ch1">
-                <p class="username">{{ article.nickname }} </p>
-                <p class="time">{{ article.createdTime }} </p>
-              </div>
+                <span>{{ article.articleTitle }} </span>
+                <span class="time">{{ article.createdTime }} </span>
               <div class="ch2">
                 <el-dropdown>
                   <el-button class="more" icon="MoreFilled" text>
@@ -23,7 +20,6 @@
               </div>
             </div>
           </template>
-          <h3 class="title">{{ article.articleTitle }} </h3>
           <p class="detail">{{ article.articleSummary }} </p>
           <el-divider border-style="dotted" />
           <el-row :gutter="20">
@@ -67,7 +63,7 @@
         </el-card>
       </li>
     </ul>
-    <el-empty v-if="articleList.length == 0" :image-size="250" description="暂未发表任何文章额"></el-empty>
+    <el-empty v-else :image-size="250" description="暂未发表任何文章"></el-empty>
   </div>
 </template>
 
@@ -75,13 +71,10 @@
 import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
-// import axios from 'axios';
+import axios from 'axios';
 const store = useStore();
 const route = useRoute();
 const router = useRouter();
-const props = defineProps({
-  articleList: Array
-})
 const articleList = ref([])
 const pageNum = ref(1)
 const id = ref(0)
@@ -89,88 +82,22 @@ const deleteArticle = (id) => {
 
 }
 const flag = ref(false)
-watch(() => {
-  // const path = router.currentRoute.value.params.id
-  // if (path == null || flag.value == false) {
-  //     flag.value = true
-  //     return
-  // }
-  // if (path !== id.value) {
-  //     console.log('path=' + path);
-  //     id.value = path
-  //     pageNum.value = 1
-  //     articleList.value = []
-  //     if (path == 0) {
-  //         axios.get('/article/index/list', {
-  //             params: {
-  //                 userId: store.state.userInfo.userId,
-  //                 pageNum: pageNum.value,
-  //                 pageSize: 10
-  //             }
-  //         }).then((res) => {
-  //             console.log("watch: "+res)
-  //             pageNum.value += 1
-  //             for (var i = 0, len = res.data.length; i < len; i++) {
-  //                 // console.log(res.data[i]);
-  //                 articleList.value.push(res.data[i])
-  //             }
-  //         })
-  //     } else {
-  //         axios.get('/article/category/list', {
-  //             params: {
-  //                 category: path,
-  //                 pageNum: pageNum.value,
-  //                 pageSize: 10
-  //             }
-  //         }).then((res) => {
-  //             console.log("watch: "+res)
-  //             pageNum.value += 1
-  //             for (var i = 0, len = res.data.length; i < len; i++) {
-  //                 articleList.value.push(res.data[i])
-  //             }
-  //         })
-  //     }
-  // }
-
-})
-
 const load = () => {
-  id.value = router.currentRoute.value.params.id
-  if (id.value == 0) {
-    // axios.get('/article/index/list', {
-    //   params: {
-    //     userId: store.state.userInfo.userId,
-    //     pageNum: pageNum.value,
-    //     pageSize: 10
-    //   }
-    // }).then((res) => {
-    //   console.log("load: " + res.data.length)
-
-    //   pageNum.value += 1
-    //   console.log('pageNum.value' + pageNum.value);
-    //   for (var i = 0, len = res.data.length; i < len; i++) {
-    //     articleList.value.push(res.data[i])
-    //   }
-    // })
-  } else {
-  //   axios.get('/article/category/list', {
-  //     params: {
-  //       category: id.value,
-  //       pageNum: pageNum.value,
-  //       pageSize: 10
-  //     }
-  //   }).then((res) => {
-
-  //     pageNum.value += 1
-  //     console.log('pageNum.value' + pageNum.value);
-  //     for (var i = 0, len = res.data.length; i < len; i++) {
-  //       // console.log(res.data[i]);
-  //       articleList.value.push(res.data[i])
-  //     }
-  //   })
-  }
+  axios.get("/article/user/list", {
+    params: {
+      userId: router.currentRoute.value.params.id,
+      pageNum: pageNum.value,
+      pageSize: 10
+    }
+  }).then((res) => {
+    console.log(res);
+    articleList.value.push(...res.data)
+    pageNum.value+=1
+  })
 }
-
+onMounted(()=>{
+  load()
+})
 </script>
 <style scoped>
 ::-webkit-scrollbar {
@@ -187,7 +114,6 @@ const load = () => {
 .infinite-list-item {
   display: flex;
   align-items: center;
-  margin: 10px;
   height: 260px;
 }
 
@@ -249,20 +175,7 @@ const load = () => {
   color: rgba(182, 182, 182, 1);
   text-align: left;
   vertical-align: top;
-}
-
-.title {
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: 0px;
-  color: rgba(102, 102, 102, 1);
-  text-align: left;
-  vertical-align: top;
-  margin-top: 0;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-  overflow: hidden;
+  margin-left: 2rem;
 }
 
 .detail {
@@ -277,10 +190,6 @@ const load = () => {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   overflow: hidden;
-}
-
-.el-divider {
-  margin-top: 0;
   margin-bottom: 1rem;
 }
 

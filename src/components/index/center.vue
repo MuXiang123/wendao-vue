@@ -93,7 +93,7 @@ watch(() => {
         flag.value = true
         return
     }
-    if (path !== id.value) {
+    if (path !== id & path < 1000000) {
         console.log('path=' + path);
         id.value = path
         pageNum.value = 1
@@ -113,7 +113,7 @@ watch(() => {
                     articleList.value.push(res.data[i])
                 }
             })
-        } else {
+        } else if(path > 0){
             axios.get('/article/category/list', {
                 params: {
                     category: path,
@@ -282,6 +282,7 @@ const detail = (aid) =>{
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     overflow: hidden;
+    margin-bottom: 1rem;
 }
 
 .el-divider {
