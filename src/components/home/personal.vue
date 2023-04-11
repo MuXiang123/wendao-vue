@@ -19,12 +19,13 @@
                         <span>{{ user.signature }} </span>
                     </div>
                     <div class="user_anniu">
-                        <el-button class="el-icon-edit" v-if=true type="primary" size="medium" plain @click="logout"
-                            icon="CircleClose">
+                        <el-button class="el-icon-edit"
+                            v-if="router.currentRoute.value.params.id == store.state.userInfo.userId" type="primary"
+                            size="medium" plain @click="logout" icon="CircleClose">
                             退出登录
                         </el-button>
                         <el-button v-else @click="follow" type="primary" size="medium" icon="Check"
-                            v-text="true ? '已关注' : '关注'">
+                            v-text="isfollow ? '已关注' : '关注'">
                         </el-button>
                     </div>
                 </div>
@@ -92,9 +93,9 @@
                 <router-view ref="rightRef" @refresh="edit" :userInfo="user" v-slot="{ Component }">
 
                     <keep-alive>
-                        <component :is="Component"  v-if="route.meta.keepAlive"/>
-                      </keep-alive>
-                      <component :is="Component"  v-if="!$route.meta.keepAlive"/>
+                        <component :is="Component" v-if="route.meta.keepAlive" />
+                    </keep-alive>
+                    <component :is="Component" v-if="!$route.meta.keepAlive" />
                 </router-view>
             </div>
 
@@ -124,33 +125,115 @@ const followData = ref({
     fanId: "",
     followId: ""
 })
-const isfollowid = ref()
 
 onMounted(() => {
     loadMsg()
 })
-
-const loadMsg = () => {
-    axios.get('/userInfo')
-        .then((res) => {
-            user.value = res.data
-            console.log(user.value.userId);
-
-            axios.get('/userData', {
-                params: {
-                    userId: user.value.userId
-                }
-            }).then((res) => {
-                console.log(res)
-                userData.value = res.data
-            })
-        }).catch((error) => {
-            ElMessage({
-                message: '请求错误',
-                type: 'error'
-            })
+watchEffect(() => {
+    let id = router.currentRoute.value.params.id
+    console.log(id);
+    if (id == undefined || id == 0) {
+        return
+    }
+    if (id !== store.state.userInfo.userId) {
+        axios.get('/userInfoId', {
+            params: {
+                userId: id
+            }
         })
+            .then((res) => {
+                user.value = res.data
+                axios.get('/userData', {
+                    params: {
+                        userId: user.value.userId
+                    }
+                }).then((res) => {
+                    console.log(res)
+                    userData.value = res.data
+                })
+            }).catch((error) => {
+                ElMessage({
+                    message: error,
+                    type: 'error'
+                })
+            })
+    } else {
+        axios.get('/userInfo')
+            .then((res) => {
+                user.value = res.data
+                axios.get('/userData', {
+                    params: {
+                        userId: user.value.userId
+                    }
+                }).then((res) => {
+                    userData.value = res.data
+                })
+            }).catch((error) => {
+                ElMessage({
+                    message: '请求错误',
+                    type: 'error'
+                })
+            })
+    }
+})
+const loadMsg = () => {
+    let id = router.currentRoute.value.params.id
+    console.log(id);
+    if (id == undefined || id == 0) {
+        return
+    }
+    if (id !== store.state.userInfo.userId) {
+        axios.get('/userInfoId', {
+            params: {
+                userId: id
+            }
+        })
+            .then((res) => {
+                user.value = res.data
+                console.log(user.value.userId);
 
+                axios.get('/userData', {
+                    params: {
+                        userId: user.value.userId
+                    }
+                }).then((res) => {
+                    userData.value = res.data
+                })
+                axios.get('/follow/isFollow', {
+                    params: {
+                        userId: store.state.userInfo.userId,
+                        followId: user.value.userId
+                    }
+                }).then((res) => {
+                    isfollow.value = res.data
+                })
+            }).catch((error) => {
+                ElMessage({
+                    message: error,
+                    type: 'error'
+                })
+            })
+    } else {
+        axios.get('/userInfo')
+            .then((res) => {
+                user.value = res.data
+                console.log(user.value.userId);
+
+                axios.get('/userData', {
+                    params: {
+                        userId: user.value.userId
+                    }
+                }).then((res) => {
+                    console.log(res)
+                    userData.value = res.data
+                })
+            }).catch((error) => {
+                ElMessage({
+                    message: '请求错误',
+                    type: 'error'
+                })
+            })
+    }
 }
 
 const logout = () => {
@@ -165,24 +248,23 @@ const edit = () => {
     dia.value.visitDia = true
 }
 const follow = () => {
-    if (!store.state.id) {
+    if (!store.state.userInfo.userId) {
         ElMessage({
             showClose: true,
             message: "请登录后再进行操作哦",
             type: "warning",
         });
     } else {
-        followData.followId = router.currentRoute.value.params.id;
-        followData.fanId = store.state.id;
-        if (isfollowid.indexOf(followData.followId) > -1) {
-            isfollow = true;
-        } else {
-            isfollow = false;
-        }
-        if (isfollow) {
-            deleteFollow(followData)
+        followData.value.followId = router.currentRoute.value.params.id;
+        followData.value.fanId = store.state.userInfo;
+        if (isfollow.value) {
+            axios.get('/follow/cancel', {
+                params: {
+                    followId: followData.value.followId
+                }
+            })
                 .then((res) => {
-                    isfollow = false;
+                    isfollow.value = false;
                     ElMessage({
                         showClose: true,
                         message: "已取消关注",
@@ -193,10 +275,14 @@ const follow = () => {
                 .catch((err) => {
                     console.log(err);
                 });
-        } else if (!isfollow) {
-            addFollow(followData)
+        } else if (!isfollow.value) {
+            axios.get('/follow/add', {
+                params: {
+                    followId: followData.value.followId
+                }
+            })
                 .then((res) => {
-                    isfollow = true;
+                    isfollow.value = true;
                     ElMessage({
                         showClose: true,
                         message: "已成功关注",

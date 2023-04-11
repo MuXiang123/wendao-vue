@@ -194,6 +194,7 @@ const detail = (aid) =>{
     align-items: center;
     margin: 10px;
     height: 260px;
+    cursor: pointer;
 }
 
 .infinite-list .infinite-list-item+.list-item {
