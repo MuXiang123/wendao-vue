@@ -12,6 +12,8 @@ const store = createStore({
     },
     showMuen: false,
     dialogVisible: false,
+    searchFlag: false,
+    inputSearch: ''
   },
   getters: {
     //这些代码还没用上
