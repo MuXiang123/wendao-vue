@@ -33,6 +33,7 @@ import axios from '../api/axios.js'
 import { ElMessage } from 'element-plus'
 import { useStore } from "vuex";
 import Cookies from 'js-cookie'
+import { EaseChatSDK, EaseChatClient } from '@/IM/initwebsdk'
 const router = useRouter()
 const route = useRoute()
 const store = useStore()
@@ -55,6 +56,13 @@ const onSubmit = async () => {
                     Cookies.set(b[0], b[1], '30d')
                     console.log(Cookies.get('token'))
                     store.commit('setId', formLabelAlign.userId)
+
+                    EaseChatClient.open({
+                        user: formLabelAlign.userId,
+                        pwd: formLabelAlign.password
+                    }).then((res)=>{
+                        console.log('huanxing登录成功   ',res);
+                    })
                     ElMessage({
                         message: '登录成功',
                         type: 'success',

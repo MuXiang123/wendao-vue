@@ -1,18 +1,19 @@
 import axios from "axios";
 import store from "../store/index.js";
-import { ElMessage,ElLoading  } from 'element-plus'
+import { ElMessage, ElLoading } from 'element-plus'
 
 axios.defaults.withCredentials = true
 axios.defaults.baseURL = "http://127.0.0.1:8081";
 axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
 axios.defaults.headers.post['Content-Type'] = 'application/json'
+const defaultBaseUrl = '//a1.easemob.com'
 
 // 设置xhr请求超时时间和baseURL（毫秒）
 axios.create({
-	timeout: 15000,
-  headers: {
-    "Content-Type": 'application/json;charset:utf-8'
-  }
+	timeout: 30000,
+	headers: {
+		"Content-Type": 'application/json;charset:utf-8'
+	}
 })
 
 let loadingInstance;
@@ -32,11 +33,21 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use(res => {
 	loadingInstance?.close()
 	return res.data
-}, err => {
-	//请求失败(前端做法是取消loading圈给提示)
-	loadingInstance?.close()
-	ElMessage.error("请求失败")
-	return Promise.reject(err)
+}, error => {
+	if (error.response) {
+		const res = error.response.data // for debug
+		if (error.response.status === 401 && res.code !== '001') {
+			ElMessage.error('无权限')
+		} else if (error.response.status === 403) {
+			ElMessage.error('您没有权限进行查询和操作!')
+		}else{
+			loadingInstance?.close()
+			ElMessage.error("请求失败")
+		}
+		return Promise.reject(error)
+
+	}
+	return Promise.reject(error)
 })
 
 export default axios;

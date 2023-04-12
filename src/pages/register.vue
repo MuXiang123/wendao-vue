@@ -33,7 +33,8 @@
 import { reactive, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import axios from '../api/axios.js'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElNotification } from 'element-plus'
+import { EaseChatSDK, EaseChatClient } from '@/IM/initwebsdk'
 const router = useRouter()
 const route = useRoute()
 const registerForm = ref();
@@ -61,7 +62,7 @@ const rules = reactive({
     ]
 })
 const onSubmit = async () => {
-    registerForm.value.validate((valid) => {
+    await registerForm.value.validate((valid) => {
         if (valid) {
             axios.post('/register/verifyRegisterInfo', {
                 nickName: formLabelAlign.nickName || '',
@@ -69,6 +70,13 @@ const onSubmit = async () => {
                 password: formLabelAlign.password
             }).then(res => {
                 if (res.code == 0) {
+                    EaseChatClient.registerUser({
+                        username: formLabelAlign.userId,
+                        password: formLabelAlign.password,
+                        nickname: formLabelAlign.nickName
+                    }).then((res) => {
+                      console.log('环信注册   ', res);  
+                    })
                     ElMessage({
                         message: '注册成功',
                         type: 'success',
@@ -85,6 +93,9 @@ const onSubmit = async () => {
                     })
                 }
             })
+
+
+
         } else {
             console.log('提交错误!!')
             return false;

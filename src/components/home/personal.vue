@@ -113,7 +113,7 @@ import { ElMessage } from 'element-plus';
 import PersonalDia from "./personalDia.vue";
 import Cookies from 'js-cookie'
 import axios from 'axios';
-
+import { EaseChatSDK, EaseChatClient } from '@/IM/initwebsdk'
 const store = useStore();
 const route = useRoute();
 const router = useRouter();
@@ -238,12 +238,11 @@ const loadMsg = () => {
 }
 
 const logout = () => {
-    console.log(Cookies.get('token'))
     window.localStorage.clear()
     Cookies.remove('token')
+    EaseChatClient.close()
     window.location.reload()
     router.push({ path: "/login" });
-
 }
 const edit = () => {
     dia.value.visitDia = true
