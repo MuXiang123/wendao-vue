@@ -131,11 +131,12 @@ onMounted(() => {
 })
 watchEffect(() => {
     let id = router.currentRoute.value.params.id
+    let path = router.currentRoute.value.path 
     console.log(id);
     if (id == undefined || id == 0) {
         return
     }
-    if (id !== store.state.userInfo.userId) {
+    if (path.substring(0, 5) == "/home") {
         axios.get('/userInfoId', {
             params: {
                 userId: id

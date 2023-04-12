@@ -35,13 +35,20 @@
                             </el-icon>
                             <span>发布</span>
                         </el-menu-item>
+                        <el-menu-item index="/article/hot">
+                            <el-icon>
+                                <svg class="icon" aria-hidden="true">
+                                    <use xlink:href="#icon-fire"></use>
+                                </svg>
+                            </el-icon>
+                            <span>热门文章</span>
+                        </el-menu-item>
                     </el-menu>
                 </div>
             </el-aside>
             <el-main class="el-main">
                 <div class="right">
                     <router-view></router-view>
-
                 </div>
             </el-main>
         </el-container>

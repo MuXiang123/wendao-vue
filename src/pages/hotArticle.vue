@@ -1,5 +1,5 @@
 <template>
-    <ul v-infinite-scroll="load" class="infinite-list" style="overflow: auto">
+    <ul class="infinite-list" style="overflow: auto">
         <li v-for="(article, i) in articleList" :key="i" class="infinite-list-item" >
             <el-card class="box-card" shadow="always" @click="detail(article.articleId)">
                 <template #header>
@@ -66,100 +66,21 @@ import axios from 'axios';
 const store = useStore();
 const route = useRoute();
 const router = useRouter();
-const props = defineProps({
-    articleList: Array
-})
 const articleList = ref([])
 const pageNum = ref(1)
-const id = ref(0)
-const flag = ref(false)
-watchEffect(() => {
-    const path = router.currentRoute.value.params.id
-    if (path == null || flag.value == false) {
-        flag.value = true
-        return
-    }
-    if (path !== id.value & path < 1000000) {
-        console.log('path=' + path);
-        id.value = path
-        pageNum.value = 1
-        articleList.value = []
-        if (path == 0) {
-            axios.get('/article/index/list', {
-                params: {
-                    userId: store.state.userInfo.userId,
-                    pageNum: pageNum.value,
-                    pageSize: 10
-                }
-            }).then((res) => {
-                console.log("watch: "+res)
-                pageNum.value += 1
-                for (var i = 0, len = res.data.length; i < len; i++) {
-                    articleList.value.push(res.data[i])
-                }
-            })
-        } else if(path > 0){
-            axios.get('/article/category/list', {
-                params: {
-                    category: path,
-                    pageNum: pageNum.value,
-                    pageSize: 10
-                }
-            }).then((res) => {
-                console.log("watch: "+res)
-                pageNum.value += 1
-                for (var i = 0, len = res.data.length; i < len; i++) {
-                    articleList.value.push(res.data[i])
-                }
-            })
-        }
-    }
-
-})
-
 const load = () => {
-    id.value = router.currentRoute.value.params.id
-    console.log('id=' + id.value);
-    if (id.value == 0) {
-        axios.get('/article/index/list', {
-            params: {
-                userId: store.state.userInfo.userId,
-                pageNum: pageNum.value,
-                pageSize: 10
-            }
-        }).then((res) => {
-            console.log("load: "+res.data.length)
-            
-            pageNum.value += 1
-            console.log('pageNum.value'+pageNum.value);
-            for (var i = 0, len = res.data.length; i < len; i++) {
-                articleList.value.push(res.data[i])
-            }
-        })
-    } else {
-        axios.get('/article/category/list', {
-            params: {
-                category: id.value,
-                pageNum: pageNum.value,
-                pageSize: 10
-            }
-        }).then((res) => {
-            console.log("load: "+res.data)
-
-            pageNum.value += 1
-            console.log('pageNum.value'+pageNum.value);
-            for (var i = 0, len = res.data.length; i < len; i++) {
-                // console.log(res.data[i]);
-                articleList.value.push(res.data[i])
-            }
-        })
-    }
-
+    axios.get('/article/hotspot', {
+    }).then((res) => {
+        pageNum.value += 1
+        console.log('pageNum.value'+pageNum.value);
+        for (var i = 0, len = res.data.length; i < len; i++) {
+            articleList.value.push(res.data[i])
+        }
+    })
 }
-
-const detail = (aid) =>{
-    router.push('/article/detail/'+aid)
-}
+onMounted(()=>{
+    load()
+})
 </script>
 <style scoped>
 ::-webkit-scrollbar {

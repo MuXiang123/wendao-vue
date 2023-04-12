@@ -7,13 +7,14 @@
             <div class="card-header">
                 <span>{{ article.articleTitle }} </span>
                 <span class="time">{{ article.createdTime }} </span>
-              <div class="ch2">
+              <div class="ch2" v-if="router.currentRoute.value.params.id == store.state.userInfo.userId">
                 <el-dropdown>
                   <el-button class="more" icon="MoreFilled" text>
                   </el-button>
                   <template #dropdown>
                     <el-dropdown-menu>
-                      <el-dropdown-item @click="deleteArticle(article.id)">删除</el-dropdown-item>
+                      <el-dropdown-item @click="editArticle(article.articleId)">编辑</el-dropdown-item>
+                      <el-dropdown-item @click="deleteArticle(article.articleId)">删除</el-dropdown-item>
                     </el-dropdown-menu>
                   </template>
                 </el-dropdown>
@@ -72,6 +73,7 @@ import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed,
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
+import { ElMessage } from 'element-plus';
 const store = useStore();
 const route = useRoute();
 const router = useRouter();
@@ -79,8 +81,34 @@ const articleList = ref([])
 const pageNum = ref(1)
 const id = ref(0)
 const deleteArticle = (id) => {
-
+  axios.get('/article/delete',{
+    params:{
+      articleId: id
+    }
+  }).then((res)=>{
+    if(res.data == true){
+      ElMessage({
+        type:'success',
+        message:'删除成功'
+      })
+    }else{
+      ElMessage({
+        type:'error',
+        message:'删除失败'
+      })
+    }
+  })
 }
+
+const editArticle = (id) =>{
+  router.push({
+    name:'ArticleEdit',
+    query:{
+      id:id
+    }
+  })
+}
+
 const flag = ref(false)
 const load = () => {
   axios.get("/article/user/list", {
@@ -98,6 +126,10 @@ const load = () => {
 onMounted(()=>{
   load()
 })
+
+const detail = (aid) =>{
+    router.push('/article/detail/'+aid)
+}
 </script>
 <style scoped>
 ::-webkit-scrollbar {
@@ -109,6 +141,7 @@ onMounted(()=>{
   margin: 0;
   padding: 0;
   list-style: none;
+  cursor: pointer;
 }
 
 .infinite-list-item {

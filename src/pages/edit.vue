@@ -92,7 +92,6 @@ const submit = () => {
                 message: '文章发布成功',
                 onClose: () => {
                     router.push({ path: "/" });
-                    window.location.reload()
                 }
             })
         }
@@ -106,10 +105,10 @@ const onUploadImg = async (files, callback) => {
                 const form = new FormData();
                 form.append('file', file);
                 axios.post('/upload/images', form, {
-                        headers: {
-                            'Content-Type': 'multipart/form-data'
-                        }
-                    })
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
                     .then((res) => rev(res))
                     .catch((error) => rej(error));
             });
@@ -120,6 +119,29 @@ const onUploadImg = async (files, callback) => {
 const onGetCatalog = (list) => {
     state.catalogList = list;
 };
+watchEffect(async () => {
+
+
+    let newId = router.currentRoute.value.query.id
+    console.log(newId);
+    if (newId == 0 || newId == undefined) {
+        return
+    }
+    axios.get('/article/detail', {
+        params: {
+            articleId: newId,
+            userId: store.state.userInfo.userId
+        }
+    })
+    .then((res) => {
+        console.log(res);
+        title.value = res.data.articleTitle
+        summary.value = res.data.articleSummary
+        state.text = res.data.articleContent
+        value.value = res.data.articleCategoryName
+    })
+
+})
 
 
 </script>

@@ -15,22 +15,28 @@ import ArticleEdit from "../pages/edit.vue"
 import CategoryArticle from "../components/index/center.vue"
 import ArticleDetail from "../pages/articleDetail.vue"
 import Message from "../pages/message.vue"
+import HotArticle from "../pages/hotArticle.vue"
 import Cookies from 'js-cookie'
 const routes = [
     {
         path: '/',
-        redirect: '/index'
+        redirect: '/index/article/0'
     },
     {
         path: '/index', // 首页
         name: 'index',
         component: Index,
+        redirect:'/index/article/0',
         children: [
             {
                 path: '/index/article/:id',
                 name: 'CategoryArticle',
                 component: CategoryArticle
-            },
+            },{
+                path:'/article/hot',
+                name:'HotArrticle',
+                component: HotArticle
+            }
         ]
     },
 
@@ -107,7 +113,7 @@ const routes = [
         path:'/message',
         name:'Message',
         component: Message
-    }
+    },
 ]
 const router = createRouter({
     history: createWebHashHistory(),

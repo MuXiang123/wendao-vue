@@ -44,10 +44,10 @@ const props = defineProps({
 })
 watchEffect(() => {
   let id = router.currentRoute.value.params.id
-  if(id == 0 || id == undefined){
-    return 
-  }
-  if (id !== store.state.userInfo.userId) {
+  let path = router.currentRoute.value.path
+  console.log(path.substring(0, 5));
+
+  if (path.substring(0, 5) == "/home") {
     axios.get('/userInfoId', {
       params: {
         userId: id
@@ -59,7 +59,7 @@ watchEffect(() => {
       }).catch((error) => {
         ElMessage({
           message: error,
-          type: 'error'
+          type: '请求用户数据错误'
         })
       })
   } else {
@@ -79,8 +79,8 @@ onMounted(() => {
 })
 const loadMsg = () => {
   let id = router.currentRoute.value.params.id
-  if(id == 0 || id == undefined){
-    return 
+  if (id == 0 || id == undefined) {
+    return
   }
   if (id !== store.state.userInfo.userId) {
     axios.get('/userInfoId', {
@@ -98,9 +98,9 @@ const loadMsg = () => {
         })
       })
   } else {
-    if(id == 0){
-    return 
-  }
+    if (id == 0) {
+      return
+    }
     axios.get('/userInfo')
       .then((res) => {
         form.value = res.data

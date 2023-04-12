@@ -46,9 +46,11 @@
                     </el-avatar>
                 </template>
                 <el-menu-item :route="{ name: 'info', params: { id: `${store.state.userInfo.userId}` } }">
-                    <svg class="icon" aria-hidden="true">
-                        <use xlink:href="#icon-home"></use>
-                    </svg>
+                    <el-icon>
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#icon-home"></use>
+                        </svg>
+                    </el-icon>
                     <span class="span">我的主页</span>
                 </el-menu-item>
             </el-sub-menu>
@@ -92,7 +94,7 @@ import { useRouter, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import { ref, watchEffect } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { useDebounceFn,debouncedWatch } from "@vueuse/core";
+import { useDebounceFn, debouncedWatch } from "@vueuse/core";
 import axios from 'axios';
 const store = useStore();
 const router = useRouter();
@@ -107,9 +109,9 @@ const articleList = ref([]);
 //     keyword.value ? handleSearch() : articleList.value = []
 // }, 500)
 debouncedWatch(
-  keyword,
-  () => keyword.value ? handleSearch() : articleList.value = [],
-  { debounce: 500 },
+    keyword,
+    () => keyword.value ? handleSearch() : articleList.value = [],
+    { debounce: 500 },
 );
 const handleSearch = () => {
     axios.get('/article/search', {
