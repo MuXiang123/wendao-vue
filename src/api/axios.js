@@ -3,10 +3,9 @@ import store from "../store/index.js";
 import { ElMessage, ElLoading } from 'element-plus'
 
 axios.defaults.withCredentials = true
-axios.defaults.baseURL = "http://127.0.0.1:8081";
+axios.defaults.baseURL = "http://127.0.0.1:7777/api";
 axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
 axios.defaults.headers.post['Content-Type'] = 'application/json'
-const defaultBaseUrl = '//a1.easemob.com'
 
 // 设置xhr请求超时时间和baseURL（毫秒）
 axios.create({
@@ -17,7 +16,6 @@ axios.create({
 })
 
 let loadingInstance;
-axios.defaults.withCredentials = true;
 // 拦截器的添加
 axios.interceptors.request.use(config => {
 	loadingInstance = ElLoading.service("加载中")

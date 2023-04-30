@@ -34,7 +34,7 @@ import { reactive, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import axios from '../api/axios.js'
 import { ElMessage, ElNotification } from 'element-plus'
-import { EaseChatSDK, EaseChatClient } from '@/IM/initwebsdk'
+import { genTestUserSig, EXPIRETIME } from '../TUIKit/debug/GenerateTestUserSig'
 const router = useRouter()
 const route = useRoute()
 const registerForm = ref();
@@ -70,13 +70,6 @@ const onSubmit = async () => {
                 password: formLabelAlign.password
             }).then(res => {
                 if (res.code == 0) {
-                    EaseChatClient.registerUser({
-                        username: formLabelAlign.userId,
-                        password: formLabelAlign.password,
-                        nickname: formLabelAlign.nickName
-                    }).then((res) => {
-                      console.log('环信注册   ', res);  
-                    })
                     ElMessage({
                         message: '注册成功',
                         type: 'success',

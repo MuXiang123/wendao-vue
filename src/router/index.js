@@ -16,6 +16,7 @@ import CategoryArticle from "../components/index/center.vue"
 import ArticleDetail from "../pages/articleDetail.vue"
 import Message from "../pages/message.vue"
 import HotArticle from "../pages/hotArticle.vue"
+import Chat from "../pages/chat.vue"
 import Cookies from 'js-cookie'
 const routes = [
     {
@@ -113,7 +114,11 @@ const routes = [
         path:'/message',
         name:'Message',
         component: Message
-    },
+    },{
+        path:'/chat',
+        name:'Chat',
+        component: Chat
+    }
 ]
 const router = createRouter({
     history: createWebHashHistory(),

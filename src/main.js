@@ -25,6 +25,21 @@ import '@kangc/v-md-editor/lib/theme/style/github.css';
 // highlightjs
 import hljs from 'highlight.js';
 
+import { TUIComponents, TUICore, genTestUserSig } from './TUIKit';
+// import TUICallKit
+import { TUICallKit } from '@tencentcloud/call-uikit-vue';
+
+const SDKAppID = 1400807520; // Your SDKAppID
+
+// init TUIKit
+const TUIKit = TUICore.init({
+  SDKAppID,
+});
+// TUIKit add TUIComponents
+TUIKit.use(TUIComponents);
+// TUIKit add TUICallKit
+TUIKit.use(TUICallKit);
+
 VMdPreview.use(githubTheme, {
   Hljs: hljs,
 });
@@ -33,7 +48,8 @@ app.use(store)
 app.use(router)
 app.use(VueClipboards)
 app.use(VueCookies)
-app.use(VMdPreview);
+app.use(VMdPreview)
+app.use(TUIKit)
 app.config.globalProperties.$utils = utils
 app.config.globalProperties.$axios = axios;
 app.mount('#app')

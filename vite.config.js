@@ -17,11 +17,6 @@ export default defineConfig({
     Components({
       resolvers: [ElementPlusResolver()],
     }),
-    viteMockServe({
-      mockPath: "./src/mock",
-      localEnabled: true,
-      supportTs: false,
-    })
   ],
   resolve: {
     alias: {
