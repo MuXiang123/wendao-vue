@@ -130,7 +130,7 @@ onMounted(() => {
 })
 watchEffect(() => {
     let id = router.currentRoute.value.params.id
-    let path = router.currentRoute.value.path 
+    let path = router.currentRoute.value.path
     console.log(id);
     if (id == undefined || id == 0) {
         return
@@ -237,10 +237,13 @@ const loadMsg = () => {
 }
 
 const logout = () => {
-    window.localStorage.clear()
-    Cookies.remove('token')
-    window.location.reload()
-    router.push({ path: "/login" });
+    axios.get('/login/logout').then((res) => {
+        window.localStorage.clear()
+        Cookies.remove('token')
+        window.location.reload()
+        router.push({ path: "/login" });
+    })
+
 }
 const edit = () => {
     dia.value.visitDia = true

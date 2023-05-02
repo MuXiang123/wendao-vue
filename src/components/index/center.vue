@@ -1,9 +1,9 @@
 <template>
     <ul v-infinite-scroll="load" class="infinite-list" style="overflow: auto">
-        <li v-for="(article, i) in articleList" :key="i" class="infinite-list-item" >
-            <el-card class="box-card" shadow="always" @click="detail(article.articleId)">
+        <li v-for="(article, i) in articleList" :key="i" class="infinite-list-item">
+            <el-card class="box-card" shadow="always">
                 <template #header>
-                    <div class="card-header">
+                    <div class="card-header" @click="personal(article.articleUserId)">
                         <el-avatar class="avatar" :size="50" :src="article.avatar" />
                         <div class="ch1">
                             <p class="username">{{ article.nickname }} </p>
@@ -11,55 +11,57 @@
                         </div>
                     </div>
                 </template>
-                <h3 class="title">{{ article.articleTitle }} </h3>
-                <p class="detail">{{ article.articleSummary }} </p>
-                <el-divider border-style="dotted" />
-                <el-row :gutter="20">
-                    <el-col :span="5">
-                        <div class="like">
-                            <el-button type="primary" text>
-                                <svg class="icon" aria-hidden="true">
-                                    <use xlink:href="#icon-like"></use>
-                                </svg>
-                                <span class="bottom_font">
-                                    <span v-text="article.articleLikeCount > 9999 ? '9999+' : article.articleLikeCount">
-                                    </span>点赞
-                                </span>
-                            </el-button>
-                        </div>
-                    </el-col>
-                    <el-col :span="5">
-                        <div class="comment">
-                            <el-button type="primary" text>
-                                <el-icon size="20px">
-                                    <Comment />
-                                </el-icon>
-                                <span class="bottom_font">
-                                    <span
-                                        v-text="article.articleCommentCount > 9999 ? '9999+' : article.articleCommentCount">
-                                    </span>条评论
-                                </span>
-                            </el-button>
-                        </div>
-                    </el-col>
-                    <el-col :span="5">
-                        <div class="share">
-                            <el-button type="primary" text>
-                                <el-icon size="20px">
-                                    <Share />
-                                </el-icon>
-                                <span class="bottom_font">分享</span>
-                            </el-button>
-                        </div>
-                    </el-col>
-                </el-row>
+                <div @click="detail(article.articleId)">
+                    <h3 class="title">{{ article.articleTitle }} </h3>
+                    <p class="detail">{{ article.articleSummary }} </p>
+                    <el-divider border-style="dotted" />
+                    <el-row :gutter="20">
+                        <el-col :span="5">
+                            <div class="like">
+                                <el-button type="primary" text>
+                                    <svg class="icon" aria-hidden="true">
+                                        <use xlink:href="#icon-like"></use>
+                                    </svg>
+                                    <span class="bottom_font">
+                                        <span v-text="article.articleLikeCount > 9999 ? '9999+' : article.articleLikeCount">
+                                        </span>点赞
+                                    </span>
+                                </el-button>
+                            </div>
+                        </el-col>
+                        <el-col :span="5">
+                            <div class="comment">
+                                <el-button type="primary" text>
+                                    <el-icon size="20px">
+                                        <Comment />
+                                    </el-icon>
+                                    <span class="bottom_font">
+                                        <span
+                                            v-text="article.articleCommentCount > 9999 ? '9999+' : article.articleCommentCount">
+                                        </span>条评论
+                                    </span>
+                                </el-button>
+                            </div>
+                        </el-col>
+                        <el-col :span="5">
+                            <div class="share">
+                                <el-button type="primary" text>
+                                    <el-icon size="20px">
+                                        <Share />
+                                    </el-icon>
+                                    <span class="bottom_font">分享</span>
+                                </el-button>
+                            </div>
+                        </el-col>
+                    </el-row>
+                </div>
             </el-card>
         </li>
     </ul>
 </template>
 
 <script setup>
-import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed} from 'vue';
+import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
@@ -92,13 +94,13 @@ watchEffect(() => {
                     pageSize: 10
                 }
             }).then((res) => {
-                console.log("watch: "+res)
+                console.log("watch: " + res)
                 pageNum.value += 1
                 for (var i = 0, len = res.data.length; i < len; i++) {
                     articleList.value.push(res.data[i])
                 }
             })
-        } else if(path > 0){
+        } else if (path > 0) {
             axios.get('/article/category/list', {
                 params: {
                     category: path,
@@ -106,7 +108,7 @@ watchEffect(() => {
                     pageSize: 10
                 }
             }).then((res) => {
-                console.log("watch: "+res)
+                console.log("watch: " + res)
                 pageNum.value += 1
                 for (var i = 0, len = res.data.length; i < len; i++) {
                     articleList.value.push(res.data[i])
@@ -128,10 +130,10 @@ const load = () => {
                 pageSize: 10
             }
         }).then((res) => {
-            console.log("load: "+res.data.length)
-            
+            console.log("load: " + res.data.length)
+
             pageNum.value += 1
-            console.log('pageNum.value'+pageNum.value);
+            console.log('pageNum.value' + pageNum.value);
             for (var i = 0, len = res.data.length; i < len; i++) {
                 articleList.value.push(res.data[i])
             }
@@ -144,10 +146,10 @@ const load = () => {
                 pageSize: 10
             }
         }).then((res) => {
-            console.log("load: "+res.data)
+            console.log("load: " + res.data)
 
             pageNum.value += 1
-            console.log('pageNum.value'+pageNum.value);
+            console.log('pageNum.value' + pageNum.value);
             for (var i = 0, len = res.data.length; i < len; i++) {
                 // console.log(res.data[i]);
                 articleList.value.push(res.data[i])
@@ -157,8 +159,13 @@ const load = () => {
 
 }
 
-const detail = (aid) =>{
-    router.push('/article/detail/'+aid)
+const detail = (aid) => {
+    router.push('/article/detail/' + aid)
+}
+const personal = (uid) => {
+  router.push({
+    path: '/home/info/' + `${uid}`,
+  })
 }
 </script>
 <style scoped>

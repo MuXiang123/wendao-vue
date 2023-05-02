@@ -3,7 +3,7 @@ import store from "../store/index.js";
 import { ElMessage, ElLoading } from 'element-plus'
 
 axios.defaults.withCredentials = true
-axios.defaults.baseURL = "http://127.0.0.1:7777/api";
+axios.defaults.baseURL = "/api";
 axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 

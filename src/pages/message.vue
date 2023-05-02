@@ -35,9 +35,7 @@ const {
 const getList = () => {
     axios.get('/notice/list')
         .then((res) => {
-            for (var i = 0; i < 10; i++) {
-                talkList.value.push(...res.data)
-            }
+            talkList.value.push(...res.data)
         })
 };
 onMounted(() => {
