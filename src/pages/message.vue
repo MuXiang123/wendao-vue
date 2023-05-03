@@ -6,7 +6,7 @@
         <div class="page-container">
             <div class="center" v-for="(talk, index) in talkList" :key="talk.id">
                 <el-card class="talk-item">
-                    <div class="talk-info">{{talk.content }} </div>
+                    <div class="talk-info" v-html="talk.content"> </div>
                     <div class="talk-time"> {{ formatDate(talk.createdDate) }} </div>
                 </el-card>
             </div>

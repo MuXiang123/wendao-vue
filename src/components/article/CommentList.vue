@@ -47,7 +47,7 @@
                     </div>
                     <div ref="readMoreRef" class="view-more" v-show="comment.replyCommentList.length > 3">
                         <span>共{{ comment.replyCommentList.length }}条回复, </span>
-                        <span class="view-more-btn" @click="readMoreComment(index, comment)">点击查看</span>
+                        <span class="view-more-btn" @click="readMoreComment(index, comment)"></span>
                     </div>
                     <ReplyBox ref="replyRef" class="mt-4" :show="false" @reload="reloadReplies(index)">
                     </ReplyBox>
@@ -115,21 +115,23 @@ watch(
 );
 // 查看更多评论
 const readMoreComment = (index, comment) => {
-    getReplyList(comment.id, { current: 1, size: 5 }).then(({ data }) => {
-        comment.replyVOList = data.data;
-        // 回复大于5条展示分页
-        if (comment.replyCount > 5) {
-            pageRef.value[index].setPaging(true);
-        }
-        // 隐藏查看更多
-        readMoreRef.value[index].style.display = "none";
-    });
+    // getReplyList(comment.id, { current: 1, size: 5 }).then(({ data }) => {
+    //     comment.replyVOList = data.data;
+    //     // 回复大于5条展示分页
+    //     if (comment.replyCount > 5) {
+    //         pageRef.value[index].setPaging(true);
+    //     }
+    //     // 隐藏查看更多
+    //     readMoreRef.value[index].style.display = "none";
+    // });
+    getList()
 };
 // 查看当前页的回复评论
 const getCurrentPage = (current, index, commentId) => {
-    getReplyList(commentId, { current: current, size: 5 }).then(({ data }) => {
-        commentList.value[index].replyVOList = data.data;
-    });
+    // getReplyList(commentId, { current: current, size: 5 }).then(({ data }) => {
+    //     commentList.value[index].replyVOList = data.data;
+    // });
+    getList()
 };
 const handleReply = (index, target) => {
     console.log(index);
@@ -167,21 +169,22 @@ const reloadComments = () => {
 };
 // 重新加载回复评论
 const reloadReplies = (index) => {
-    getReplyList(commentList.value[index].id, {
-        current: pageRef.value[index].current,
-        size: 5,
-    }).then(({ data }) => {
-        commentList.value[index].replyVOList = data.data;
-        commentList.value[index].replyCount++;
-        // 隐藏回复框
-        replyRef.value[index].setReply(false);
-        // 回复大于5条展示分页
-        if (commentList.value[index].replyCount > 5) {
-            pageRef.value[index].setPaging(true);
-        }
-        // 隐藏查看更多
-        readMoreRef.value[index].style.display = "none";
-    });
+    // getReplyList(commentList.value[index].id, {
+    //     current: pageRef.value[index].current,
+    //     size: 5,
+    // }).then(({ data }) => {
+    //     commentList.value[index].replyVOList = data.data;
+    //     commentList.value[index].replyCount++;
+    //     // 隐藏回复框
+    //     replyRef.value[index].setReply(false);
+    //     // 回复大于5条展示分页
+    //     if (commentList.value[index].replyCount > 5) {
+    //         pageRef.value[index].setPaging(true);
+    //     }
+    //     // 隐藏查看更多
+    //     readMoreRef.value[index].style.display = "none";
+    // });
+    window.location.reload()
 };
 onMounted(() => {
     getList();

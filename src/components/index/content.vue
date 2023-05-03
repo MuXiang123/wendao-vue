@@ -23,7 +23,7 @@
                             </el-icon>
                             <span>视频</span>
                         </el-menu-item>
-                        <el-menu-item index="chat">
+                        <el-menu-item index="/chat">
                             <el-icon>
                                 <ChatDotRound />
                             </el-icon>

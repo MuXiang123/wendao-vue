@@ -26,7 +26,7 @@
             <el-input v-model="form.userId" disabled></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password">
-            <el-input v-model="form.password"></el-input>
+            <el-input v-model="form.password" show-password type="password" ></el-input>
           </el-form-item>
           <el-form-item label="个性签名" prop="signature">
             <el-input v-model="form.signature"></el-input>

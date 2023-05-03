@@ -181,7 +181,6 @@ onMounted(() => {
     })
 })
 const formatDate = (timeStamp) => {
-    timeStamp * 1000
     var dateTime = new Date(timeStamp);
     var no1new = dateTime.valueOf();
     var year = dateTime.getFullYear();
@@ -206,10 +205,8 @@ const formatDate = (timeStamp) => {
     } else if (1000 * 60 * 60 * 24 < milliseconds && milliseconds <= 1000 * 60 * 60 * 24 * 15) {
         timeSpanStr = Math.round(milliseconds / (1000 * 60 * 60 * 24)) + '天前';
     } else if (milliseconds > 1000 * 60 * 60 * 24 * 15 && year == now.getFullYear()) {
-        // timeSpanStr = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
         timeSpanStr = year + '-' + month + '-' + day
     } else {
-        // timeSpanStr = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
         timeSpanStr = year + '-' + month + '-' + day
     }
 
