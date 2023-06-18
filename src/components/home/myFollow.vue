@@ -41,8 +41,8 @@ const personal = (tid) => {
   })
 }
 const follow = (id, index) => {
-  if(id == 0 || id == undefined){
-    return 
+  if (id == 0 || id == undefined) {
+    return
   }
   if (id !== store.state.userInfo.userId) {
     if (isFollow.value[index] == 0) {
@@ -78,7 +78,11 @@ const load = () => {
   } else {
     currentUser.value = false
   }
-  axios.get('/follow/list')
+  axios.get('/follow/list', {
+    params: {
+      userId: router.currentRoute.value.params.id
+    }
+  })
     .then((res) => {
       console.log(res);
       for (var i = 0; i < res.data.length; i++) {

@@ -37,7 +37,11 @@ const personal = (id) => {
   })
 }
 const load = () => {
-  axios.get('/fans/list')
+  axios.get('/fans/list', {
+    params:{
+      userId: router.currentRoute.value.params.id
+    }
+  })
     .then((res) => {
       console.log(res);
       allData.value = res.data
